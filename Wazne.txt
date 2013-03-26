@@ -1,0 +1,9 @@
+1. Edytujemy kod. 
+2. Zapisujemy.
+3. Komentujemy na githubie Destopowym.
+4. !!! Sync !!!
+5. Dopiero wtedy pull request w przegl¹darce.
+6. Akceptacja i na g³ównym jest wszystko aktualne.
+
+Pozdrawiam,
+gmagdaa z nudnych seminariów o jêzykach programowania
