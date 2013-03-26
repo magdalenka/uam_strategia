@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Novell.Directory.Ldap;
+using System.Data;
 
 public partial class Account_Login : System.Web.UI.Page
 {
