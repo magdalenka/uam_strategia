@@ -2,11 +2,11 @@
 2. Zapisujemy.
 3. Komentujemy na githubie Destopowym.
 4. !!! Sync !!!
-5. Dopiero wtedy pull request w przegl¹darce.
-6. Akceptacja i na g³ównym jest wszystko aktualne.
+5. Dopiero wtedy pull request w przeglï¿½darce.
+6. Akceptacja i na gï¿½ï¿½wnym jest wszystko aktualne.
 
 Pozdrawiam,
-gmagdaa z nudnych seminariów o jêzykach programowania
+gmagdaa z nudnych seminariï¿½w o jï¿½zykach programowania
 
 blabla-Ania bla
 
@@ -21,3 +21,5 @@ Druga Magda tez dopisuje
 Dopisuje i dobrze jej to wychodzi :)
 
 Maciek: Testtesttest.
+
+test
