@@ -1,4 +1,4 @@
-1. Edytujemy kod. 
+﻿1. Edytujemy kod. 
 2. Zapisujemy.
 3. Komentujemy na githubie Destopowym.
 4. !!! Sync !!!
@@ -23,4 +23,4 @@ Dopisuje i dobrze jej to wychodzi :)
 Maciek: Testtesttest.
 
 
-test
+testJeszczeRaz
