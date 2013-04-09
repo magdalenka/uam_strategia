@@ -3,20 +3,21 @@
 drop table dzialanie_cel
 drop table cel
 drop table dzialanie
-drop table osoby_powiazane
+drop table osoby_odpowiedzialne
 drop table strategia
 drop table dzialanie_odpowiedzialnosc
 drop table strategia_autor
 drop table podjete_dzialanie
 drop table zrodlo_finansowania
 drop table dzialanie_zrodlo
+drop table autor
 
 -- tworzenie tabeli
 
 CREATE TABLE strategia(
 id int IDENTITY(1,1) primary key,
 id_parent int references strategia(id),
-lp varchar(10),
+lp int not null,
 nazwa_strategii varchar(max),
 nazwa_jednostki varchar(max),
 widocznosc tinyint default 1
@@ -24,24 +25,23 @@ widocznosc tinyint default 1
 
 CREATE TABLE osoby_odpowiedzialne(
 id int IDENTITY(1,1) primary key,
-lp int,
+lp int not null,
 stanowisko varchar(100),
 tytul varchar(20),
 nazwisko varchar(100),
-rola varchar(100),
 id_startegii int references strategia(id)
 )
 
 CREATE TABLE autor(
 id int IDENTITY(1,1) primary key,
-lp int,
+lp int not null,
 tytul varchar(100),
 nazwisko varchar(100),
 )
 
 CREATE TABLE cel
 (id int IDENTITY(1,1) primary key,
-lp varchar(10),
+lp int not null,
 id_strategii int references strategia(id),
 id_parent int references cel(id), 
 tresc varchar(max),
@@ -51,21 +51,21 @@ widocznosc tinyint default 1
 CREATE TABLE dzialanie
 (id int IDENTITY(1,1) primary key,
 nazwa varchar(max),
-lp varchar(10),
-termin varchar(max),
+lp int not null,
 wskaznik_rezultat varchar(max),
 okres_od date,
 okres_do date,
 waga int,
+zatwierdzenie tinyint default 0,
 widocznosc tinyint default 1
 )
-
-
-
 
 CREATE TABLE podjete_dzialanie
 (id int IDENTITY(1,1) primary key,
 dzialanie int references dzialanie(id),
+opis varchar(max),
+okres_od date,
+okres_do date,
 realizacja int,
 komentarz varchar(max)
 )
@@ -105,38 +105,46 @@ primary key (id_celu, id_dzialania)
 
 -- wstawianie do tabeli
 
-insert into strategia(id_parent, nazwa_strategii, nazwa_jednostki, widocznosc)
-values (null, 'Strategia Kasia', 'blelee', 0)
-insert into strategia(id_parent, nazwa_strategii, nazwa_jednostki, widocznosc)
-values (1, 'Strategia Basia', 'blelee', 1)
+insert into strategia(id_parent, lp, nazwa_strategii, nazwa_jednostki, widocznosc)
+values (null, 1, 'nazwa str 1', 'nazwa jednostki', 0)
+insert into strategia(id_parent, lp, nazwa_strategii, nazwa_jednostki, widocznosc)
+values (1, 2, 'nazwa str 2', 'nazwa jedn 2', 1)
 
-insert into autor (nazwisko, id_startegii)
-values ('Kowalski', 1);
-insert into autor (nazwisko, id_startegii)
-values ('Nowak', 1);
-insert into autor (nazwisko, id_startegii)
-values ('Kowalski', 2);
+insert into osoby_odpowiedzialne(lp, stanowisko, tytul, nazwisko, id_startegii)
+values (1, 'dziekan', 'prof', 'Kowalski', 2)
+insert into osoby_odpowiedzialne(lp, stanowisko, tytul, nazwisko, id_startegii)
+values (1, 'sprz¹tacz', 'dr', 'Nowak', 1)
 
-insert into cel (id_strateg, id_parent, tresc)
-values (1, null, 'To jest jakis cel' )
-insert into cel (id_strateg, id_parent, tresc)
-values (2, null, 'To jest jakis cel 2' )
-insert into cel (id_strateg, id_parent, tresc)
-values (2, 1, 'Cel 3' )
+insert into autor (lp, tytul, nazwisko)
+values (1, 'prof', 'Kowalski');
+insert into autor (lp, tytul, nazwisko)
+values (2, 'dr', 'Suse³');
 
-insert into dzialanie (nazwa, odpowiedzialnosc, termin, wskaznik_rezultat, zrodlo_finansowania, widocznosc )
-values ('Nazwa dzialania', 'Mrowka', 'powinna byc chyba data zamiast varchar', 'tutaj nie wiem co', 'brak finansowania', 1)
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (1, 1, null, 'To jest jakis cel')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (2, 2, 1, 'To jest jakis cel potomny')
 
-insert into dzialanie (nazwa, odpowiedzialnosc, termin, wskaznik_rezultat, zrodlo_finansowania, widocznosc )
-values ('Dzialanie 2', 'Mrowka', 'powinna byc chyba data zamiast varchar', 'tutaj nie wiem co', 'brak finansowania', 1)
+insert into dzialanie (nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc )
+values ('Nazwa dzialania', 1, 'liczba mrówek', GETDATE(), '2017-02-27', 87, 1, 1)
+insert into dzialanie (nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc )
+values ('Nazwa dzialania 2', 2, 'liczba pieniêdzy', '2007-02-27', '2017-02-27', 75, 0, 0)
 
-insert into polaczenie(id_celu, id_dzialania)
-values (1,1)
-insert into polaczenie(id_celu, id_dzialania)
-values (3,2)
+-- zrobiæ inserty dla:
+-- podjete_dzialanie
+-- zrodlo_finansowania
+-- dzialanie_zrodlo
+-- dzialanie_odpowiedzialnosc
+-- strategia_autor
+-- dzialanie_cel
+
+
+
+
 
 -- wyswietlanie
 select * from strategia
+select * from osoby_odpowiedzialne
+select * from autor
 select * from cel
 select * from dzialanie
-select * from polaczenie
