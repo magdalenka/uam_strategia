@@ -106,29 +106,109 @@ primary key (id_celu, id_dzialania)
 -- wstawianie do tabeli
 
 insert into strategia(id_parent, lp, nazwa_strategii, nazwa_jednostki, widocznosc)
-values (null, 1, 'nazwa str 1', 'nazwa jednostki', 0)
-insert into strategia(id_parent, lp, nazwa_strategii, nazwa_jednostki, widocznosc)
-values (1, 2, 'nazwa str 2', 'nazwa jedn 2', 1)
+values (null, 1, 'Strategia Rozwoju Uniwersytetu Im. Adama Mickiewicza', 'Uniwersytet im. Adama Mickiewicza', 1)
+
+insert into zrodlo_finansowania(nazwa)
+values ('Œrodki wydzia³ów')
+
+insert into autor (lp, tytul, nazwisko)
+values (1, 'prof.', 'Jacek Guliñski');
+insert into autor (lp, tytul, nazwisko)
+values (2, 'prof.', 'Andrzej Lesicki');
+insert into autor (lp, tytul, nazwisko)
+values (3, ' ', 'Natalia Chromiñska');
+insert into autor (lp, tytul, nazwisko)
+values (4, 'prof.', 'Rafa³ Drozdowski');
+insert into autor (lp, tytul, nazwisko)
+values (5, 'prof.', 'Katarzyna Dziubalska-Ko³aczyk');
+insert into autor (lp, tytul, nazwisko)
+values (6, 'prof.', 'Witold Mazurczak');
+insert into autor (lp, tytul, nazwisko)
+values (7, 'prof.', 'Zbyszko Melosik');
+insert into autor (lp, tytul, nazwisko)
+values (8, 'prof.', 'Bogus³aw Mróz');
+insert into autor (lp, tytul, nazwisko)
+values (9, ' ', 'Dorotoa Nicewicz-Modrzewska');
+insert into autor (lp, tytul, nazwisko)
+values (10, 'prof.', 'Henryk Rogacki');
+insert into autor (lp, tytul, nazwisko)
+values (11, 'prof.', 'Grzegorz Schroeder');
+insert into autor (lp, tytul, nazwisko)
+values (12, 'prof.', 'Tadeusz Stryjakiewicz');
+
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 3)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 4)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 5)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 6)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 7)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 8)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 9)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 10)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 11)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 12)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 13)
+insert into strategia_autor(id_strategii, id_osoby)
+values (3, 14)
+
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (1, 3, null, 'BADANIA NAUKOWE na œwiatowym poziomie')
+
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (1, 3, 16, 'Wspieranie rozwoju naukowego pracowników')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (2, 3, 16, 'Poszerzanie interdyscyplinarnoœci badañ naukowych')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (3, 3, 16, 'Umiêdzynarodowienie badañ')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (4, 3, 16, 'Wzmacnianie infrastrutury badawczej')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (5, 3, 16, 'Wdro¿enie systemu ochrony i korzystania z w³asnoœci intelektualnej')
+
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (1, 3, 27, 'Osi¹ganie najwy¿szych kategorii naukowych przez wszystkie podstawowe jednostki organizacyjne')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (2, 3, 27, 'Budowa systemu jakoœci badañ oraz powi¹zania finansowania badañ z efektami naukowymi')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (3, 3, 27, 'Wy³anianie i wspieranie jednostek o wybitnym potencjale naukowym i intelektualnym')
+insert into cel (lp, id_strategii, id_parent, tresc)
+values (4, 3, 27, 'Kszta³towanie sylwetki uczonego - kierownika zespo³u badawczego')
+
+insert into dzialanie (nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc )
+values ('Wspieranie dzia³añ maj¹cych na celu utrzymanie i podnoszenie kategorii parametryzacji naukowej jednostek', 1, 'Liczba wydzia³ów z l.kategori¹', '2009-01-01', '2019-12-31', 10, 1, 1)
+insert into dzialanie (nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc )
+values ('Zwiêkszenie liczby uprawnieñ do nadawania stopni naukowych i tytu³u naukowego', 2, 'Liczba kierunków i wydzia³ów posiadaj¹cyh takie uprawnienia', '2009-01-01', '2019-12-31', 10, 1, 1)
+
+select * from zrodlo_finansowania
+select * from dzialanie
+insert into dzialanie_zrodlo (id_dzialania, id_zrodlo_finansowania)
+values (6,1);
+insert into dzialanie_zrodlo (id_dzialania, id_zrodlo_finansowania)
+values (7,1);
+
 
 insert into osoby_odpowiedzialne(lp, stanowisko, tytul, nazwisko, id_startegii)
 values (1, 'dziekan', 'prof', 'Kowalski', 2)
 insert into osoby_odpowiedzialne(lp, stanowisko, tytul, nazwisko, id_startegii)
 values (1, 'sprz¹tacz', 'dr', 'Nowak', 1)
 
-insert into autor (lp, tytul, nazwisko)
-values (1, 'prof', 'Kowalski');
-insert into autor (lp, tytul, nazwisko)
-values (2, 'dr', 'Suse³');
+select * from osoby_odpowiedzialne
 
-insert into cel (lp, id_strategii, id_parent, tresc)
-values (1, 1, null, 'To jest jakis cel')
-insert into cel (lp, id_strategii, id_parent, tresc)
-values (2, 2, 1, 'To jest jakis cel potomny')
 
-insert into dzialanie (nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc )
-values ('Nazwa dzialania', 1, 'liczba mrówek', GETDATE(), '2017-02-27', 87, 1, 1)
-insert into dzialanie (nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc )
-values ('Nazwa dzialania 2', 2, 'liczba pieniêdzy', '2007-02-27', '2017-02-27', 75, 0, 0)
+-- zadanie ci¹g³e to wpisywaæ koniec wa¿noœci strategii?
+-- a datê od, to datê kiedy powsta³a strategia?
+delete from dzialanie
+select * from dzialanie
 
 -- zrobiæ inserty dla:
 -- podjete_dzialanie
@@ -143,6 +223,15 @@ values ('Nazwa dzialania 2', 2, 'liczba pieniêdzy', '2007-02-27', '2017-02-27', 
 
 
 -- wyswietlanie
+-- Ÿród³a finansowania do okreœlonego dzia³ania
+select D.nazwa, Z.nazwa
+from dzialanie as D, zrodlo_finansowania as Z
+where D.id = 6
+-- autorzy strategii o id =3 (UAM)
+select A.tytul, A.nazwisko 
+from autor as A, strategia as S
+where S.id = 3
+
 select * from strategia
 select * from osoby_odpowiedzialne
 select * from autor
