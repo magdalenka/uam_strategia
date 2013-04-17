@@ -12,7 +12,7 @@
     </p>
 
 
-      <asp:TreeView ID="DrzewoJednostek" Runat="server" ShowLines=true>
+      <asp:TreeView ID="DrzewoJednostek" Runat="server" OnSelectedNodeChanged="DrzewoJednostek_SelectedNodeChanged" ShowLines=true>
       <Nodes>
 
         <asp:TreeNode Value="Wydzial1" Expanded="False" Text="Wydział Matematyki i Informatyki">
@@ -33,6 +33,22 @@
 
       </Nodes>
       </asp:TreeView>
+
+
+      <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+
+
+
+
+
+      <asp:TreeView ID="DrzewoStrategii" Runat="server" OnSelectedNodeChanged="DrzewoStrategii_SelectedNodeChanged" ShowLines=true PopulateNodesFromClient="true" ExpandDepth="0">
+      <Nodes>
+      </Nodes>
+      </asp:TreeView>
+
+      <iframe name="ramka" id="ramka" src="" height=300 width=600 frameborder=1>
+            Niestety, Twoja przeglądarka nie potrafi poprawnie wyświetlić zawartości strony. Zaktualizuj ją.
+	  </iframe>
 
 
 </asp:Content>
