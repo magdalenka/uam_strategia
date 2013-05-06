@@ -1,15 +1,15 @@
-﻿<%@ Page Title="Log In" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
+﻿<%@ Page Title="Logowanie" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
     CodeFile="Login.aspx.cs" Inherits="Account_Login" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <h2>
-        Log In
+        Logowanie
     </h2>
     <p>
-        Please enter your username and password.
-        <asp:HyperLink ID="RegisterHyperLink" runat="server" EnableViewState="false">Register</asp:HyperLink> if you don't have an account.
+        Wpisz nazwę użytkownika i hasło.
+        <asp:HyperLink ID="RegisterHyperLink" runat="server" EnableViewState="false">Zarejestruj się</asp:HyperLink> jeśli nie posiadasz konta.
     </p>
     <asp:Login ID="LoginUser" runat="server" EnableViewState="false" RenderOuterTable="false">
         <LayoutTemplate>
@@ -20,28 +20,28 @@
                  ValidationGroup="LoginUserValidationGroup"/>
             <div class="accountInfo">
                 <fieldset class="login">
-                    <legend>Account Information</legend>
+                    <legend>Informacje o koncie</legend>
                     <p>
-                        <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">Username:</asp:Label>
+                        <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">Nazwa użytkownika:</asp:Label>
                         <asp:TextBox ID="UserName" runat="server" CssClass="textEntry"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName" 
-                             CssClass="failureNotification" ErrorMessage="User Name is required." ToolTip="User Name is required." 
+                             CssClass="failureNotification" ErrorMessage="Podaj nazwę użytkownika." ToolTip="Podaj nazwę użytkownika." 
                              ValidationGroup="LoginUserValidationGroup">*</asp:RequiredFieldValidator>
                     </p>
                     <p>
-                        <asp:Label ID="PasswordLabel" runat="server" AssociatedControlID="Password">Password:</asp:Label>
+                        <asp:Label ID="PasswordLabel" runat="server" AssociatedControlID="Password">Hasło:</asp:Label>
                         <asp:TextBox ID="Password" runat="server" CssClass="passwordEntry" TextMode="Password"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password" 
-                             CssClass="failureNotification" ErrorMessage="Password is required." ToolTip="Password is required." 
+                             CssClass="failureNotification" ErrorMessage="Podaj hasło." ToolTip="Podaj hasło." 
                              ValidationGroup="LoginUserValidationGroup">*</asp:RequiredFieldValidator>
                     </p>
                     <p>
                         <asp:CheckBox ID="RememberMe" runat="server"/>
-                        <asp:Label ID="RememberMeLabel" runat="server" AssociatedControlID="RememberMe" CssClass="inline">Keep me logged in</asp:Label>
+                        <asp:Label ID="RememberMeLabel" runat="server" AssociatedControlID="RememberMe" CssClass="inline">Nie wylogowuj mnie</asp:Label>
                     </p>
                 </fieldset>
                 <p class="submitButton">
-                    <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Log In" ValidationGroup="LoginUserValidationGroup"/>
+                    <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Zaloguj" ValidationGroup="LoginUserValidationGroup"/>
                 </p>
             </div>
         </LayoutTemplate>

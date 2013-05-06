@@ -1,4 +1,4 @@
-1. Edytujemy kod. 
+﻿1. Edytujemy kod. 
 2. Zapisujemy.
 3. Komentujemy na githubie Destopowym.
 4. !!! Sync !!!
@@ -6,22 +6,4 @@
 6. Akceptacja i na g��wnym jest wszystko aktualne.
 
 Pozdrawiam,
-gmagdaa z nudnych seminari�w o j�zykach programowania
 
-blabla-Ania bla
-
-
-I teraz dopisuje jeszcze Magda.
-
-Ania again
-
-Druga Magda tez dopisuje
-??
-
-Dopisuje i dobrze jej to wychodzi :)
-
-Maciek: Testtesttest.
-
-test
-
-krowa

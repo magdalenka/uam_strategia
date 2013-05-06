@@ -6,8 +6,8 @@ body
     background: #b6b7bc;
     font-size: .80em;
     font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;
-    margin: 0px;
-    padding: 0px;
+    margin: 0px 20px;
+    padding: 0px 10px;
     color: #696969;
 }
 
@@ -88,7 +88,7 @@ first child of the left and right table columns */
 
 .page
 {
-    width: 960px;
+    width: 100%;
     background-color: #fff;
     margin: 20px auto 0px auto;
     border: 1px solid #496077;
