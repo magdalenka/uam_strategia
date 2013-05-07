@@ -5,6 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <script language="javascript" type= "text/javascript">
+        function Popup(id, strategyNr, edit) {
+            window.open("FormCel.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=250,top=243,left=25');
+            return false;
+        }
+    </script>
 </head>
 <body style="height: 492px">
     <form id="form1" runat="server">

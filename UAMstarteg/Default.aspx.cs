@@ -26,8 +26,8 @@ public partial class _Default : System.Web.UI.Page
     protected void Button1_Click(object sender, EventArgs e)
     {
         SqlConnection mySQLConnection = new SqlConnection();
-            mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
-            mySQLConnection.Open();
+        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";    
+        mySQLConnection.Open();
 
             SqlCommand cmd;
             cmd = new SqlCommand("SELECT  * from autor ", mySQLConnection);

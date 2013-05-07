@@ -25,7 +25,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 
         SqlCommand cmd;
         //id_parent is null and // tylko cele, narazie podcele tez wyswietla
-        cmd = new SqlCommand("SELECT lp, tresc from cel where id_strategii = "+ strategyNr +";", mySQLConnection);
+        cmd = new SqlCommand("SELECT id, lp, tresc from cel where id_strategii = "+ strategyNr +";", mySQLConnection);
         cmd.ExecuteNonQuery();
 
         SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -36,6 +36,7 @@ public partial class TargetsAsText : System.Web.UI.Page
         for (int i=0; i<no; i++) // dla wszytskich wyciagnietych wierszy
         {
             TableRow row = new TableRow();
+            String id = dt.Rows[0]["id"].ToString();
             
             //liczba porządkowa
             TableCell lpCell = new TableCell();
@@ -50,55 +51,53 @@ public partial class TargetsAsText : System.Web.UI.Page
             //dodaj
             TableCell addButtonCell = new TableCell();
             ImageButton addButton = new ImageButton();
-            addButton.ID = "addButton" + i.ToString();
+            addButton.ID = "addButton_" + id;
             addButton.ImageUrl = "add.gif";
             addButton.Enabled = true;
             addButton.Visible = true;
             addButton.Height = 22;
             addButton.Width = 22;
-            addButton.OnClientClick = "OnAddButtonClick";
+            addButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 0 + ");";
             addButtonCell.Controls.Add(addButton);
             row.Cells.Add(addButtonCell);
 
             //edytuj
             TableCell editButtonCell = new TableCell();
             ImageButton editButton = new ImageButton();
-            editButton.ID = "editButton" + i.ToString();
+            editButton.ID = "editButton_" + id;
             editButton.ImageUrl = "edit.gif";
             editButton.Enabled = true;
             editButton.Visible = true;
             editButton.Height = 22;
             editButton.Width = 22;
-            editButton.OnClientClick = "OnEditButtonClick";
+            editButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
             editButtonCell.Controls.Add(editButton);
             row.Cells.Add(editButtonCell);
 
             //usun
+            //niebezpiczne usuwanie
             TableCell deleteButtonCell = new TableCell();
             ImageButton deleteButton = new ImageButton();
-            deleteButton.ID = "deleteButton" + i.ToString();
+            deleteButton.ID = "deleteButton_" + id;
             deleteButton.ImageUrl = "delete.gif";
             deleteButton.Enabled = true;
             deleteButton.Visible = true;
             deleteButton.Height = 22;
             deleteButton.Width = 22;
-            deleteButton.OnClientClick = "OnDeleteButtonClick";
+            deleteButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
             deleteButtonCell.Controls.Add(deleteButton);
             row.Cells.Add(deleteButtonCell);
             TargetTable.Rows.Add(row);
         }
     }
 
-    //do zrobienia !!!
-    void OnAddButtonClick(object sender, ImageClickEventArgs e)
-    {
-    }
 
-    void OnEditButtonClick(object sender, ImageClickEventArgs e)
+    public int GetAimId(object sender)
     {
-    }
-
-    void OnDeleteButtonClick(object sender, ImageClickEventArgs e)
-    {
+        Button lbtn = (Button)sender;
+        string idButton = lbtn.ID;
+        var parts = idButton.Split('_');
+        int id = Convert.ToInt32(parts[1]);
+        return id;
     }
 }
