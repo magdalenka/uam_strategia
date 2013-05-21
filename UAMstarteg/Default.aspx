@@ -8,16 +8,17 @@
         Witamy w Systemie zarządzania strategiami UAM.
     </h2>
     <p>
-        To learn more about ASP.NET visit <a href="http://www.asp.net" title="ASP.NET Website">www.asp.net</a>.
+        Zaloguj się aby kontynuować.
     </p>
+
+    <asp:Label ID="Label" runat="server" Text=""></asp:Label>
+<!--
     <p>
-        You can also find <a href="http://go.microsoft.com/fwlink/?LinkID=152368&amp;clcid=0x409"
-            title="MSDN ASP.NET Docs">documentation on ASP.NET at MSDN</a>.</p>
-<p>
         &nbsp;<asp:Button ID="Button1" runat="server" onclick="Button1_Click" 
             Text="Wyswietl" />
         <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
     </p>
+-->
 </asp:Content>

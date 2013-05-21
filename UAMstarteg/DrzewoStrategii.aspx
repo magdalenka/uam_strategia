@@ -1,17 +1,18 @@
-﻿<%@ Page Title="Strona z drzewem, zmienić koniecznie jej nazwę" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
-    CodeFile="About.aspx.cs" Inherits="About" %>
+﻿<%@ Page Title="Strona z drzewem, zmienić koniecznie jej nazwę" Language="C#" MasterPageFile="~/TreeSite.master" AutoEventWireup="true"
+    CodeFile="DrzewoStrategii.aspx.cs" Inherits="About" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
+
     <h2>
-        About
+        Wykaz dostępnych strategii
     </h2>
     <p>
-        Put content here.
+        Wybierz interesującą Cię strategię
     </p>
 
-
+<!--
       <asp:TreeView ID="DrzewoJednostek" Runat="server" OnSelectedNodeChanged="DrzewoJednostek_SelectedNodeChanged" ShowLines=true>
       <Nodes>
 
@@ -39,16 +40,16 @@
 
 
 
-
+-->
 
       <asp:TreeView ID="DrzewoStrategii" Runat="server" OnSelectedNodeChanged="DrzewoStrategii_SelectedNodeChanged" ShowLines=true PopulateNodesFromClient="true" ExpandDepth="0">
       <Nodes>
       </Nodes>
       </asp:TreeView>
-
+<!--
       <iframe name="ramka" id="ramka" src="" height=300 width=600 frameborder=1>
             Niestety, Twoja przeglądarka nie potrafi poprawnie wyświetlić zawartości strony. Zaktualizuj ją.
 	  </iframe>
-
+-->
 
 </asp:Content>

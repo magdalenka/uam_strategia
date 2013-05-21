@@ -20,6 +20,7 @@ public partial class About : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+/*
         DataTable dt = select("*", "autor", "");
 
         int rowsCount = dt.Rows.Count;
@@ -40,7 +41,7 @@ public partial class About : System.Web.UI.Page
 
 
         }
-
+*/
         utworzKorzenDrzewaStrategii();
 
     }
@@ -88,11 +89,10 @@ public partial class About : System.Web.UI.Page
                 nazwaStrategii,
                 idStrategii,
                 "",
-                "Default.aspx",
-                "ramka"
+                "Default.aspx?id_strategii=" + idStrategii,
+                "ramka_tresc"
                 );
             DrzewoStrategii.Nodes.Add(wezel);
-
             dodajPotomkowDoDrzewaStrategii(wezel, dtStrategie);
 
         }
@@ -113,11 +113,12 @@ public partial class About : System.Web.UI.Page
                 nazwaStrategii,
                 idStrategii,
                 "",
-                "Default.aspx",
-                "ramka"
+                "Default.aspx?id_strategii=" + idStrategii,
+                "ramka_tresc"
                 );
 
             rodzic.ChildNodes.Add(wezel);
+            
 
             dodajPotomkowDoDrzewaStrategii(wezel, dtStrategie);
         }
@@ -125,23 +126,6 @@ public partial class About : System.Web.UI.Page
     
 
     protected void DrzewoJednostek_SelectedNodeChanged(object sender, EventArgs e)
-    {
-        switch (DrzewoJednostek.SelectedValue)
-        {
-            case "Wydzial1":
-                Response.Redirect("http://google.com", false);
-                break;
-            case "Wydzial2":
-                Response.Redirect("http://bash.org.pl", false);
-                break;
-            case "Katedra1": // uważać na duplikaty nazw
-                Response.Redirect("http://fb.com", false);
-                break;
-
-        }
-    }
-
-    protected void DrzewoStrategii_SelectedNodeChanged(object sender, EventArgs e)
     {/*
         switch (DrzewoJednostek.SelectedValue)
         {
@@ -156,6 +140,23 @@ public partial class About : System.Web.UI.Page
                 break;
 
         }*/
+    }
+
+    protected void DrzewoStrategii_SelectedNodeChanged(object sender, EventArgs e)
+    {/*
+        switch (DrzewoJednostek.SelectedValue)
+        {
+            case "Wydzial1":
+                Response.Redirect("http://google.com", false);
+               break;
+            case "Wydzial2":
+               Response.Redirect("http://bash.org.pl", false);
+               break;
+            case "Katedra1": // uważać na duplikaty nazw
+                Response.Redirect("http://fb.com", false);
+                break;
+
+        */
     }
 
 

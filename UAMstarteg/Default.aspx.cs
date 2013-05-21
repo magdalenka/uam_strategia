@@ -16,18 +16,24 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        string id = Request.QueryString["id_strategii"];
+        if (id != "" && id != null)
+        {
+            id = "Wybrałeś strategię numer " + id + ".";
+            Label.Text = id;
+        }
     }
 
     String lp;
     String tytul;
     String nazwisko;
-
+    
     protected void Button1_Click(object sender, EventArgs e)
     {
-        SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";    
-        mySQLConnection.Open();
+    /*    SqlConnection mySQLConnection = new SqlConnection();
+            mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+            mySQLConnection.Open();
+>>>>>>> Frameset + przesyłanie id strategii do podstrony
 
             SqlCommand cmd;
             cmd = new SqlCommand("SELECT  * from autor ", mySQLConnection);
@@ -43,17 +49,17 @@ public partial class _Default : System.Web.UI.Page
             tytul = dt.Rows[0]["tytul"].ToString();
             nazwisko = dt.Rows[0]["nazwisko"].ToString();
 
-           /* for (int i = 0; i < 10; i++) //  (int i = 0; i < dt.Rows.Count; i++)
-            {
-                //lp = dt.Rows[i]["lp"].ToString();
+           // for (int i = 0; i < 10; i++) //  (int i = 0; i < dt.Rows.Count; i++)
+           // {
+           //    lp = dt.Rows[i]["lp"].ToString();
+           //    wyjscie[i] = id + ";" + nazwa + "; " + cena + ";" + rezerwacja + ";";
+           // }
 
-               // wyjscie[i] = id + ";" + nazwa + "; " + cena + ";" + rezerwacja + ";";
-            } */
             da.Dispose();
             mySQLConnection.Close();
 
             Label2.Text = "Polaczylem sie z baza danych i pieknie wyswietlilem:";
             Label1.Text = "Tytul to: " + tytul + " ,a nazwisko to: " + nazwisko;
-        
+        */
     }
 }
