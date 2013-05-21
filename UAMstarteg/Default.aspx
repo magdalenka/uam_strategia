@@ -12,6 +12,7 @@
     </p>
 
     <asp:Label ID="Label" runat="server" Text=""></asp:Label>
+    <br />
 <!--
     <p>
         &nbsp;<asp:Button ID="Button1" runat="server" onclick="Button1_Click" 
@@ -21,4 +22,7 @@
         <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
     </p>
 -->
+    <asp:Button ID="zalogowany" runat="server" onclick="zalogowany_Click" 
+        Text="Zalogowany" />
+    <asp:Label ID="LDAP" runat="server" Text="Label"></asp:Label>
 </asp:Content>

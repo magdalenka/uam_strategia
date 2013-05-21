@@ -62,4 +62,30 @@ public partial class _Default : System.Web.UI.Page
             Label1.Text = "Tytul to: " + tytul + " ,a nazwisko to: " + nazwisko;
         */
     }
+
+    public string Login;
+    public string OrganizationKey;
+    protected void zalogowany_Click(object sender, EventArgs e)
+    {
+        
+        Login = (string)Session["USERID"];
+        //LDAP.Text = "Login osoby to: " + Login;
+         SqlConnection mySQLConnection = new SqlConnection();
+        mySQLConnection.ConnectionString = @"Data Source=150.254.76.229;Initial Catalog=UAMSTRATEG_USERS;Persist Security Info=True;User ID=UAMSTRATEG;Password=21hMpA8a";
+        mySQLConnection.Open();
+
+        SqlCommand cmd;
+        cmd = new SqlCommand("SELECT OrganizationKey from dbo.UAM_USERS where Uid = '" + Login +"' ", mySQLConnection);
+        cmd.ExecuteNonQuery();
+
+        SqlDataAdapter da = new SqlDataAdapter(cmd);
+        DataTable dt = new DataTable();
+        da.Fill(dt);
+        int no = dt.Rows.Count;
+        String[] wyjscie = new String[no];
+
+
+        OrganizationKey = dt.Rows[0]["OrganizationKey"].ToString();
+        LDAP.Text = "Zalogowana osoba ma OrganizationKey = " + OrganizationKey; 
+    }
 }
