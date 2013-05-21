@@ -9,6 +9,9 @@
 
     <frameset cols="70%,*">
         <frame src="Default.aspx" name="ramka_tresc" id="ramka_tresc">
-        <frame src="DrzewoStrategii.aspx" name="ramka_drzewo" id="ramka_drzewo">
+        <frameset rows="50%,*">
+            <frame src="DrzewoStrategii.aspx" name="ramka_strategii" id="ramka_strategii">
+            <frame src="DrzewoCelow.aspx" name="ramka_celow" id="ramka_celow">
+        </frameset>
     </frameset>
 

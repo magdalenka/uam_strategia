@@ -18,32 +18,13 @@ using System.Web.UI.WebControls;
 public partial class About : System.Web.UI.Page
 {
 
+    int idStrategii = 0;
+
     protected void Page_Load(object sender, EventArgs e)
     {
-/*
-        DataTable dt = select("*", "autor", "");
-
-        int rowsCount = dt.Rows.Count;
-        String tytul;
-        String nazwisko;
-        String lp;
-        String[] wyjscie = new String[rowsCount];
-
-
-        for (int i = 0; i < rowsCount; i++)
-        {
-            lp = dt.Rows[i]["lp"].ToString();
-            tytul = dt.Rows[i]["tytul"].ToString();
-            nazwisko = dt.Rows[i]["nazwisko"].ToString();
-
-            wyjscie[i] = lp + ". " + tytul + " " + nazwisko + "<br>";
-            Label1.Text += wyjscie[i];
-
-
-        }
-*/
-        utworzKorzenDrzewaStrategii();
-
+        idStrategii = Convert.ToInt32(Request.QueryString["id_strategii"]);
+        utworzKorzenDrzewaCelow();
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.ramka_tresc.location='Default.aspx?id_strategii=" + idStrategii + "id_celu=0'</script>");
     }
 
 
@@ -71,56 +52,56 @@ public partial class About : System.Web.UI.Page
         return dt;
     }
 
-    protected void utworzKorzenDrzewaStrategii()
+    protected void utworzKorzenDrzewaCelow()
     {
-        DataTable dtStrategie = select("*", "strategia", "widocznosc = 1");
-        int rowsCountStrategie = dtStrategie.Rows.Count;
+        DataTable dtCele = select("*", "cel", "id_strategii ="+ idStrategii +" and widocznosc = 1");
+        int rowsCountCele = dtCele.Rows.Count;
 
-        DataRow[] drStrategie;
-        drStrategie = dtStrategie.Select("id_parent is null", "lp asc");
+        DataRow[] drCele;
+        drCele = dtCele.Select("id_parent is null", "lp asc");
 
 
-        for (int i = 0; i < drStrategie.Length; i++)
+        for (int i = 0; i < drCele.Length; i++)
         {
-            String nazwaStrategii = drStrategie[i]["nazwa_strategii"].ToString();
-            String idStrategii = drStrategie[i]["id"].ToString();
+            String nazwaCelu = drCele[i]["tresc"].ToString();
+            String idCelu = drCele[i]["id"].ToString();
 
             TreeNode wezel = new TreeNode(
-                nazwaStrategii,
-                idStrategii,
+                nazwaCelu,
+                idCelu,
                 "",
-                "DrzewoCelow.aspx?id_strategii=" + idStrategii,
-                "ramka_celow"
+                "Default.aspx?id_strategii=" + idStrategii + "id_celu=" + idCelu,
+                "ramka_tresc"
                 );
-            DrzewoStrategii.Nodes.Add(wezel);
-            dodajPotomkowDoDrzewaStrategii(wezel, dtStrategie);
+            DrzewoCelow.Nodes.Add(wezel);
+            dodajPotomkowDoDrzewaCelow(wezel, dtCele);
 
         }
     }
 
-    protected void dodajPotomkowDoDrzewaStrategii(TreeNode rodzic, DataTable dtStrategie)
+    protected void dodajPotomkowDoDrzewaCelow(TreeNode rodzic, DataTable dtCele)
     {
-        DataRow[] drStrategie;
-        drStrategie = dtStrategie.Select("id_parent = "+ Convert.ToInt32(rodzic.Value), "lp asc");
+        DataRow[] drCele;
+        drCele = dtCele.Select("id_parent = "+ Convert.ToInt32(rodzic.Value), "lp asc");
 
 
-        for (int i = 0; i < drStrategie.Length; i++)
+        for (int i = 0; i < drCele.Length; i++)
         {
-            String nazwaStrategii = drStrategie[i]["nazwa_strategii"].ToString();
-            String idStrategii = drStrategie[i]["id"].ToString();
+            String nazwaCelu = drCele[i]["tresc"].ToString();
+            String idCelu = drCele[i]["id"].ToString();
 
             TreeNode wezel = new TreeNode(
-                nazwaStrategii,
-                idStrategii,
+                nazwaCelu,
+                idCelu,
                 "",
-                "DrzewoCelow.aspx?id_strategii=" + idStrategii,
-                "ramka_celow"
+                "Default.aspx?id_strategii=" + idStrategii + "id_celu=" + idCelu,
+                "ramka_tresc"
                 );
 
             rodzic.ChildNodes.Add(wezel);
             
 
-            dodajPotomkowDoDrzewaStrategii(wezel, dtStrategie);
+            dodajPotomkowDoDrzewaCelow(wezel, dtCele);
         }
     }
     
@@ -142,7 +123,7 @@ public partial class About : System.Web.UI.Page
         }*/
     }
 
-    protected void DrzewoStrategii_SelectedNodeChanged(object sender, EventArgs e)
+    protected void DrzewoCelow_SelectedNodeChanged(object sender, EventArgs e)
     {/*
         switch (DrzewoJednostek.SelectedValue)
         {
