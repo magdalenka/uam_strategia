@@ -18,24 +18,18 @@ using System.Collections;
 public partial class TargetsAsText : System.Web.UI.Page
 {
     private DataFetcher dataFetcher = new DataFetcher();
+    Stack revertRows = new Stack();
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        Boolean zadanie = true;
         int strategyNr = 16, targetNr=0;
         String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii AS tresc, nazwa_jednostki, widocznosc FROM strategia";
         String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null";
 
-        //Wszystkie strategie        
-       // DataTable strategies = dataFetcher.getSelectResultsAsDataTable(strategiesQuery);
-       // int strategiesNo = strategies.Rows.Count;
-
         //wszystkie cele
         DataTable targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
         int targetsNo = targets.Rows.Count;
-
-        //dzialania do konkretnego celu/podcelu 
-      //  DataTable operations = dataFetcher.getSelectResultsAsDataTable(operationsQuery);
-      //  int operationsNo = operations.Rows.Count; 
 
         ArrayList previousLevel = new ArrayList();
 
@@ -45,27 +39,95 @@ public partial class TargetsAsText : System.Web.UI.Page
         targetsNo = targets.Rows.Count;
         DataTable subTargets = new DataTable();
 
-        for (int i = 0; i < targetsNo; i++) // dla każdego celu
+        //cała strategia
+        if (zadanie)
         {
-            previousLevel.Clear();
-            previousLevel.Add(targets.Rows[i]["lp"]);
-            PutNewRowIntoTable(targets.Rows[i], previousLevel, "target");
-            
-            targetNr = (int)targets.Rows[i]["id"];
-
-            //Wyciąga wszystkie podcele - 1 poziom
-            String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-           + "WHERE id_parent = " + targetNr + ";";
-            subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
-
-            if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
+            for (int i = 0; i < targetsNo; i++) // dla każdego celu
             {
-                createContentTable(subTargets, false, previousLevel);
+                previousLevel.Clear();
+                previousLevel.Add(targets.Rows[i]["lp"]);
+                PutNewRowIntoTable(targets.Rows[i], previousLevel, "target");
+
+                targetNr = (int)targets.Rows[i]["id"];
+
+                //Wyciąga wszystkie podcele - 1 poziom
+                String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
+               + "WHERE id_parent = " + targetNr + ";";
+                subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
+
+                if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
+                {
+                    createContentTable(subTargets, false, previousLevel);
+                }
+                // previousLevel.RemoveAt(previousLevel.Count - 1);
             }
-           // previousLevel.RemoveAt(previousLevel.Count - 1);
+        }
+        else
+        {
+           
+            DataTable dt;
+            String type = "operation";
+            int id = 8; //Pobrać to
+           // String operationQuery = "SELECT nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc, id_celu"
+             //   + " FROM dzialanie WHERE id = " + id + ";";
+            String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = "+ id +";";
+          //  String operationQuery = "Select * from cel inner join strategia ON cel.id = strategia.id";
+
+            if (type.Equals("operation"))
+            {
+                dt = dataFetcher.getSelectResultsAsDataTable(operationQuery);
+                revertRows.Push(dt.Rows[0]);
+                id = (int)dt.Rows[0]["id_celu"];
+            }
+            String targetQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
+                  + "WHERE id = " + id + ";";
+            dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
+            revertRows.Push(dt.Rows[0]);
+      
+            id = (int)dt.Rows[0]["id_parent"];
+            if (id != null)
+            {
+                createTableFromTreeBranch(id);
+            }
+
+            PrintTableFromTreeBranch();
         }
     }
 
+    //Wstawia wiersze w odwroconej kolejnosci do tabeli
+    private void PrintTableFromTreeBranch()
+    {
+        ArrayList previousLevel = new ArrayList();
+       foreach (DataRow row in revertRows) 
+        {
+            previousLevel.Add(row["lp"]);
+            if (row.ItemArray.Length == 6) //cel
+            {
+                PutNewRowIntoTable(row, previousLevel, "target");
+            }
+            else
+            {
+                PutNewRowIntoTable(row, previousLevel, "operation");
+            }
+        }
+    }
+
+    //tworzy wybraną gałąź drzewa (wstawia na stos)
+    private void createTableFromTreeBranch( int id)
+    {
+        String targetQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
+                  + "WHERE id = " + id + ";";
+        DataTable dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
+        revertRows.Push(dt.Rows[0]);
+
+        if (dt.Rows[0]["id_parent"] != DBNull.Value )
+        {
+            id = (int)dt.Rows[0]["id_parent"];
+            createTableFromTreeBranch(id);
+        }
+    }
+
+    //rekurencyjnie wyświetla całą strategię
     private void createContentTable(DataTable data, Boolean end, ArrayList previousLevel)
     {
         int subTargetNr = 0;
@@ -88,12 +150,18 @@ public partial class TargetsAsText : System.Web.UI.Page
                 }
                 else
                 {
-                    operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie " +
-                        "ON dzialanie_cel.id_celu = " + subTargetNr + ";";
-                    DataTable operations = dataFetcher.getSelectResultsAsDataTable(operationsQuery);;
-                    for (int j = 0; j < operations.Rows.Count; j++)
+                  //  operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie " +
+                    //    "ON dzialanie_cel.id_celu = " + subTargetNr + ";";
+                    operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE dzialanie_cel.id_celu = " + subTargetNr + ";";
+                    DataTable operations = dataFetcher.getSelectResultsAsDataTable(operationsQuery);
+                    if (operations.Rows.Count > 0)
                     {
-                        PutNewRowIntoTable(data.Rows[i], previousLevel, "operation");
+                        for (int j = 0; j < operations.Rows.Count; j++)
+                        {
+                            previousLevel.Add(operations.Rows[j]["lp"]);
+                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation");
+                            previousLevel.RemoveAt(previousLevel.Count - 1);
+                        }
                     }
                 }
                 previousLevel.RemoveAt(previousLevel.Count - 1);
@@ -110,15 +178,17 @@ public partial class TargetsAsText : System.Web.UI.Page
         if (type.Equals("target"))
         {
             tableRow.Cells.Add(PutTargetContentCellIntoRow(row));
+            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], (int)row["id_strategii"]));
         }
         else if (type.Equals("operation"))
         {
             tableRow.Cells.Add(PutOperationContentCellIntoRow(row));
         }
-        tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], (int)row["id_strategii"], 1));
 
         TargetTable.Rows.Add(tableRow);
     }
+
+
 
     //Wstawia do tabeli nowy wiersz z celem / podcelem
     private TableCell PutTargetContentCellIntoRow(DataRow row)
@@ -132,14 +202,14 @@ public partial class TargetsAsText : System.Web.UI.Page
     }
 
     //!!!!!!! NIE SKONCZONE _ NIE UZYWAC !!!!!!!!
-    //Wstawia do tabeli nowy wiersz z dziłaniem
+    //Wstawia do tabeli nowy wiersz z działaniem
     private TableCell PutOperationContentCellIntoRow(DataRow row)
     {
         TableRow tableRow = new TableRow();
 
         TableCell contentCell = new TableCell();
         contentCell.CssClass = "contentCells";
-        contentCell.Controls.Add(new LiteralControl(row["tresc"].ToString()));
+        contentCell.Controls.Add(new LiteralControl(row["nazwa"].ToString()));
         return contentCell;
     }
 
@@ -158,7 +228,7 @@ public partial class TargetsAsText : System.Web.UI.Page
     }
 
     //Zwraca komórkę zawierającą przyciski
-    private TableCell PutOperationButtonsIntoTableRow(int id, int strategyNr, int type)
+    private TableCell PutOperationButtonsIntoTableRow(int id, int strategyNr)
     {
         TableCell buttonCell = new TableCell();
         buttonCell.CssClass = "buttonCells";
