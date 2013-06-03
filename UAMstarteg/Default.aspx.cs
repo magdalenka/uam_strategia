@@ -17,6 +17,30 @@ public partial class _Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
+       // odbieranie nr strategii i nr celu, mozna potem usunac wyswietlanie w labelu
+       string id_str = Request.QueryString["id_strategii"];
+       string id_cel = Request.QueryString["id_celu"];
+
+       if (id_str != "" && id_str != null)
+       {
+           id_str = "Wybrałeś strategię numer " + id_str + ".<br>";
+
+           if (id_cel != "" && id_cel != null)
+           {
+               id_cel = "Wybrałeś cel numer " + id_cel + ".";
+           }
+           else
+           {
+               id_cel = "Podano niepoprawny numer celu.";
+           }
+           Label.Text = id_str + id_cel;
+       }
+       else
+       {
+           Label.Text = "Podano niepoprawny numer strategii.";
+       }
+       // dotad
+
         Sprawdz_OrganizationKey();
 
     }

@@ -24,7 +24,7 @@ public partial class About : System.Web.UI.Page
     {
         idStrategii = Convert.ToInt32(Request.QueryString["id_strategii"]);
         utworzKorzenDrzewaCelow();
-        Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.ramka_tresc.location='Default.aspx?id_strategii=" + idStrategii + "id_celu=0'</script>");
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.ramka_tresc.location='Default.aspx?id_strategii=" + idStrategii + "&id_celu=0'</script>");
     }
 
 
@@ -70,7 +70,7 @@ public partial class About : System.Web.UI.Page
                 nazwaCelu,
                 idCelu,
                 "",
-                "Default.aspx?id_strategii=" + idStrategii + "id_celu=" + idCelu,
+                "Default.aspx?id_strategii=" + idStrategii + "&id_celu=" + idCelu,
                 "ramka_tresc"
                 );
             DrzewoCelow.Nodes.Add(wezel);
@@ -94,7 +94,7 @@ public partial class About : System.Web.UI.Page
                 nazwaCelu,
                 idCelu,
                 "",
-                "Default.aspx?id_strategii=" + idStrategii + "id_celu=" + idCelu,
+                "Default.aspx?id_strategii=" + idStrategii + "&id_celu=" + idCelu,
                 "ramka_tresc"
                 );
 

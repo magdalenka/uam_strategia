@@ -11,6 +11,12 @@
         Zaloguj się aby kontynuować.
     </p>
     <br />
+
+    <!--potem do skasowania-->
+    <asp:Label ID="Label" runat="server" Text=""></asp:Label>
+    <br /><br />
+    <!--dotad-->
+
     <asp:Button ID="uniwersytet" runat="server" Enabled="False" Text="Uniwersytet" 
         onclick="uniwersytet_Click" style="padding-top: 0px" />
     <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
