@@ -6,6 +6,14 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Novell.Directory.Ldap;
 using System.Data;
+using System.Xml;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Web.Services;
+using System.ComponentModel;
+using System.Drawing;
+using System.Text;
+using System.IO;
 
 public partial class Account_Login : System.Web.UI.Page
 {
@@ -48,6 +56,9 @@ public partial class Account_Login : System.Web.UI.Page
 
 
     public string USERID;
+     public string Login;
+    public string OrganizationKey;
+    public string OrganizationKeyP;
 
     protected void LoginUser_Authenticate(object sender, AuthenticateEventArgs e)
     {
@@ -56,15 +67,42 @@ public partial class Account_Login : System.Web.UI.Page
         e.Authenticated = ok;
         if (ok)
         {
+            
             Session["USERID"] = LoginUser.UserName;
+            Login = (string)Session["USERID"];
+            sprawdzOrganizationKey();
+
 
         }
         else
         {
             Session["USERID"] = LoginUser.UserName;
+            Login = (string)Session["USERID"];
+            sprawdzOrganizationKey();
         }
+
     }
 
+    protected void sprawdzOrganizationKey()
+    {
+        SqlConnection mySQLConnection = new SqlConnection();
+        mySQLConnection.ConnectionString = @"Data Source=150.254.76.229;Initial Catalog=UAMSTRATEG_USERS;Persist Security Info=True;User ID=UAMSTRATEG;Password=21hMpA8a";
+        mySQLConnection.Open();
+
+        SqlCommand cmd;
+        cmd = new SqlCommand("SELECT OrganizationKey from dbo.UAM_USERS where Uid = '" + Login + "' ", mySQLConnection);
+        cmd.ExecuteNonQuery();
+
+        SqlDataAdapter da = new SqlDataAdapter(cmd);
+        DataTable dt = new DataTable();
+        da.Fill(dt);
+        int no = dt.Rows.Count;
+        String[] wyjscie = new String[no];
+
+
+        OrganizationKey = dt.Rows[0]["OrganizationKey"].ToString();
+        Session["OrganizationKeyP"] = OrganizationKey;
+    }
 
 
 

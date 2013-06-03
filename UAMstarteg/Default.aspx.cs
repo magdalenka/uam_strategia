@@ -16,12 +16,9 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string id = Request.QueryString["id_strategii"];
-        if (id != "" && id != null)
-        {
-            id = "Wybrałeś strategię numer " + id + ".";
-            Label.Text = id;
-        }
+
+        Sprawdz_OrganizationKey();
+
     }
 
     String lp;
@@ -65,27 +62,54 @@ public partial class _Default : System.Web.UI.Page
 
     public string Login;
     public string OrganizationKey;
-    protected void zalogowany_Click(object sender, EventArgs e)
+    public int OrganizationKeyINT;
+   
+
+    protected void Sprawdz_OrganizationKey()
     {
-        
-        Login = (string)Session["USERID"];
-        //LDAP.Text = "Login osoby to: " + Login;
-         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=150.254.76.229;Initial Catalog=UAMSTRATEG_USERS;Persist Security Info=True;User ID=UAMSTRATEG;Password=21hMpA8a";
-        mySQLConnection.Open();
+        OrganizationKey = (string)Session["OrganizationKeyP"];
+        OrganizationKeyINT = Convert.ToInt32(OrganizationKey);
+        if (OrganizationKeyINT == 0000000000)
+        {
+            // Uniwersytet
+            uniwersytet.Enabled = true;
+            biologia.Enabled = true;
+            chemia.Enabled = true;
+            Filologia.Enabled = true;
+        }
+        if (OrganizationKeyINT == 0200000000)
+        {
+            // wydzial biologii
+            biologia.Enabled = true;
+        }
+        if (OrganizationKeyINT == 0300000000)
+        {
+            //chemia
+            chemia.Enabled = true;
+        }
+        if (OrganizationKeyINT == 0400000000)
+        {
+            // wydział filogii polskiej i klasycznej
+            Filologia.Enabled = true;
+        }
+       
 
-        SqlCommand cmd;
-        cmd = new SqlCommand("SELECT OrganizationKey from dbo.UAM_USERS where Uid = '" + Login +"' ", mySQLConnection);
-        cmd.ExecuteNonQuery();
+    }
 
-        SqlDataAdapter da = new SqlDataAdapter(cmd);
-        DataTable dt = new DataTable();
-        da.Fill(dt);
-        int no = dt.Rows.Count;
-        String[] wyjscie = new String[no];
-
-
-        OrganizationKey = dt.Rows[0]["OrganizationKey"].ToString();
-        LDAP.Text = "Zalogowana osoba ma OrganizationKey = " + OrganizationKey; 
+    protected void uniwersytet_Click(object sender, EventArgs e)
+    {
+        Label1.Text = "Masz prawo do edycji strategii Uniwersytetu";
+    }
+    protected void biologia_Click(object sender, EventArgs e)
+    {
+        Label2.Text = "Masz prawo do edycji strategii Wydziału Biologii";
+    }
+    protected void chemia_Click(object sender, EventArgs e)
+    {
+        Label3.Text = "Masz prawo do edycji strategii Wydziału Chemii";
+    }
+    protected void Filologia_Click(object sender, EventArgs e)
+    {
+        Label4.Text = "Masz prawo do edycji strategii Wydziału Filologii";
     }
 }

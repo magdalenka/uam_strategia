@@ -10,19 +10,20 @@
     <p>
         Zaloguj się aby kontynuować.
     </p>
-
-    <asp:Label ID="Label" runat="server" Text=""></asp:Label>
     <br />
-<!--
-    <p>
-        &nbsp;<asp:Button ID="Button1" runat="server" onclick="Button1_Click" 
-            Text="Wyswietl" />
-        <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
-    </p>
--->
-    <asp:Button ID="zalogowany" runat="server" onclick="zalogowany_Click" 
-        Text="Zalogowany" />
-    <asp:Label ID="LDAP" runat="server" Text="Label"></asp:Label>
+    <asp:Button ID="uniwersytet" runat="server" Enabled="False" Text="Uniwersytet" 
+        onclick="uniwersytet_Click" style="padding-top: 0px" />
+    <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+    <br />
+    <asp:Button ID="biologia" runat="server" Enabled="False" Text="Biologia" 
+        Height="27px" onclick="biologia_Click" Width="103px" />
+    <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
+    <br />
+    <asp:Button ID="chemia" runat="server" Enabled="False" Height="29px" 
+        onclick="chemia_Click" Text="Chemia" Width="103px" />
+    <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
+    <br />
+    <asp:Button ID="Filologia" runat="server" Enabled="False" Height="30px" 
+        onclick="Filologia_Click" Text="Filologia" Width="104px" />
+    <asp:Label ID="Label4" runat="server" Text="Label"></asp:Label>
 </asp:Content>
