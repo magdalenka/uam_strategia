@@ -12,7 +12,7 @@
         <asp:HyperLink ID="RegisterHyperLink" runat="server" EnableViewState="false">Zarejestruj się</asp:HyperLink> jeśli nie posiadasz konta.
     </p>
     <asp:Login ID="LoginUser" runat="server" EnableViewState="false" 
-        RenderOuterTable="false" onauthenticate="LoginUser_Authenticate">
+        RenderOuterTable="false" onauthenticate="LoginUser_Authenticate"  DestinationPageUrl="~/Frameset.aspx">
         <LayoutTemplate>
             <span class="failureNotification">
                 <asp:Literal ID="FailureText" runat="server"></asp:Literal>
@@ -42,7 +42,7 @@
                     </p>
                 </fieldset>
                 <p class="submitButton">
-                    <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Zaloguj" ValidationGroup="LoginUserValidationGroup"/>
+                    <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Zaloguj" ValidationGroup="LoginUserValidationGroup" />
                 </p>
             </div>
         </LayoutTemplate>
