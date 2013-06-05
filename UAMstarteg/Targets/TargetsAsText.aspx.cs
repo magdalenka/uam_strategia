@@ -23,7 +23,7 @@ public partial class TargetsAsText : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         Boolean zadanie = true;
-        int strategyNr = 16, targetNr=0;
+        int strategyNr = 1, targetNr =0;
         String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii AS tresc, nazwa_jednostki, widocznosc FROM strategia";
         String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null";
 
@@ -33,12 +33,10 @@ public partial class TargetsAsText : System.Web.UI.Page
 
         ArrayList previousLevel = new ArrayList();
 
-        strategyNr = 16;
-
         targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
         targetsNo = targets.Rows.Count;
         DataTable subTargets = new DataTable();
-
+   
         //cała strategia
         if (zadanie)
         {
@@ -62,12 +60,12 @@ public partial class TargetsAsText : System.Web.UI.Page
                 // previousLevel.RemoveAt(previousLevel.Count - 1);
             }
         }
-        else
+        else // konkretna gałąź drzewa
         {
            
             DataTable dt;
             String type = "operation";
-            int id = 8; //Pobrać to
+            int id = 8; //to jest zamiennik TargetNr
            // String operationQuery = "SELECT nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc, id_celu"
              //   + " FROM dzialanie WHERE id = " + id + ";";
             String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = "+ id +";";
