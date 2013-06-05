@@ -60,7 +60,40 @@ public partial class TargetsAsText : System.Web.UI.Page
                 // previousLevel.RemoveAt(previousLevel.Count - 1);
             }
         }
-        else // konkretna gałąź drzewa
+        else //Wszystko pod wybranym
+        {
+            DataTable dt;
+            previousLevel.Clear();
+            String type = "target";
+            int id = 3; //to jest zamiennik TargetNr
+            String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = " + id + ";";
+
+            if (type.Equals("operation"))
+            {
+                dt = dataFetcher.getSelectResultsAsDataTable(operationQuery);
+                //revertRows.Push(dt.Rows[0]);
+                //id = (int)dt.Rows[0]["id_celu"];
+            }
+            else if (type.Equals("target"))
+            {
+                targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id = " + id + ";" ;
+                previousLevel.Add(targets.Rows[0]["lp"]);
+                PutNewRowIntoTable(targets.Rows[0], previousLevel, "target");
+
+                targetNr = (int)targets.Rows[0]["id"];
+
+                //Wyciąga wszystkie podcele - 1 poziom
+                String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
+               + "WHERE id_parent = " + targetNr + ";";
+                subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
+
+                if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
+                {
+                    createContentTable(subTargets, false, previousLevel);
+                }
+            }
+        }
+     /*   else // konkretna gałąź drzewa // Wszystko nad wybranym
         {
            
             DataTable dt;
@@ -89,7 +122,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             }
 
             PrintTableFromTreeBranch();
-        }
+        } */
     }
 
     //Wstawia wiersze w odwroconej kolejnosci do tabeli
