@@ -19,24 +19,30 @@ public partial class TargetsAsText : System.Web.UI.Page
 {
     private DataFetcher dataFetcher = new DataFetcher();
     Stack revertRows = new Stack();
-
+    String organizationKeyString;
     protected void Page_Load(object sender, EventArgs e)
     {
         Boolean zadanie = true;
-        int strategyNr = 1, targetNr =0;
-        String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii AS tresc, nazwa_jednostki, widocznosc FROM strategia";
+        int strategyNr = 1, targetNr=0;
+        String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii, organization_key AS tresc, nazwa_jednostki, widocznosc, organization_key FROM strategia";
         String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null";
 
+        String organizationKeyQuery = "SELECT organization_key FROM strategiA WHERE id = " + strategyNr;
+        DataTable organizationKey = dataFetcher.getSelectResultsAsDataTable(organizationKeyQuery);
+        organizationKeyString = organizationKey.Rows[0]["organization_key"].ToString();
         //wszystkie cele
         DataTable targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
         int targetsNo = targets.Rows.Count;
 
         ArrayList previousLevel = new ArrayList();
 
+        strategyNr = 1;
+
         targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
         targetsNo = targets.Rows.Count;
         DataTable subTargets = new DataTable();
-   
+
+        DataTable strategies = dataFetcher.getSelectResultsAsDataTable(strategiesQuery);
         //cała strategia
         if (zadanie)
         {
@@ -44,7 +50,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             {
                 previousLevel.Clear();
                 previousLevel.Add(targets.Rows[i]["lp"]);
-                PutNewRowIntoTable(targets.Rows[i], previousLevel, "target");
+                PutNewRowIntoTable(targets.Rows[i], previousLevel, "target", organizationKeyString);
 
                 targetNr = (int)targets.Rows[i]["id"];
 
@@ -60,45 +66,12 @@ public partial class TargetsAsText : System.Web.UI.Page
                 // previousLevel.RemoveAt(previousLevel.Count - 1);
             }
         }
-        else //Wszystko pod wybranym
-        {
-            DataTable dt;
-            previousLevel.Clear();
-            String type = "target";
-            int id = 3; //to jest zamiennik TargetNr
-            String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = " + id + ";";
-
-            if (type.Equals("operation"))
-            {
-                dt = dataFetcher.getSelectResultsAsDataTable(operationQuery);
-                //revertRows.Push(dt.Rows[0]);
-                //id = (int)dt.Rows[0]["id_celu"];
-            }
-            else if (type.Equals("target"))
-            {
-                targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id = " + id + ";" ;
-                previousLevel.Add(targets.Rows[0]["lp"]);
-                PutNewRowIntoTable(targets.Rows[0], previousLevel, "target");
-
-                targetNr = (int)targets.Rows[0]["id"];
-
-                //Wyciąga wszystkie podcele - 1 poziom
-                String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-               + "WHERE id_parent = " + targetNr + ";";
-                subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
-
-                if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
-                {
-                    createContentTable(subTargets, false, previousLevel);
-                }
-            }
-        }
-     /*   else // konkretna gałąź drzewa // Wszystko nad wybranym
+        else
         {
            
             DataTable dt;
             String type = "operation";
-            int id = 8; //to jest zamiennik TargetNr
+            int id = 8; //Pobrać to
            // String operationQuery = "SELECT nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc, id_celu"
              //   + " FROM dzialanie WHERE id = " + id + ";";
             String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = "+ id +";";
@@ -122,7 +95,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             }
 
             PrintTableFromTreeBranch();
-        } */
+        }
     }
 
     //Wstawia wiersze w odwroconej kolejnosci do tabeli
@@ -134,11 +107,11 @@ public partial class TargetsAsText : System.Web.UI.Page
             previousLevel.Add(row["lp"]);
             if (row.ItemArray.Length == 6) //cel
             {
-                PutNewRowIntoTable(row, previousLevel, "target");
+                PutNewRowIntoTable(row, previousLevel, "target", organizationKeyString);
             }
             else
             {
-                PutNewRowIntoTable(row, previousLevel, "operation");
+                PutNewRowIntoTable(row, previousLevel, "operation", organizationKeyString);
             }
         }
     }
@@ -169,7 +142,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             for (int i = 0; i < data.Rows.Count; i++)
             {
                 previousLevel.Add(data.Rows[i]["lp"]);
-                PutNewRowIntoTable(data.Rows[i], previousLevel, "target");
+                PutNewRowIntoTable(data.Rows[i], previousLevel, "target", organizationKeyString);
                 subTargetNr = (int)data.Rows[i]["id"];
                 subTargetsQueryCC = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
                     + "WHERE id_parent = " + subTargetNr + ";";
@@ -190,7 +163,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                         for (int j = 0; j < operations.Rows.Count; j++)
                         {
                             previousLevel.Add(operations.Rows[j]["lp"]);
-                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation");
+                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation", organizationKeyString);
                             previousLevel.RemoveAt(previousLevel.Count - 1);
                         }
                     }
@@ -201,7 +174,7 @@ public partial class TargetsAsText : System.Web.UI.Page
     }
 
     //Wstawia do tabeli nowy wiersz z celem/podcelem
-    private void PutNewRowIntoTable(DataRow row, ArrayList previousLevel, String type)
+    private void PutNewRowIntoTable(DataRow row, ArrayList previousLevel, String type, String strategy)
     {
         TableRow tableRow = new TableRow();
 
@@ -209,7 +182,7 @@ public partial class TargetsAsText : System.Web.UI.Page
         if (type.Equals("target"))
         {
             tableRow.Cells.Add(PutTargetContentCellIntoRow(row));
-            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], (int)row["id_strategii"]));
+            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], (int)row["id_strategii"], strategy));
         }
         else if (type.Equals("operation"))
         {
@@ -257,49 +230,65 @@ public partial class TargetsAsText : System.Web.UI.Page
 
         return lpCell;
     }
+    public string OrganizationKey;
+    public int OrganizationKeyINT;
+
+    
 
     //Zwraca komórkę zawierającą przyciski
-    private TableCell PutOperationButtonsIntoTableRow(int id, int strategyNr)
+    private TableCell PutOperationButtonsIntoTableRow(int id, int strategyNr, String organizationkey)
     {
-        TableCell buttonCell = new TableCell();
-        buttonCell.CssClass = "buttonCells";
-        buttonCell.Width = 66;
+        // stad
+        OrganizationKey = (string)Session["OrganizationKeyP"];
+         OrganizationKeyINT = Convert.ToInt32(OrganizationKey);
+         TableCell buttonCell = new TableCell();
 
-        //dodaj
-        ImageButton addButton = new ImageButton();
-        // addButton.ID = "addButton_" + id;
-        addButton.ImageUrl = "add.png";
-        addButton.Enabled = true;
-        addButton.Visible = true;
-        addButton.Height = 22;
-        addButton.Width = 22;
-        addButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 0 + ");";
-        buttonCell.Controls.Add(addButton);
+         if (organizationkey == OrganizationKey)
+         {
 
-        //edytuj
-        ImageButton editButton = new ImageButton();
-        // editButton.ID = "editButton_" + id;
-        editButton.ImageUrl = "edit.png";
-        editButton.Enabled = true;
-        editButton.Visible = true;
-        editButton.Height = 22;
-        editButton.Width = 22;
-        editButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
-        buttonCell.Controls.Add(editButton);
 
-        //usun
-        //niebezpiczne usuwanie
-        ImageButton deleteButton = new ImageButton();
-        //  deleteButton.ID = "deleteButton_" + id;
-        deleteButton.ImageUrl = "delete.png";
-        deleteButton.Enabled = true;
-        deleteButton.Visible = true;
-        deleteButton.Height = 22;
-        deleteButton.Width = 22;
-        deleteButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
+             // do tad
+             
+             buttonCell.CssClass = "buttonCells";
+             buttonCell.Width = 66;
 
-        buttonCell.Controls.Add(deleteButton);
-        return buttonCell;
+             //dodaj
+             ImageButton addButton = new ImageButton();
+             // addButton.ID = "addButton_" + id;
+             addButton.ImageUrl = "add.png";
+             addButton.Enabled = true;
+             addButton.Visible = true;
+             addButton.Height = 22;
+             addButton.Width = 22;
+             addButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 0 + ");";
+             buttonCell.Controls.Add(addButton);
+
+             //edytuj
+             ImageButton editButton = new ImageButton();
+             // editButton.ID = "editButton_" + id;
+             editButton.ImageUrl = "edit.png";
+             editButton.Enabled = true;
+             editButton.Visible = true;
+             editButton.Height = 22;
+             editButton.Width = 22;
+             editButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
+             buttonCell.Controls.Add(editButton);
+
+             //usun
+             //niebezpiczne usuwanie
+             ImageButton deleteButton = new ImageButton();
+             //  deleteButton.ID = "deleteButton_" + id;
+             deleteButton.ImageUrl = "delete.png";
+             deleteButton.Enabled = true;
+             deleteButton.Visible = true;
+             deleteButton.Height = 22;
+             deleteButton.Width = 22;
+             deleteButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
+
+             buttonCell.Controls.Add(deleteButton);
+             
+         }
+         return buttonCell;
     }
 
 
