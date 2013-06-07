@@ -40,3 +40,9 @@
             -moz-box-shadow: 0px 0px 5px #999933;
             -webkit-box-shadow: 0px 0px 5px #999933; 
         }
+        
+        .border {
+            border-width: .2em;
+            border-style: dotted;
+            border-color: #900;
+        } 

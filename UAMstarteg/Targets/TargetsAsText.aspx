@@ -15,7 +15,7 @@
 
 
     <asp:Table ID="TargetTable" runat="server" BorderStyle="None" 
-        GridLines="Horizontal" Height="215px" HorizontalAlign="Left" Width="719px">
+        GridLines="Horizontal" Height="215px" HorizontalAlign="Left" Width="98%">
     </asp:Table>
 
 </asp:Content>
