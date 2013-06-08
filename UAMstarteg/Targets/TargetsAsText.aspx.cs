@@ -18,7 +18,6 @@ using System.Collections;
 public partial class TargetsAsText : System.Web.UI.Page
 {
     private DataFetcher dataFetcher = new DataFetcher();
-    Stack revertRows = new Stack();
     String organizationKeyString;
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -65,7 +64,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             DataTable subTargets = new DataTable();
 
             DataTable strategies = dataFetcher.getSelectResultsAsDataTable(strategiesQuery);
-            //cała strategia
+            //wyświetla całą strategię
             if (zadanie)
             {
                 for (int i = 0; i < targetsNo; i++) // dla każdego celu
@@ -85,77 +84,52 @@ public partial class TargetsAsText : System.Web.UI.Page
                     {
                         createContentTable(subTargets, false, previousLevel);
                     }
-                    // previousLevel.RemoveAt(previousLevel.Count - 1);
                 }
             }
-            else
+            else // Wyświetla wszystko pod wybranym elementem
             {
-
-                DataTable dt;
                 String type = "target";
-                int id = targetNr; //Pobrać to
-                // String operationQuery = "SELECT nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc, id_celu"
-                //   + " FROM dzialanie WHERE id = " + id + ";";
-                String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = " + id + ";";
-                //  String operationQuery = "Select * from cel inner join strategia ON cel.id = strategia.id";
+                DataTable dt = new DataTable();
 
-                if (type.Equals("operation"))
+                if (type.Equals("operation")) // elementem wybranym w drzewie jest działanie
                 {
+                    //pobiera z bazy wybrane działanie
+                    String operationQuery = "SELECT * FROM dzialanie WHERE id = " + targetNr + ";";
                     dt = dataFetcher.getSelectResultsAsDataTable(operationQuery);
-                    revertRows.Push(dt.Rows[0]);
-                    id = (int)dt.Rows[0]["id_celu"];
+                    // Dodaje liczbę porządkową do listy z numerami porządkowymi
+                    previousLevel.Add(dt.Rows[0]["lp"]);
+                    // Dodaje do tabeli wiersz z działaniem
+                    PutNewRowIntoTable(dt.Rows[0], previousLevel, "operation", organizationKeyString);
                 }
-                String targetQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-                      + "WHERE id = " + id + ";";
-                dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
-                revertRows.Push(dt.Rows[0]);
-
-                if (!dt.Rows[0]["id_parent"].ToString().Equals(""))
+                else // elementem wybranym w drzewie jest cel
                 {
-                    id = (int)dt.Rows[0]["id_parent"];
-                    createTableFromTreeBranch(id);
+                    //pobiera cel wybrany na drzewie
+                    String targetQuery = "SELECT * FROM cel "
+                          + "WHERE id = " + targetNr + ";";
+                    dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
+                    // dodaje liczbę porządkową wybranefo celu do listy z numerami porządkowymi
+                    previousLevel.Add(dt.Rows[0]["lp"]);
+                    // wstawia do tabeli wiersz z wybranym celem
+                    PutNewRowIntoTable(dt.Rows[0], previousLevel, "target", organizationKeyString);
+
+                    //wyciąga wszystkie podcele wybranego w drzewie celu
+                    String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
+                   + "WHERE id_parent = " + targetNr + ";";
+                    subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
+
+                    //jeżeli podcele istnieją
+                    if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
+                    {
+                        //tworzy rekurencyjnie resztę tabeli (wyciąga pozostałe poziomy)
+                        createContentTable(subTargets, false, previousLevel);
+                    }
+
                 }
-
-
-                PrintTableFromTreeBranch();
             }
         }
         else
         {
             Label.Text = "<br>Wybierz strategię z panelu po prawej stronie.";
-        }
-    }
-
-    //Wstawia wiersze w odwroconej kolejnosci do tabeli
-    private void PrintTableFromTreeBranch()
-    {
-        ArrayList previousLevel = new ArrayList();
-       foreach (DataRow row in revertRows) 
-        {
-            previousLevel.Add(row["lp"]);
-            if (row.ItemArray.Length == 6) //cel
-            {
-                PutNewRowIntoTable(row, previousLevel, "target", organizationKeyString);
-            }
-            else
-            {
-                PutNewRowIntoTable(row, previousLevel, "operation", organizationKeyString);
-            }
-        }
-    }
-
-    //tworzy wybraną gałąź drzewa (wstawia na stos)
-    private void createTableFromTreeBranch( int id)
-    {
-        String targetQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-                  + "WHERE id = " + id + ";";
-        DataTable dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
-        revertRows.Push(dt.Rows[0]);
-
-        if (dt.Rows[0]["id_parent"] != DBNull.Value )
-        {
-            id = (int)dt.Rows[0]["id_parent"];
-            createTableFromTreeBranch(id);
         }
     }
 
@@ -182,8 +156,6 @@ public partial class TargetsAsText : System.Web.UI.Page
                 }
                 else
                 {
-                  //  operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie " +
-                    //    "ON dzialanie_cel.id_celu = " + subTargetNr + ";";
                     operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE dzialanie_cel.id_celu = " + subTargetNr + ";";
                     DataTable operations = dataFetcher.getSelectResultsAsDataTable(operationsQuery);
                     if (operations.Rows.Count > 0)
@@ -233,15 +205,85 @@ public partial class TargetsAsText : System.Web.UI.Page
         return contentCell;
     }
 
-    //!!!!!!! NIE SKONCZONE _ NIE UZYWAC !!!!!!!!
-    //Wstawia do tabeli nowy wiersz z działaniem
+    //Zwraca komórkę zawierającą treść działania
     private TableCell PutOperationContentCellIntoRow(DataRow row)
     {
         TableRow tableRow = new TableRow();
 
         TableCell contentCell = new TableCell();
         contentCell.CssClass = "contentCells";
-        contentCell.Controls.Add(new LiteralControl(row["nazwa"].ToString()));
+
+        contentCell.Controls.Add(new LiteralControl("<b>" + row["nazwa"].ToString() + "</b>"));
+        contentCell.Controls.Add(new LiteralControl("</br></br>"));
+
+        contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
+
+        contentCell.Controls.Add(new LiteralControl("<b>Termin : </b>" + row["okres_od"].ToString() + "  -  "
+            + row["okres_do"]));
+        contentCell.Controls.Add(new LiteralControl("</br>"));
+
+        contentCell.Controls.Add(new LiteralControl("<b>Waga działania : </b>" + row["waga"].ToString()));
+        contentCell.Controls.Add(new LiteralControl("</br>"));
+
+        String approval = "";
+        if (row["zatwierdzenie"].ToString().Equals("1"))
+        {
+            approval = "Działanie zostało już zatwierdzone.";
+        }
+        else
+        {
+            approval = "Działanie nie zostało jeszcze zatwierdzone.";
+        }
+        contentCell.Controls.Add(new LiteralControl("<b>Status : </b>" + approval));
+
+        //Sprawdza czy działanie zostało już podjęte
+        String ifTakenQuery = "SELECT * FROM podjete_dzialanie WHERE dzialanie = " + (int)row["id"];
+        DataTable dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
+        if (dt.Rows.Count > 0) // zostało podjęte
+        {
+            contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
+
+            contentCell.Controls.Add(new LiteralControl("<b>Działanie zostało podjęte</b>"));
+            contentCell.Controls.Add(new LiteralControl("</br>"));
+
+            contentCell.Controls.Add(new LiteralControl("Opis : " + row["opis"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("</br>"));
+
+            contentCell.Controls.Add(new LiteralControl("Okres : " + row["okres_od"].ToString() +
+                "   -   " + row["okres_do"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("</br>"));
+
+            contentCell.Controls.Add(new LiteralControl("Realizacja : " + row["realizacja"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("</br>"));
+
+            contentCell.Controls.Add(new LiteralControl("Komentarz : " + row["komentarz"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("</br>"));
+
+            contentCell.Controls.Add(new LiteralControl("</div>"));
+        }
+
+        //Sprawdza czy istnieją osoby odpowiedzialne za działanie
+        String peopleQuery = "SELECT * FROM dzialanie_odpowiedzialnosc WHERE id_dzialania" + (int)row["id"];
+        dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
+        if (dt.Rows.Count > 0) //osoby odpowiedzialne istnieją
+        {
+            contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
+
+            contentCell.Controls.Add(new LiteralControl("<b>Osoby odpowiedzialne : </b>"));
+            contentCell.Controls.Add(new LiteralControl("</br>"));
+
+            for (int i = 0; i < dt.Rows.Count; i++) // Dla każdej osoby odpowiedzialnej
+            {
+                contentCell.Controls.Add(new LiteralControl(dt.Rows[i]["imie"].ToString() + " " +
+                    dt.Rows[i]["nazwisko"]));
+                contentCell.Controls.Add(new LiteralControl("</br>"));
+            }
+
+            contentCell.Controls.Add(new LiteralControl("</div>"));
+        }
+
+        contentCell.Controls.Add(new LiteralControl("<div>"));
+
         return contentCell;
     }
 
