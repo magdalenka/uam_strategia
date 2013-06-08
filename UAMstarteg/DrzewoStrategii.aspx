@@ -41,6 +41,12 @@
 
 
 -->
+    <script language="javascript" type= "text/javascript">
+        function Popup() {
+            window.open("DodawanieS.aspx", "", 'width=500,height=250,top=243,left=25');
+            return false;
+        }
+    </script>
 
       <asp:TreeView ID="DrzewoStrategii" Runat="server" OnSelectedNodeChanged="DrzewoStrategii_SelectedNodeChanged" ShowLines=true PopulateNodesFromClient="true" ExpandDepth="0">
       <Nodes>
