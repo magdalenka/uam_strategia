@@ -95,6 +95,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             }
             else // Wyświetla wszystko pod wybranym elementem
             {
+                StrategyInformation.Visible = false;
                 String type = "target";
                 DataTable dt = new DataTable();
                 
@@ -222,11 +223,12 @@ public partial class TargetsAsText : System.Web.UI.Page
         if (type.Equals("target"))
         {
             tableRow.Cells.Add(PutTargetContentCellIntoRow(row));
-            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], (int)row["id_strategii"], strategy));
+            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], (int)row["id_strategii"], strategy, true));
         }
         else if (type.Equals("operation"))
         {
             tableRow.Cells.Add(PutOperationContentCellIntoRow(row));
+            tableRow.Cells.Add(PutOperationButtonsIntoTableRow(-1, -1, strategy, false));
         }
 
         TargetTable.Rows.Add(tableRow);
@@ -345,62 +347,63 @@ public partial class TargetsAsText : System.Web.UI.Page
 
     
 
-    //Zwraca komórkę zawierającą przyciski
-    private TableCell PutOperationButtonsIntoTableRow(int id, int strategyNr, String organizationkey)
+    //Zwraca komórkę zawierającą przyciski - isTarget - czy jest celem czy dzialaniem, jak dzilaniem to zwr tylko tlo
+    private TableCell PutOperationButtonsIntoTableRow(int id, int strategyNr, String organizationkey, Boolean isTarget)
     {
         // stad
-        OrganizationKey = (string)Session["OrganizationKeyP"];
+         OrganizationKey = (string)Session["OrganizationKeyP"];
          OrganizationKeyINT = Convert.ToInt32(OrganizationKey);
          TableCell buttonCell = new TableCell();
 
          if (organizationkey == OrganizationKey)
          {
+           
+                 // do tad
 
+                 buttonCell.CssClass = "buttonCells";
+                 buttonCell.Width = 66;
 
-             // do tad
-             
-             buttonCell.CssClass = "buttonCells";
-             buttonCell.Width = 66;
+             if (isTarget == true)
+                 {
 
-             //dodaj
-             ImageButton addButton = new ImageButton();
-             // addButton.ID = "addButton_" + id;
-             addButton.ImageUrl = "add.png";
-             addButton.Enabled = true;
-             addButton.Visible = true;
-             addButton.Height = 22;
-             addButton.Width = 22;
-             addButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 0 + ");";
-             buttonCell.Controls.Add(addButton);
+                 //dodaj
+                 ImageButton addButton = new ImageButton();
+                 // addButton.ID = "addButton_" + id;
+                 addButton.ImageUrl = "add.png";
+                 addButton.Enabled = true;
+                 addButton.Visible = true;
+                 addButton.Height = 22;
+                 addButton.Width = 22;
+                 addButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 0 + ");";
+                 buttonCell.Controls.Add(addButton);
 
-             //edytuj
-             ImageButton editButton = new ImageButton();
-             // editButton.ID = "editButton_" + id;
-             editButton.ImageUrl = "edit.png";
-             editButton.Enabled = true;
-             editButton.Visible = true;
-             editButton.Height = 22;
-             editButton.Width = 22;
-             editButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
-             buttonCell.Controls.Add(editButton);
+                 //edytuj
+                 ImageButton editButton = new ImageButton();
+                 // editButton.ID = "editButton_" + id;
+                 editButton.ImageUrl = "edit.png";
+                 editButton.Enabled = true;
+                 editButton.Visible = true;
+                 editButton.Height = 22;
+                 editButton.Width = 22;
+                 editButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
+                 buttonCell.Controls.Add(editButton);
 
-             //usun
-             //niebezpiczne usuwanie
-             ImageButton deleteButton = new ImageButton();
-             //  deleteButton.ID = "deleteButton_" + id;
-             deleteButton.ImageUrl = "delete.png";
-             deleteButton.Enabled = true;
-             deleteButton.Visible = true;
-             deleteButton.Height = 22;
-             deleteButton.Width = 22;
-             deleteButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
+                 //usun
+                 //niebezpiczne usuwanie
+                 ImageButton deleteButton = new ImageButton();
+                 //  deleteButton.ID = "deleteButton_" + id;
+                 deleteButton.ImageUrl = "delete.png";
+                 deleteButton.Enabled = true;
+                 deleteButton.Visible = true;
+                 deleteButton.Height = 22;
+                 deleteButton.Width = 22;
+                 deleteButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
 
-             buttonCell.Controls.Add(deleteButton);
-             
+                 buttonCell.Controls.Add(deleteButton);
+             }
          }
          return buttonCell;
     }
-
 
     public int GetAimId(object sender)
     {
