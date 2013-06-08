@@ -61,7 +61,7 @@ public partial class FormCel : System.Web.UI.Page
         cmd.ExecuteNonQuery();
 
         mySQLConnection.Close();
-
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
 
@@ -106,7 +106,7 @@ public partial class FormCel : System.Web.UI.Page
         cmd.ExecuteNonQuery();
 
         mySQLConnection.Close();
-
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
 
@@ -122,7 +122,7 @@ public partial class FormCel : System.Web.UI.Page
         cmd.ExecuteNonQuery();
 
         mySQLConnection.Close();
-
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
     
