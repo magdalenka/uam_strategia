@@ -240,7 +240,7 @@ public partial class TargetsAsText : System.Web.UI.Page
     private TableCell PutTargetContentCellIntoRow(DataRow row)
     {
         TableCell contentCell = new TableCell();
-        contentCell.CssClass = "contentCells";
+        contentCell.CssClass = "target";
 
         contentCell.Controls.Add(new LiteralControl(row["tresc"].ToString()));
 
@@ -253,7 +253,8 @@ public partial class TargetsAsText : System.Web.UI.Page
         TableRow tableRow = new TableRow();
 
         TableCell contentCell = new TableCell();
-        contentCell.CssClass = "contentCells";
+        contentCell.CssClass = "operation";
+
 
         contentCell.Controls.Add(new LiteralControl("<b>" + row["nazwa"].ToString() + "</b>"));
         contentCell.Controls.Add(new LiteralControl("</br></br>"));
