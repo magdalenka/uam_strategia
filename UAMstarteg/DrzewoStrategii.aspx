@@ -9,7 +9,7 @@
         Wykaz dostępnych strategii
     </h2>
     <p>
-        Wybierz interesującą Cię strategię
+        Wybierz interesującą Cię strategię lub <a href=# onClick="Popup()">dodaj nową</a>
     </p>
 
 <!--
