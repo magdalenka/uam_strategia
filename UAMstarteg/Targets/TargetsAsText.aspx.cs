@@ -45,8 +45,8 @@ public partial class TargetsAsText : System.Web.UI.Page
 
 
             //int strategyNr = 1, targetNr=0;
-            String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii, organization_key AS tresc, nazwa_jednostki, widocznosc, organization_key FROM strategia";
-            String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null";
+            String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii, organization_key AS tresc, nazwa_jednostki, widocznosc, organization_key FROM strategia WHERE widocznosc = 1 ORDER BY lp ASC";
+            String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null AND widocznosc = 1 ORDER BY lp ASC";
 
             String organizationKeyQuery = "SELECT organization_key FROM strategiA WHERE id = " + strategyNr;
             DataTable organizationKey = dataFetcher.getSelectResultsAsDataTable(organizationKeyQuery);
@@ -77,7 +77,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 
                     //Wyciąga wszystkie podcele - 1 poziom
                     String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-                   + "WHERE id_parent = " + targetNr + ";";
+                   + "WHERE id_parent = " + targetNr + " AND widocznosc = 1 ORDER BY lp ASC ;";
                     subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
 
                     if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
@@ -90,11 +90,11 @@ public partial class TargetsAsText : System.Web.UI.Page
             {
                 String type = "target";
                 DataTable dt = new DataTable();
-
+                
                 if (type.Equals("operation")) // elementem wybranym w drzewie jest działanie
                 {
                     //pobiera z bazy wybrane działanie
-                    String operationQuery = "SELECT * FROM dzialanie WHERE id = " + targetNr + ";";
+                    String operationQuery = "SELECT * FROM dzialanie WHERE id = " + targetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
                     dt = dataFetcher.getSelectResultsAsDataTable(operationQuery);
                     // Dodaje liczbę porządkową do listy z numerami porządkowymi
                     previousLevel.Add(dt.Rows[0]["lp"]);
@@ -105,7 +105,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                 {
                     //pobiera cel wybrany na drzewie
                     String targetQuery = "SELECT * FROM cel "
-                          + "WHERE id = " + targetNr + ";";
+                          + "WHERE id = " + targetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
                     dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
                     // dodaje liczbę porządkową wybranefo celu do listy z numerami porządkowymi
                     previousLevel.Add(dt.Rows[0]["lp"]);
@@ -114,7 +114,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 
                     //wyciąga wszystkie podcele wybranego w drzewie celu
                     String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-                   + "WHERE id_parent = " + targetNr + ";";
+                   + "WHERE id_parent = " + targetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
                     subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
 
                     //jeżeli podcele istnieją
@@ -147,7 +147,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                 PutNewRowIntoTable(data.Rows[i], previousLevel, "target", organizationKeyString);
                 subTargetNr = (int)data.Rows[i]["id"];
                 subTargetsQueryCC = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-                    + "WHERE id_parent = " + subTargetNr + ";";
+                    + "WHERE id_parent = " + subTargetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
                 
                 DataTable newDT = dataFetcher.getSelectResultsAsDataTable(subTargetsQueryCC);
                 if (newDT != null && newDT.Rows != null && newDT.Rows.Count > 0)
@@ -156,7 +156,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                 }
                 else
                 {
-                    operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE dzialanie_cel.id_celu = " + subTargetNr + ";";
+                    operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE dzialanie_cel.id_celu = " + subTargetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
                     DataTable operations = dataFetcher.getSelectResultsAsDataTable(operationsQuery);
                     if (operations.Rows.Count > 0)
                     {
