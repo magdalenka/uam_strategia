@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
 using System.Web.Services;
 using System.ComponentModel;
 using System.Data;
@@ -35,6 +36,10 @@ public partial class TargetsAsText : System.Web.UI.Page
                 targetNr = Convert.ToInt32(id_cel);
             }
         }
+        if (strategyNr == 0)
+        {
+            StrategyInformation.Visible = false;
+        }
 
         if (strategyNr != 0)
         {
@@ -57,7 +62,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 
             ArrayList previousLevel = new ArrayList();
 
-            strategyNr = 1;
+           // strategyNr = 1;
 
             targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
             targetsNo = targets.Rows.Count;
@@ -67,6 +72,8 @@ public partial class TargetsAsText : System.Web.UI.Page
             //wyświetla całą strategię
             if (zadanie)
             {
+
+                CreatePanelWithInformationAboutStrategy(strategyNr);
                 for (int i = 0; i < targetsNo; i++) // dla każdego celu
                 {
                     previousLevel.Clear();
@@ -170,6 +177,39 @@ public partial class TargetsAsText : System.Web.UI.Page
                 }
                 previousLevel.RemoveAt(previousLevel.Count - 1);
             }
+        }
+    }
+
+    //Wyświetli nad tabelą z celami panel  zaw info o strategii (opis, autorzy itd.)
+    private void CreatePanelWithInformationAboutStrategy(int strategyNr)
+    {
+        StrategyInformation.Visible = true;
+
+        //wyciąga dane o wybranej strategii
+        String strategyQuery = "SELECT * FROM strategia WHERE id = " + strategyNr;
+        DataTable dt = dataFetcher.getSelectResultsAsDataTable(strategyQuery);
+
+        StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa : </b>" + dt.Rows[0]["nazwa_strategii"]));
+        StrategyInformation.Controls.Add(new LiteralControl("</br>"));
+        StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa jednostki : </b>" + dt.Rows[0]["nazwa_strategii"]));
+        StrategyInformation.Controls.Add(new LiteralControl("</br>"));
+
+        //Pobiera dane o wszystkich autorach strategii
+        String strategyAuthorQuery = "SELECT * FROM strategia_autor INNER JOIN autor ON strategia_autor.id_osoby = autor.id where id_strategii = "+ strategyNr;
+        dt = dataFetcher.getSelectResultsAsDataTable(strategyAuthorQuery);
+
+        StrategyInformation.Controls.Add(new LiteralControl("<b>Autorzy strategii :</b>"));
+        StrategyInformation.Controls.Add(new LiteralControl("</br>"));
+        if (dt.Rows.Count == 0)
+        {
+            StrategyInformation.Controls.Add(new LiteralControl("Strategia nie ma jeszcze przypisanych żadnych autorów."));
+            StrategyInformation.Controls.Add(new LiteralControl("</br>"));
+        }
+        
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            StrategyInformation.Controls.Add(new LiteralControl("- " + dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"]));
+            StrategyInformation.Controls.Add(new LiteralControl("</br>"));
         }
     }
 

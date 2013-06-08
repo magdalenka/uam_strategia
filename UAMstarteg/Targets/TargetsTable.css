@@ -46,3 +46,21 @@
             border-style: dotted;
             border-color: #900;
         } 
+        
+        .strategyInformation 
+        {
+            width: 90%;
+            margin-right: 10px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            padding-top:5px;
+            padding-bottom:5px;
+            padding-right:5px;
+            padding-left:5px;
+            background-color: #CCFF33; 
+            color: #000000;
+            border-width: .2em;
+            border-style: groove;
+            border-color: blue;
+        }
