@@ -24,7 +24,7 @@ public partial class About : System.Web.UI.Page
     {
         idStrategii = Convert.ToInt32(Request.QueryString["id_strategii"]);
         utworzKorzenDrzewaCelow();
-        Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.ramka_tresc.location='Default.aspx?id_strategii=" + idStrategii + "&id_celu=0'</script>");
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.ramka_tresc.location='Targets/TargetsAsText.aspx?id_strategii=" + idStrategii + "&id_celu=0'</script>");
     }
 
 
@@ -36,9 +36,9 @@ public partial class About : System.Web.UI.Page
 
         String query;
         if (ograniczenie == "" || ograniczenie == null)
-            query = "SELECT  "+ co +" from "+ skad;
+            query = "SELECT  " + co + " from " + skad;
         else
-	        query = "SELECT  "+ co +" from "+ skad + " where " + ograniczenie;
+            query = "SELECT  " + co + " from " + skad + " where " + ograniczenie;
 
         SqlCommand cmd = new SqlCommand(query, mySQLConnection);
         cmd.ExecuteNonQuery();
@@ -54,7 +54,7 @@ public partial class About : System.Web.UI.Page
 
     protected void utworzKorzenDrzewaCelow()
     {
-        DataTable dtCele = select("*", "cel", "id_strategii ="+ idStrategii +" and widocznosc = 1");
+        DataTable dtCele = select("*", "cel", "id_strategii =" + idStrategii + " and widocznosc = 1");
         int rowsCountCele = dtCele.Rows.Count;
 
         DataRow[] drCele;
@@ -70,7 +70,7 @@ public partial class About : System.Web.UI.Page
                 nazwaCelu,
                 idCelu,
                 "",
-                "Default.aspx?id_strategii=" + idStrategii + "&id_celu=" + idCelu,
+                "Targets/TargetsAsText.aspx?id_strategii=" + idStrategii + "&id_celu=" + idCelu,
                 "ramka_tresc"
                 );
             DrzewoCelow.Nodes.Add(wezel);
@@ -82,7 +82,7 @@ public partial class About : System.Web.UI.Page
     protected void dodajPotomkowDoDrzewaCelow(TreeNode rodzic, DataTable dtCele)
     {
         DataRow[] drCele;
-        drCele = dtCele.Select("id_parent = "+ Convert.ToInt32(rodzic.Value), "lp asc");
+        drCele = dtCele.Select("id_parent = " + Convert.ToInt32(rodzic.Value), "lp asc");
 
 
         for (int i = 0; i < drCele.Length; i++)
@@ -94,17 +94,17 @@ public partial class About : System.Web.UI.Page
                 nazwaCelu,
                 idCelu,
                 "",
-                "Default.aspx?id_strategii=" + idStrategii + "&id_celu=" + idCelu,
+                "Targets/TargetsAsText.aspx?id_strategii=" + idStrategii + "&id_celu=" + idCelu,
                 "ramka_tresc"
                 );
 
             rodzic.ChildNodes.Add(wezel);
-            
+
 
             dodajPotomkowDoDrzewaCelow(wezel, dtCele);
         }
     }
-    
+
 
     protected void DrzewoJednostek_SelectedNodeChanged(object sender, EventArgs e)
     {/*

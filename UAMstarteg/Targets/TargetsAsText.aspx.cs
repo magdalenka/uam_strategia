@@ -22,79 +22,107 @@ public partial class TargetsAsText : System.Web.UI.Page
     String organizationKeyString;
     protected void Page_Load(object sender, EventArgs e)
     {
-        Boolean zadanie = true;
-        int strategyNr = 1, targetNr=0;
-        String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii, organization_key AS tresc, nazwa_jednostki, widocznosc, organization_key FROM strategia";
-        String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null";
 
-        String organizationKeyQuery = "SELECT organization_key FROM strategiA WHERE id = " + strategyNr;
-        DataTable organizationKey = dataFetcher.getSelectResultsAsDataTable(organizationKeyQuery);
-        organizationKeyString = organizationKey.Rows[0]["organization_key"].ToString();
-        //wszystkie cele
-        DataTable targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
-        int targetsNo = targets.Rows.Count;
+        string id_str = Request.QueryString["id_strategii"];
+        string id_cel = Request.QueryString["id_celu"];
+        int strategyNr = 0;
+        int targetNr = 0;
 
-        ArrayList previousLevel = new ArrayList();
-
-        strategyNr = 1;
-
-        targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
-        targetsNo = targets.Rows.Count;
-        DataTable subTargets = new DataTable();
-
-        DataTable strategies = dataFetcher.getSelectResultsAsDataTable(strategiesQuery);
-        //cała strategia
-        if (zadanie)
+        if (id_str != "" && id_str != null)
         {
-            for (int i = 0; i < targetsNo; i++) // dla każdego celu
+            strategyNr = Convert.ToInt32(id_str);
+            if (id_cel != "" && id_cel != null)
             {
-                previousLevel.Clear();
-                previousLevel.Add(targets.Rows[i]["lp"]);
-                PutNewRowIntoTable(targets.Rows[i], previousLevel, "target", organizationKeyString);
+                targetNr = Convert.ToInt32(id_cel);
+            }
+        }
 
-                targetNr = (int)targets.Rows[i]["id"];
+        if (strategyNr != 0)
+        {
 
-                //Wyciąga wszystkie podcele - 1 poziom
-                String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-               + "WHERE id_parent = " + targetNr + ";";
-                subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
+            Boolean zadanie = false;
+            if (targetNr == 0)
+                zadanie = true;
 
-                if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
+
+            //int strategyNr = 1, targetNr=0;
+            String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii, organization_key AS tresc, nazwa_jednostki, widocznosc, organization_key FROM strategia";
+            String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null";
+
+            String organizationKeyQuery = "SELECT organization_key FROM strategiA WHERE id = " + strategyNr;
+            DataTable organizationKey = dataFetcher.getSelectResultsAsDataTable(organizationKeyQuery);
+            organizationKeyString = organizationKey.Rows[0]["organization_key"].ToString();
+            //wszystkie cele
+            DataTable targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
+            int targetsNo = targets.Rows.Count;
+
+            ArrayList previousLevel = new ArrayList();
+
+            strategyNr = 1;
+
+            targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
+            targetsNo = targets.Rows.Count;
+            DataTable subTargets = new DataTable();
+
+            DataTable strategies = dataFetcher.getSelectResultsAsDataTable(strategiesQuery);
+            //cała strategia
+            if (zadanie)
+            {
+                for (int i = 0; i < targetsNo; i++) // dla każdego celu
                 {
-                    createContentTable(subTargets, false, previousLevel);
+                    previousLevel.Clear();
+                    previousLevel.Add(targets.Rows[i]["lp"]);
+                    PutNewRowIntoTable(targets.Rows[i], previousLevel, "target", organizationKeyString);
+
+                    targetNr = (int)targets.Rows[i]["id"];
+
+                    //Wyciąga wszystkie podcele - 1 poziom
+                    String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
+                   + "WHERE id_parent = " + targetNr + ";";
+                    subTargets = dataFetcher.getSelectResultsAsDataTable(subTargetsQuery);
+
+                    if (subTargets != null && subTargets.Rows != null && subTargets.Rows.Count > 0)
+                    {
+                        createContentTable(subTargets, false, previousLevel);
+                    }
+                    // previousLevel.RemoveAt(previousLevel.Count - 1);
                 }
-                // previousLevel.RemoveAt(previousLevel.Count - 1);
+            }
+            else
+            {
+
+                DataTable dt;
+                String type = "target";
+                int id = targetNr; //Pobrać to
+                // String operationQuery = "SELECT nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc, id_celu"
+                //   + " FROM dzialanie WHERE id = " + id + ";";
+                String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = " + id + ";";
+                //  String operationQuery = "Select * from cel inner join strategia ON cel.id = strategia.id";
+
+                if (type.Equals("operation"))
+                {
+                    dt = dataFetcher.getSelectResultsAsDataTable(operationQuery);
+                    revertRows.Push(dt.Rows[0]);
+                    id = (int)dt.Rows[0]["id_celu"];
+                }
+                String targetQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
+                      + "WHERE id = " + id + ";";
+                dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
+                revertRows.Push(dt.Rows[0]);
+
+                if (!dt.Rows[0]["id_parent"].ToString().Equals(""))
+                {
+                    id = (int)dt.Rows[0]["id_parent"];
+                    createTableFromTreeBranch(id);
+                }
+
+
+                PrintTableFromTreeBranch();
             }
         }
         else
         {
-           
-            DataTable dt;
-            String type = "operation";
-            int id = 8; //Pobrać to
-           // String operationQuery = "SELECT nazwa, lp, wskaznik_rezultat, okres_od, okres_do, waga, zatwierdzenie, widocznosc, id_celu"
-             //   + " FROM dzialanie WHERE id = " + id + ";";
-            String operationQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE id = "+ id +";";
-          //  String operationQuery = "Select * from cel inner join strategia ON cel.id = strategia.id";
-
-            if (type.Equals("operation"))
-            {
-                dt = dataFetcher.getSelectResultsAsDataTable(operationQuery);
-                revertRows.Push(dt.Rows[0]);
-                id = (int)dt.Rows[0]["id_celu"];
-            }
-            String targetQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
-                  + "WHERE id = " + id + ";";
-            dt = dataFetcher.getSelectResultsAsDataTable(targetQuery);
-            revertRows.Push(dt.Rows[0]);
-      
-            id = (int)dt.Rows[0]["id_parent"];
-            if (id != null)
-            {
-                createTableFromTreeBranch(id);
-            }
-
-            PrintTableFromTreeBranch();
+            Label.Text = "<br>Wybierz strategię z panelu po prawej stronie.";
         }
     }
 

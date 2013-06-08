@@ -8,7 +8,7 @@
 </head>
 
     <frameset cols="70%,*">
-        <frame src="Default.aspx" name="ramka_tresc" id="ramka_tresc">
+        <frame src="Targets/TargetsAsText.aspx" name="ramka_tresc" id="ramka_tresc">
         <frameset rows="50%,*">
             <frame src="DrzewoStrategii.aspx" name="ramka_strategii" id="ramka_strategii">
             <frame src="DrzewoCelow.aspx" name="ramka_celow" id="ramka_celow">
