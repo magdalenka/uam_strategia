@@ -375,8 +375,9 @@ public partial class TargetsAsText : System.Web.UI.Page
                  addButton.Visible = true;
                  addButton.Height = 22;
                  addButton.Width = 22;
-                 addButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 0 + ");";
+                 addButton.OnClientClick = "javascript:OpenWindowOption(" + id + "," + strategyNr + "," + 0 + ");";
                  buttonCell.Controls.Add(addButton);
+             }
 
                  //edytuj
                  ImageButton editButton = new ImageButton();
@@ -386,11 +387,17 @@ public partial class TargetsAsText : System.Web.UI.Page
                  editButton.Visible = true;
                  editButton.Height = 22;
                  editButton.Width = 22;
-                 editButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
+                 if (isTarget == true)
+                 {
+                     editButton.OnClientClick = "javascript:OpenWindowTarget(" + id + "," + strategyNr + "," + 1 + ");";
+                 }
+                 else
+                 {
+                     editButton.OnClientClick = "javascript:OpenWindowOperation(" + id + "," + strategyNr + "," + 1 + ");";
+                 }
                  buttonCell.Controls.Add(editButton);
 
                  //usun
-                 //niebezpiczne usuwanie
                  ImageButton deleteButton = new ImageButton();
                  //  deleteButton.ID = "deleteButton_" + id;
                  deleteButton.ImageUrl = "delete.png";
@@ -398,10 +405,17 @@ public partial class TargetsAsText : System.Web.UI.Page
                  deleteButton.Visible = true;
                  deleteButton.Height = 22;
                  deleteButton.Width = 22;
-                 deleteButton.OnClientClick = "javascript:Popup(" + id + "," + strategyNr + "," + 1 + ");";
+                 if (isTarget == true)
+                 {
+                     deleteButton.OnClientClick = "javascript:OpenWindowTarget(" + id + "," + strategyNr + "," + 1 + ");";
+                 }
+                 else
+                 {
+                     deleteButton.OnClientClick = "javascript:OpenWindowOperation(" + id + "," + strategyNr + "," + 1 + ");";
+                 }
 
                  buttonCell.Controls.Add(deleteButton);
-             }
+             
          }
          return buttonCell;
     }
