@@ -254,26 +254,28 @@ div.accountInfo
 
 .loginDisplay
 {
+    background-image: url('naglowek.jpg');
     font-size: 1.1em;
     display: block;
     text-align: right;
     padding: 10px;
-    color: White;
+    color: #465c71;
+    height: 146px;
 }
 
 .loginDisplay a:link
 {
-    color: white;
+    color: #465c71;
 }
 
 .loginDisplay a:visited
 {
-    color: white;
+    color: #465c71;
 }
 
 .loginDisplay a:hover
 {
-    color: white;
+    color: #465c71;
 }
 
 .failureNotification
