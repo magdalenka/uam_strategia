@@ -6,13 +6,22 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data;
-using System.Web;
+using Novell.Directory.Ldap;
+using System.Data;
+using System.Xml;
+using System.Configuration;
+using System.Web.Services;
+using System.ComponentModel;
+using System.Drawing;
+using System.Text;
+using System.IO;
 
 public partial class FormCel : System.Web.UI.Page
 {
     private int id;
     private int strategyNr;
     private int edit;
+    private string connStrMSSQL = ConfigurationManager.ConnectionStrings["myConnectionStringMSSQL"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -53,7 +62,7 @@ public partial class FormCel : System.Web.UI.Page
         string content = TextBox1.Text;
 
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStrMSSQL;
         mySQLConnection.Open();
 
         SqlCommand cmd;
@@ -70,7 +79,7 @@ public partial class FormCel : System.Web.UI.Page
         if (TextBox2.Text == "" && TextBox1.Text == "")
         {
             SqlConnection mySQLConnection = new SqlConnection();
-            mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+            mySQLConnection.ConnectionString = connStrMSSQL;
             mySQLConnection.Open();
 
             SqlCommand cmd;
@@ -98,7 +107,7 @@ public partial class FormCel : System.Web.UI.Page
         string content = TextBox1.Text;
 
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStrMSSQL;
         mySQLConnection.Open();
 
         SqlCommand cmd;
@@ -114,7 +123,7 @@ public partial class FormCel : System.Web.UI.Page
     public void DeleteAim(int id)
     {
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStrMSSQL;
         mySQLConnection.Open();
 
         SqlCommand cmd;

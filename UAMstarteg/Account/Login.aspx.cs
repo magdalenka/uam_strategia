@@ -85,8 +85,9 @@ public partial class Account_Login : System.Web.UI.Page
 
     protected void sprawdzOrganizationKey()
     {
+        string connStr = ConfigurationManager.ConnectionStrings["myConnectionString150"].ConnectionString;
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=150.254.76.229;Initial Catalog=UAMSTRATEG_USERS;Persist Security Info=True;User ID=UAMSTRATEG;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStr;
         mySQLConnection.Open();
 
         SqlCommand cmd;
