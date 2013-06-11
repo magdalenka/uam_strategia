@@ -88,6 +88,7 @@ first child of the left and right table columns */
 
 .page
 {
+    
     width: 100%;
     background-color: #fff;
     margin: 20px auto 0px auto;
@@ -101,6 +102,9 @@ first child of the left and right table columns */
     padding: 0px;
     background: #4b6c9e;
     width: 100%;
+    top: 1px;
+    left: 0px;
+    height: 182px;
 }
 
 .header h1
@@ -254,26 +258,28 @@ div.accountInfo
 
 .loginDisplay
 {
+    background-image: url("naglowek.jpg");
     font-size: 1.1em;
     display: block;
     text-align: right;
     padding: 10px;
-    color: White;
+    color: #465c71;
+    height: 155px;
 }
 
 .loginDisplay a:link
 {
-    color: white;
+    color: #465c71;
 }
 
 .loginDisplay a:visited
 {
-    color: white;
+    color: #465c71;
 }
 
 .loginDisplay a:hover
 {
-    color: white;
+    color: #465c71;
 }
 
 .failureNotification

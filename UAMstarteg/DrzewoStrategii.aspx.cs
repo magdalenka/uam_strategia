@@ -21,14 +21,14 @@ public partial class About : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
-        ImageButton addButton = new ImageButton();
+       /* ImageButton addButton = new ImageButton();
         addButton.ImageUrl = "add.png";
         addButton.Enabled = true;
         addButton.Visible = true;
         addButton.Height = 22;
         addButton.Width = 22;
         addButton.OnClientClick = "javascript:Popup();";
-        Form.Controls.Add(addButton);
+        Form.Controls.Add(addButton); */
 /*
         DataTable dt = select("*", "autor", "");
 

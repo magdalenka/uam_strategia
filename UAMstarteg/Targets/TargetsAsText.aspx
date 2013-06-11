@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="TargetsTable.css" />
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent" style="height: 492px" bgcolor = "#535353">
+    <br />
     <asp:Panel ID="StrategyInformation" runat="server" class="strategyInformation">
     </asp:Panel>
     <asp:Label ID="Label" runat="server" Text=""></asp:Label>

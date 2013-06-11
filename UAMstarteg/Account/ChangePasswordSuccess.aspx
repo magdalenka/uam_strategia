@@ -5,6 +5,8 @@
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <h2>
+        &nbsp;</h2>
+    <h2>
         Zmiana hasła
     </h2>
     <p>
