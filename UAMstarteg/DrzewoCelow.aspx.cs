@@ -25,6 +25,7 @@ public partial class About : System.Web.UI.Page
         idStrategii = Convert.ToInt32(Request.QueryString["id_strategii"]);
         utworzKorzenDrzewaCelow();
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.ramka_tresc.location='Targets/TargetsAsText.aspx?id_strategii=" + idStrategii + "&id_celu=0'</script>");
+       
     }
 
 

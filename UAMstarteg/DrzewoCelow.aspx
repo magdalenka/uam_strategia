@@ -9,9 +9,10 @@
         Cele wybranej strategii
     </h2>
     <p>
-        Wybierz interesujący Cię cel
+        Wybierz interesujący Cię cel 
     </p>
 
+    
       <asp:TreeView ID="DrzewoCelow" Runat="server" OnSelectedNodeChanged="DrzewoCelow_SelectedNodeChanged" ShowLines=true PopulateNodesFromClient="true" ExpandDepth="0">
       <Nodes>
       </Nodes>

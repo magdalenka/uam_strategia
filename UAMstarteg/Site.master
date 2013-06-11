@@ -13,6 +13,9 @@
     <div class="page">
         <div class="header">
             <div class="title">
+                <h1>
+                    System zarządzania strategiami UAM
+                </h1>
             </div>
             <div class="loginDisplay">
                 <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
@@ -29,7 +32,7 @@
                 <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">
                     <Items>
                         <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Strategie"/>
-                        <asp:MenuItem NavigateUrl="~/DrzewoStrategii.aspx" Text="Raporty"/>
+                        <asp:MenuItem NavigateUrl="~/Raporty.aspx" Text="Raporty"/>
                     </Items>
                 </asp:Menu>
             </div>

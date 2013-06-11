@@ -4,23 +4,14 @@
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
     <script language="javascript" type= "text/javascript">
-        function OpenWindowTarget(id, strategyNr, edit) {
+        function Popup(id, strategyNr, edit) {
             window.open("FormCel.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=250,top=243,left=25');
-            return false;
-        }
-        function OpenWindowOperation(id, strategyNr, edit) {
-            window.open("FormOperation.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=500,top=243,left=25');
-            return false;
-        }
-        function OpenWindowOption(id, strategyNr, edit) {
-            window.open("FormOption.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=200,top=243,left=25');
             return false;
         }
     </script>
     <link rel="stylesheet" type="text/css" href="TargetsTable.css" />
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent" style="height: 492px" bgcolor = "#535353">
-    <br />
     <asp:Panel ID="StrategyInformation" runat="server" class="strategyInformation">
     </asp:Panel>
     <asp:Label ID="Label" runat="server" Text=""></asp:Label>
