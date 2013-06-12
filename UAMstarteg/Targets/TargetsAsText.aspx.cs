@@ -192,7 +192,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 
         StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa : </b>" + dt.Rows[0]["nazwa_strategii"]));
         StrategyInformation.Controls.Add(new LiteralControl("</br>"));
-        StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa jednostki : </b>" + dt.Rows[0]["nazwa_strategii"]));
+        StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa jednostki : </b>" + dt.Rows[0]["nazwa_jednostki"]));
         StrategyInformation.Controls.Add(new LiteralControl("</br>"));
 
         //Pobiera dane o wszystkich autorach strategii
