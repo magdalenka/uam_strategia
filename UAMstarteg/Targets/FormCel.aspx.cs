@@ -122,18 +122,27 @@ public partial class FormCel : System.Web.UI.Page
 
     public void DeleteAim(int id)
     {
-        SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = connStrMSSQL;
-        mySQLConnection.Open();
-
-        SqlCommand cmd;
-       // cmd = new SqlCommand("DELETE FROM cel WHERE id=" + id, mySQLConnection);
-        cmd = new SqlCommand("UPDATE cel SET widocznosc= 0 WHERE id=" + id, mySQLConnection);
-        cmd.ExecuteNonQuery();
-
-        mySQLConnection.Close();
+        update("cel", "widocznosc=0", "id=" + id);
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
+    }
+
+    protected void update(string tabela, string zmieniane_kolumny, string ograniczenie)
+    {
+
+        SqlConnection mySQLConnection = new SqlConnection();
+        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.Open();
+
+        String query;
+        if (ograniczenie == "" || ograniczenie == null)
+            query = "UPDATE  " + tabela + " SET " + zmieniane_kolumny;
+        else
+            query = "UPDATE  " + tabela + " SET " + zmieniane_kolumny + " WHERE " + ograniczenie;
+
+        SqlCommand cmd = new SqlCommand(query, mySQLConnection);
+        cmd.ExecuteNonQuery();
+
     }
     
 

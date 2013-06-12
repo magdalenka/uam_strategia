@@ -3,11 +3,19 @@
     CodeFile="TargetsAsText.aspx.cs" Inherits="TargetsAsText" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
-    <script language="javascript" type= "text/javascript">
-        function Popup(id, strategyNr, edit) {
-            window.open("FormCel.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=250,top=243,left=25');
-            return false;
-        }
+   <script language="javascript" type= "text/javascript">
+       function OpenWindowTarget(id, strategyNr, edit) {
+           window.open("FormCel.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=250,top=243,left=25');
+           return false;
+       }
+       function OpenWindowOperation(id, strategyNr, edit) {
+           window.open("FormOperation.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=500,top=243,left=25');
+           return false;
+       }
+       function OpenWindowOption(id, strategyNr, edit) {
+           window.open("FormOption.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=200,top=243,left=25');
+           return false;
+       }
     </script>
     <link rel="stylesheet" type="text/css" href="TargetsTable.css" />
 </asp:Content>
