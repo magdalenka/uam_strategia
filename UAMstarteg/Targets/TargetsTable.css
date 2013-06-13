@@ -81,3 +81,9 @@
             border-style: groove;
             border-color: #74A6FF;
         }
+        
+        .addNewTargetButton
+        {
+            width: 100px;
+            height: 30px;
+        }
