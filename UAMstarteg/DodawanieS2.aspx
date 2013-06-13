@@ -1,15 +1,11 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="DodawanieS2.aspx.cs" Inherits="DodawanieS2" %>
+﻿<%@ Page Title="System zarządzania strategiami UAM" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
+    CodeFile="DodawanieS2.aspx.cs" Inherits="DodawanieS2" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head id="Head1" runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
     <div>
-        <h3>Formularz dodawania strategii</h3>
+        <h2>Formularz dodawania strategii</h2>
+        <br />
         <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
         <br />
     </div>
@@ -26,6 +22,5 @@
     <asp:Button ID="dalejButton" runat="server" Text="Dalej..." 
         onclick="dalejButton_Click" />
     <asp:Label ID="LabelError" runat="server" Text=""></asp:Label>
-    </form>
-</body>
-</html>
+
+</asp:Content>

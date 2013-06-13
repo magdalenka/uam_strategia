@@ -43,7 +43,7 @@
 -->
     <script language="javascript" type= "text/javascript">
         function Popup() {
-            window.open("DodawanieS.aspx/?nr=0000000000&nazwa=Uniwersytet im A. Mickiewicza", "", 'width=500,height=250,top=243,left=25');
+            parent.ramka_tresc.location="DodawanieS.aspx/?nr=0000000000&nazwa=Uniwersytet im A. Mickiewicza";
             return false;
         }
     </script>

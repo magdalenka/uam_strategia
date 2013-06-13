@@ -23,6 +23,7 @@ public partial class DodawanieS2 : System.Web.UI.Page
         jednostka = Request.QueryString["jednostka"];
         Label1.Text = "Wybrano jednostkę <b>" + jednostka + "</b><br><br>Wypełnij pozostałe pola.<br><br>";
     }
+
     protected void dalejButton_Click(object sender, EventArgs e)
     {
         int n;
@@ -34,8 +35,9 @@ public partial class DodawanieS2 : System.Web.UI.Page
             LabelError.Text = "<b>Podaj numer strategii!</b>";
         else
         {
+            string connStr = ConfigurationManager.ConnectionStrings["myConnectionString150"].ConnectionString;
             SqlConnection mySQLConnection = new SqlConnection();
-            mySQLConnection.ConnectionString = @"Data Source=150.254.76.229;Initial Catalog=UAMSTRATEG_USERS;Persist Security Info=True;User ID=UAMSTRATEG;Password=21hMpA8a";
+            mySQLConnection.ConnectionString = connStr;
             mySQLConnection.Open();
 
             SqlCommand cmd;
@@ -48,15 +50,17 @@ public partial class DodawanieS2 : System.Web.UI.Page
 
             if (dt.Rows.Count == 0)
             {
+                connStr = ConfigurationManager.ConnectionStrings["myConnectionStringMSSQL"].ConnectionString;
                 mySQLConnection = new SqlConnection();
-                mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+                mySQLConnection.ConnectionString = connStr;
                 mySQLConnection.Open();
 
                 cmd = new SqlCommand("insert into strategia(id_parent, lp, nazwa_strategii, nazwa_jednostki, widocznosc, organization_key) values (null, " + TBLp.Text + ", '" + TBNazwa.Text + "', '" + jednostka + "', 1, '0000000000')", mySQLConnection);
                 cmd.ExecuteNonQuery();
                 da.Dispose();
                 mySQLConnection.Close();
-                LabelError.Text = "<b>Sukces!</b>";
+                LabelError.Text = "<b>Dodano strategię.</b>";
+                Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.location='Frameset.aspx'</script>");
             }
             else
             {
@@ -71,8 +75,9 @@ public partial class DodawanieS2 : System.Web.UI.Page
                 string parentKey = dt.Rows[0]["OrganizationParentKey"].ToString();
 
                 mySQLConnection.Close();
+                connStr = ConfigurationManager.ConnectionStrings["myConnectionStringMSSQL"].ConnectionString;
                 mySQLConnection = new SqlConnection();
-                mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+                mySQLConnection.ConnectionString = connStr;
                 mySQLConnection.Open();
 
                 cmd = new SqlCommand("SELECT id from strategia where widocznosc = 1 and organization_key = '" + parentKey + "'", mySQLConnection);
@@ -88,8 +93,8 @@ public partial class DodawanieS2 : System.Web.UI.Page
                 cmd.ExecuteNonQuery();
                 da.Dispose();
                 mySQLConnection.Close();
-                LabelError.Text = "<b>Sukces!</b>";
-                //Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.location='Frameset.aspx'</script>");
+                LabelError.Text = "<b>Dodano strategię.</b>";
+                Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.location='Frameset.aspx'</script>");
             }
         }
     }
