@@ -73,7 +73,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             if (zadanie)
             {
 
-                CreatePanelWithInformationAboutStrategy(strategyNr);
+                CreatePanelWithInformationAboutStrategy(strategyNr, organizationKeyString);
                 for (int i = 0; i < targetsNo; i++) // dla każdego celu
                 {
                     previousLevel.Clear();
@@ -92,7 +92,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                         createContentTable(subTargets, false, previousLevel);
                     }
 
-                     //Wyświetlanie działań, dla celi które nie mają podceli
+                    //Wyświetlanie działań, dla celi które nie mają podceli
                     String operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE dzialanie_cel.id_celu = " + targetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
                     DataTable operations = dataFetcher.getSelectResultsAsDataTable(operationsQuery);
                     if (operations.Rows.Count > 0)
@@ -196,7 +196,7 @@ public partial class TargetsAsText : System.Web.UI.Page
     }
 
     //Wyświetli nad tabelą z celami panel  zaw info o strategii (opis, autorzy itd.)
-    private void CreatePanelWithInformationAboutStrategy(int strategyNr)
+    private void CreatePanelWithInformationAboutStrategy(int strategyNr, String organizationkey)
     {
         StrategyInformation.Visible = true;
 
@@ -228,13 +228,18 @@ public partial class TargetsAsText : System.Web.UI.Page
         }
 
         //Guzik dodający cel główny
-        ImageButton addNewTargetButton = new ImageButton();
-        addNewTargetButton.ImageUrl = "addNewTarget.png";
-        addNewTargetButton.Enabled = true;
-        addNewTargetButton.Visible = true;
-        addNewTargetButton.CssClass = "addNewTargetButton";
-        addNewTargetButton.OnClientClick = "javascript:OpenWindowTarget(" + -1 + "," + strategyNr + "," + 0 + ");";
-        StrategyInformation.Controls.Add(addNewTargetButton);
+        OrganizationKey = (string)Session["OrganizationKeyP"];
+        OrganizationKeyINT = Convert.ToInt32(OrganizationKey);
+        if (organizationkey.Equals(OrganizationKey))
+        {
+            ImageButton addNewTargetButton = new ImageButton();
+            addNewTargetButton.ImageUrl = "addNewTarget.png";
+            addNewTargetButton.Enabled = true;
+            addNewTargetButton.Visible = true;
+            addNewTargetButton.CssClass = "addNewTargetButton";
+            addNewTargetButton.OnClientClick = "javascript:OpenWindowTarget(" + -1 + "," + strategyNr + "," + 0 + ");";
+            StrategyInformation.Controls.Add(addNewTargetButton);
+        }
     }
 
     //Wstawia do tabeli nowy wiersz z celem/podcelem

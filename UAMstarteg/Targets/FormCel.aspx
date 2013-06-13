@@ -12,6 +12,7 @@
             width: 344px;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="Forms.css" />
 </head>
 <body>
     <form id="form1" runat="server">
@@ -19,19 +20,23 @@
         <div class="numer">
             <div class="label">
                 <asp:Label ID="Label1" runat="server" Text="Numer"></asp:Label>
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać liczbę porządkową celu</span></a>
             </div>
+            
             <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
             
         </div>
        <div class="label">
                 <asp:Label ID="Label2" runat="server" Text="Treść"></asp:Label>
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać treść celu</span></a>
             </div>
         <div class="tresc">
+        
         <asp:TextBox ID="TextBox1" runat="server" Height="95px" Width="373px" 
                 TextMode="MultiLine"></asp:TextBox>
         </div>
          <div class="button">
-            <asp:Button ID="editButton_14" runat="server" 
+            <asp:Button ID="editButton_14" runat="server"
             onclick="Button1_Click" Text="Zapisz" />
              <asp:Button ID="Button3" runat="server" Text="Usuń" onclick="Button3_Click" />
              <asp:Button ID="Button2" runat="server" Text="Anuluj" onclick="Button2_Click" />
