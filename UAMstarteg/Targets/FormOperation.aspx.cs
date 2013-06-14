@@ -140,7 +140,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
 
         update("dzialanie", zmieniane_kolumny, "id=" + id);
 
-        String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
+        //String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
 
