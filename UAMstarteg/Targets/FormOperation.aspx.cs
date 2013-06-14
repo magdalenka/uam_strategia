@@ -25,6 +25,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         {
             LoadOperation(id);
         }
+        //Załaduj źródła finansowania
+        LoadListBox();
     }
 
     protected void Button1_Click(object sender, EventArgs e)
@@ -48,6 +50,16 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         DeleteOperation(id);
     }
 
+    protected void LoadListBox()
+    {
+        DataTable dt = select("*", "zrodlo_finansowania", null, " nazwa ASC");
+        ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(" ", "-1"));//pusta opcja
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(dt.Rows[i]["nazwa"].ToString(), dt.Rows[i]["id"].ToString()));
+        }
+    }
+
     public void AddNewOperation(int id_strategii, int id_cel)
     {
         string number = TextBox_Numer.Text;
@@ -57,15 +69,30 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         string okres_do = TextBox_TerminDo.Text;
         string waga = TextBox_Waga.Text;
         string zatwierdzenie = TextBox_Status.Text;
+        String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
         string values = "'" + content + "'," + number + ",'" + wskaznik_rezultat + "','" + okres_od + "','" + okres_do + "'," + waga + ", "
             + zatwierdzenie + ",1";
         //id nowo dodanej operacji
         int id_operation = insert("dzialanie", values);
-        insert("dzialanie_cel", id_cel + ", " + id_operation);
+        insert("dzialanie_cel", "'"+id_cel+"'" + ", " + id_operation);
+        //uzupelnienie tabeli dzialanie_zrodlo
+        values = id_operation + " ," + zrodlo_finansowania_id;
+        int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
 
 
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
+    }
+
+    protected String AddNewFinSourceIfNotSelected()
+    {
+        String zrodlo_finansowania_id = ZrodlaFinansowaniaDropDownList.SelectedValue;
+        if (zrodlo_finansowania_id.Equals("-1") || zrodlo_finansowania_id == null || zrodlo_finansowania_id.Equals(""))
+        {
+            String nowe_zrodlo_finansowania = ZrodlaFinansowaniaTextBox.Text;
+            zrodlo_finansowania_id = insert("zrodlo_finansowania", "'" + nowe_zrodlo_finansowania.ToString() + "'").ToString();
+        }
+        return zrodlo_finansowania_id;
     }
 
     public void LoadOperation(int id)
@@ -73,7 +100,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         if (TextBox_Numer.Text == "" && TextBox_Tresc.Text == "" && TextBox_Wskaznik.Text == "" && TextBox_TerminOd.Text == ""
             && TextBox_TerminDo.Text == "" && TextBox_Waga.Text == "" && TextBox_Status.Text == "")
         {
-            DataTable dt = select("*", "dzialanie", "id = " + id);
+            DataTable dt = select("*", "dzialanie", "id = " + id, null);
 
             string number = dt.Rows[0]["lp"].ToString();
             string content = dt.Rows[0]["nazwa"].ToString();
@@ -90,6 +117,9 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             TextBox_TerminDo.Text = okres_do;
             TextBox_Waga.Text = waga;
             TextBox_Status.Text = zatwierdzenie;
+
+          //  dt = select("*", "dzialanie_zrodlo", "id_dzialania = "+id, null);
+          //  ZrodlaFinansowaniaDropDownList.SelectedValue = dt.Rows[0]["id_zrodlo_finansowania"].ToString();
         }
 
 
@@ -105,11 +135,12 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         string waga = TextBox_Waga.Text;
         string zatwierdzenie = TextBox_Status.Text;
 
-
         string zmieniane_kolumny = "nazwa='" + content1 + "', lp=" + number + ", wskaznik_rezultat='" + wskaznik_rezultat + "', okres_od='" + okres_od +
                 "', okres_do='" + okres_do + "', waga=" + waga + ", zatwierdzenie=" + zatwierdzenie;
 
         update("dzialanie", zmieniane_kolumny, "id=" + id);
+
+        String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
 
@@ -122,7 +153,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
 
-    protected DataTable select(string co, string skad, string ograniczenie)
+    protected DataTable select(string co, string skad, string ograniczenie, String order)
     {
         SqlConnection mySQLConnection = new SqlConnection();
         mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
@@ -133,6 +164,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             query = "SELECT  " + co + " from " + skad;
         else
             query = "SELECT  " + co + " from " + skad + " where " + ograniczenie;
+        if (order != null && order != "")
+            query += " ORDER BY " + order;
 
         SqlCommand cmd = new SqlCommand(query, mySQLConnection);
         cmd.ExecuteNonQuery();

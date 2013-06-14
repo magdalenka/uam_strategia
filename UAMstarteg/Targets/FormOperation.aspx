@@ -52,6 +52,15 @@
             </div>
             <asp:TextBox ID="TextBox_Waga" runat="server"></asp:TextBox>
         </div>
+        <div class="finansowanie">
+            <div>
+             <asp:Label ID="Label9" runat="server" Text="Źródła finansowania"></asp:Label> 
+             <a class="cloud" href="#"><img src="information.png"><span>Wybierz źródło finansowania działania z listy po lewej lub wprowadź nowe źródło w polu po prawej</span></a>
+            </div>
+            <asp:DropDownList ID="ZrodlaFinansowaniaDropDownList" runat="server">
+            </asp:DropDownList>
+            <asp:TextBox ID="ZrodlaFinansowaniaTextBox" runat="server"></asp:TextBox>
+        </div>
         <div class="status">
             <div>
                 <asp:Label ID="Label7" runat="server" Text="Status"></asp:Label> 
