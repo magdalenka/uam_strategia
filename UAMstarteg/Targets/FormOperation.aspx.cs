@@ -20,13 +20,13 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         id = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("id"));
         strategyNr = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("strategyNr"));
         edit = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("edit"));
-        //wczytaj jesli istnieje
-        if (edit != 0)
-        {
-            LoadOperation(id);
-        }
         //Załaduj źródła finansowania
         LoadListBox();
+        //wczytaj jesli istnieje
+        if (edit != 0)
+        {          
+            LoadOperation(id);
+        }
     }
 
     protected void Button1_Click(object sender, EventArgs e)
@@ -52,7 +52,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
 
     protected void LoadListBox()
     {
-        DataTable dt = select("*", "zrodlo_finansowania", null, " nazwa ASC");
+        DataTable dt = select("*", "zrodlo_finansowania", "nazwa != ''", " nazwa ASC");
         ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(" ", "-1"));//pusta opcja
         for (int i = 0; i < dt.Rows.Count; i++)
         {
@@ -80,7 +80,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         values = id_operation + " ," + zrodlo_finansowania_id;
         int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
 
-
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
 
@@ -90,8 +90,10 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         if (zrodlo_finansowania_id.Equals("-1") || zrodlo_finansowania_id == null || zrodlo_finansowania_id.Equals(""))
         {
             String nowe_zrodlo_finansowania = ZrodlaFinansowaniaTextBox.Text;
-            zrodlo_finansowania_id = insert("zrodlo_finansowania", "'" + nowe_zrodlo_finansowania.ToString() + "'").ToString();
+            if (!nowe_zrodlo_finansowania.Equals(""))
+                zrodlo_finansowania_id = insert("zrodlo_finansowania", "'" + nowe_zrodlo_finansowania.ToString() + "'").ToString();
         }
+
         return zrodlo_finansowania_id;
     }
 
@@ -109,6 +111,12 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             string okres_do = dt.Rows[0]["okres_do"].ToString();
             string waga = dt.Rows[0]["waga"].ToString();
             string zatwierdzenie = dt.Rows[0]["zatwierdzenie"].ToString();
+           
+            dt = select("*", "dzialanie_zrodlo", "id_dzialania = " + id, null);
+            if (dt.Rows.Count > 0)
+                ZrodlaFinansowaniaDropDownList.SelectedValue = dt.Rows[0]["id_zrodlo_finansowania"].ToString();
+            else
+                ZrodlaFinansowaniaDropDownList.SelectedValue = "-1";
 
             TextBox_Numer.Text = number;
             TextBox_Tresc.Text = content;
@@ -117,11 +125,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             TextBox_TerminDo.Text = okres_do;
             TextBox_Waga.Text = waga;
             TextBox_Status.Text = zatwierdzenie;
-
-          //  dt = select("*", "dzialanie_zrodlo", "id_dzialania = "+id, null);
-          //  ZrodlaFinansowaniaDropDownList.SelectedValue = dt.Rows[0]["id_zrodlo_finansowania"].ToString();
         }
-
 
     }
 
@@ -134,22 +138,34 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         string okres_do = TextBox_TerminDo.Text;
         string waga = TextBox_Waga.Text;
         string zatwierdzenie = TextBox_Status.Text;
+        String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
         string zmieniane_kolumny = "nazwa='" + content1 + "', lp=" + number + ", wskaznik_rezultat='" + wskaznik_rezultat + "', okres_od='" + okres_od +
                 "', okres_do='" + okres_do + "', waga=" + waga + ", zatwierdzenie=" + zatwierdzenie;
 
         update("dzialanie", zmieniane_kolumny, "id=" + id);
 
-        //String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
+        DataTable dt = select("*", "dzialanie_zrodlo", "id_dzialania = "+id, null);
+        if (dt.Rows.Count > 0)
+        {
+            zmieniane_kolumny = "id_dzialania='" + id + "' , id_zrodlo_finansowania='" + zrodlo_finansowania_id + "'";
+            update("dzialanie_zrodlo", zmieniane_kolumny, "id_dzialania=" + id);
+        }
+        else
+        {
+            String values = id + " ," + zrodlo_finansowania_id;
+            int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
+        }
 
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
-
     }
 
 
     public void DeleteOperation(int id)
     {
         update("dzialanie", "widocznosc=0", "id=" + id);
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
 
@@ -223,5 +239,4 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         return id_operation;
 
     }
-
 }

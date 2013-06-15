@@ -296,6 +296,10 @@ public partial class TargetsAsText : System.Web.UI.Page
         contentCell.Controls.Add(new LiteralControl("<b>Waga działania : </b>" + row["waga"].ToString()));
         contentCell.Controls.Add(new LiteralControl("</br>"));
 
+        //Sprawdza i wyswietla wskażnik stopnia wykonania
+        contentCell.Controls.Add(new LiteralControl("<b>Wskaźnik wykonania : </b>" + row["wskaznik_rezultat"]));
+        contentCell.Controls.Add(new LiteralControl("</br>"));
+
         String approval = "";
         if (row["zatwierdzenie"].ToString().Equals("1"))
         {
@@ -306,13 +310,14 @@ public partial class TargetsAsText : System.Web.UI.Page
             approval = "Działanie nie zostało jeszcze zatwierdzone.";
         }
         contentCell.Controls.Add(new LiteralControl("<b>Status : </b>" + approval));
+
         //Wyswietla źródło finansowania działania
         String finQuery = "SELECT * FROM zrodlo_finansowania INNER JOIN dzialanie_zrodlo ON zrodlo_finansowania.id = dzialanie_zrodlo.id_zrodlo_finansowania"
         +" WHERE dzialanie_zrodlo.id_dzialania = "+ (int)row["id"];
         DataTable dt = dataFetcher.getSelectResultsAsDataTable(finQuery);
         if (dt.Rows.Count > 0)
             contentCell.Controls.Add(new LiteralControl("</br><b>Źródło finansowania : </b>" + dt.Rows[0]["nazwa"]));
-
+        
         //Sprawdza czy działanie zostało już podjęte
         String ifTakenQuery = "SELECT * FROM podjete_dzialanie WHERE dzialanie = " + (int)row["id"];
         dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);

@@ -9,7 +9,7 @@
            return false;
        }
        function OpenWindowOperation(id, strategyNr, edit) {
-           window.open("FormOperation.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=500,top=243,left=25');
+           window.open("FormOperation.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=600,top=243,left=25');
            return false;
        }
        function OpenWindowOption(id, strategyNr, edit) {
