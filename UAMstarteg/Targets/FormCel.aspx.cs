@@ -66,7 +66,14 @@ public partial class FormCel : System.Web.UI.Page
         mySQLConnection.Open();
 
         SqlCommand cmd;
-        cmd = new SqlCommand("insert into cel(lp, id_strategii, id_parent, tresc, widocznosc) values (" + number + "," + id_strategii + "," + id_parent + ",'" + content + "',1)", mySQLConnection);
+        if (id_parent != -1) // podcel (t0 co było wcześniej)
+        {
+            cmd = new SqlCommand("insert into cel(lp, id_strategii, id_parent, tresc, widocznosc) values (" + number + "," + id_strategii + "," + id_parent + ",'" + content + "',1)", mySQLConnection);
+        }
+        else //nowy cel główny (z rodzicem nullem) - w kodzie guzika w TargetAsText.aspx.cs jest przesyłane -1
+        {
+            cmd = new SqlCommand("insert into cel(lp, id_strategii, id_parent, tresc, widocznosc) values (" + number + "," + id_strategii + ", null,'" + content + "',1)", mySQLConnection);
+        }
         cmd.ExecuteNonQuery();
 
         mySQLConnection.Close();

@@ -73,7 +73,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             if (zadanie)
             {
 
-                CreatePanelWithInformationAboutStrategy(strategyNr);
+                CreatePanelWithInformationAboutStrategy(strategyNr, organizationKeyString);
                 for (int i = 0; i < targetsNo; i++) // dla każdego celu
                 {
                     previousLevel.Clear();
@@ -91,6 +91,20 @@ public partial class TargetsAsText : System.Web.UI.Page
                     {
                         createContentTable(subTargets, false, previousLevel);
                     }
+
+                    //Wyświetlanie działań, dla celi które nie mają podceli
+                    String operationsQuery = "SELECT * FROM dzialanie_cel INNER JOIN dzialanie ON dzialanie_cel.id_dzialania = dzialanie.id WHERE dzialanie_cel.id_celu = " + targetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
+                    DataTable operations = dataFetcher.getSelectResultsAsDataTable(operationsQuery);
+                    if (operations.Rows.Count > 0)
+                    {
+                        for (int j = 0; j < operations.Rows.Count; j++)
+                        {
+                            previousLevel.Add(operations.Rows[j]["lp"]);
+                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation", organizationKeyString);
+                            previousLevel.RemoveAt(previousLevel.Count - 1);
+                        }
+                    }
+       
                 }
             }
             else // Wyświetla wszystko pod wybranym elementem
@@ -182,7 +196,7 @@ public partial class TargetsAsText : System.Web.UI.Page
     }
 
     //Wyświetli nad tabelą z celami panel  zaw info o strategii (opis, autorzy itd.)
-    private void CreatePanelWithInformationAboutStrategy(int strategyNr)
+    private void CreatePanelWithInformationAboutStrategy(int strategyNr, String organizationkey)
     {
         StrategyInformation.Visible = true;
 
@@ -192,7 +206,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 
         StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa : </b>" + dt.Rows[0]["nazwa_strategii"]));
         StrategyInformation.Controls.Add(new LiteralControl("</br>"));
-        StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa jednostki : </b>" + dt.Rows[0]["nazwa_strategii"]));
+        StrategyInformation.Controls.Add(new LiteralControl("<b>Nazwa jednostki : </b>" + dt.Rows[0]["nazwa_jednostki"]));
         StrategyInformation.Controls.Add(new LiteralControl("</br>"));
 
         //Pobiera dane o wszystkich autorach strategii
@@ -212,6 +226,20 @@ public partial class TargetsAsText : System.Web.UI.Page
             StrategyInformation.Controls.Add(new LiteralControl("- " + dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"]));
             StrategyInformation.Controls.Add(new LiteralControl("</br>"));
         }
+
+        //Guzik dodający cel główny
+        OrganizationKey = (string)Session["OrganizationKeyP"];
+        OrganizationKeyINT = Convert.ToInt32(OrganizationKey);
+        if (organizationkey.Equals(OrganizationKey))
+        {
+            ImageButton addNewTargetButton = new ImageButton();
+            addNewTargetButton.ImageUrl = "addNewTarget.png";
+            addNewTargetButton.Enabled = true;
+            addNewTargetButton.Visible = true;
+            addNewTargetButton.CssClass = "addNewTargetButton";
+            addNewTargetButton.OnClientClick = "javascript:OpenWindowTarget(" + -1 + "," + strategyNr + "," + 0 + ");";
+            StrategyInformation.Controls.Add(addNewTargetButton);
+        }
     }
 
     //Wstawia do tabeli nowy wiersz z celem/podcelem
@@ -228,7 +256,7 @@ public partial class TargetsAsText : System.Web.UI.Page
         else if (type.Equals("operation"))
         {
             tableRow.Cells.Add(PutOperationContentCellIntoRow(row));
-            tableRow.Cells.Add(PutOperationButtonsIntoTableRow(-1, -1, strategy, false));
+            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], 0, strategy, false));
         }
 
         TargetTable.Rows.Add(tableRow);
@@ -278,10 +306,16 @@ public partial class TargetsAsText : System.Web.UI.Page
             approval = "Działanie nie zostało jeszcze zatwierdzone.";
         }
         contentCell.Controls.Add(new LiteralControl("<b>Status : </b>" + approval));
+        //Wyswietla źródło finansowania działania
+        String finQuery = "SELECT * FROM zrodlo_finansowania INNER JOIN dzialanie_zrodlo ON zrodlo_finansowania.id = dzialanie_zrodlo.id_zrodlo_finansowania"
+        +" WHERE dzialanie_zrodlo.id_dzialania = "+ (int)row["id"];
+        DataTable dt = dataFetcher.getSelectResultsAsDataTable(finQuery);
+        if (dt.Rows.Count > 0)
+            contentCell.Controls.Add(new LiteralControl("</br><b>Źródło finansowania : </b>" + dt.Rows[0]["nazwa"]));
 
         //Sprawdza czy działanie zostało już podjęte
         String ifTakenQuery = "SELECT * FROM podjete_dzialanie WHERE dzialanie = " + (int)row["id"];
-        DataTable dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
+        dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
         if (dt.Rows.Count > 0) // zostało podjęte
         {
             contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));

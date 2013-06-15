@@ -12,6 +12,7 @@
             width: 344px;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="Forms.css" />
 </head>
 <body>
     <form id="form1" runat="server">
@@ -19,12 +20,14 @@
         <div class="numer">
             <div class="label">
                 <asp:Label ID="Label1" runat="server" Text="Numer"></asp:Label>
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać liczbę porządkową działania</span></a>
             </div>
             <asp:TextBox ID="TextBox_Numer" runat="server"></asp:TextBox>
             
         </div>
        <div class="label">
                 <asp:Label ID="Label2" runat="server" Text="Treść"></asp:Label>
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać treść działania</span></a>
             </div>
         <div class="tresc">
         <asp:TextBox ID="TextBox_Tresc" runat="server" Height="95px" Width="373px" 
@@ -34,6 +37,8 @@
         <div class="terminy">
             <div>
                 <asp:Label ID="Label3" runat="server" Text="Termin"></asp:Label> 
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty obowiązywania działania.</br>
+                Daty w formacie rok-miesiąc-dzień</span></a>
             </div>
             <asp:Label ID="Label5" runat="server" Text=" od "></asp:Label>
             <asp:TextBox ID="TextBox_TerminOd" runat="server"></asp:TextBox>
@@ -43,18 +48,31 @@
         <div class="waga">
             <div>
                 <asp:Label ID="Label6" runat="server" Text="Waga"></asp:Label> 
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać wagę działania</span></a>
             </div>
             <asp:TextBox ID="TextBox_Waga" runat="server"></asp:TextBox>
+        </div>
+        <div class="finansowanie">
+            <div>
+             <asp:Label ID="Label9" runat="server" Text="Źródła finansowania"></asp:Label> 
+             <a class="cloud" href="#"><img src="information.png"><span>Wybierz źródło finansowania działania z listy po lewej lub wprowadź nowe źródło w polu po prawej</span></a>
+            </div>
+            <asp:DropDownList ID="ZrodlaFinansowaniaDropDownList" runat="server">
+            </asp:DropDownList>
+            <asp:TextBox ID="ZrodlaFinansowaniaTextBox" runat="server"></asp:TextBox>
         </div>
         <div class="status">
             <div>
                 <asp:Label ID="Label7" runat="server" Text="Status"></asp:Label> 
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać status działania.</br>
+                1 jeżeli zostało zatwierdzone, 0 jeżeli nie.</span></a>
             </div>
             <asp:TextBox ID="TextBox_Status" runat="server"></asp:TextBox>
         </div>
         <div class="wskaznik">
             <div>
                 <asp:Label ID="Label8" runat="server" Text="Wskaźnik/Rezultat"></asp:Label> 
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać jednostkę w jakiej jest mierzony stopień zrealizowania działania</span></a>
             </div>
             <asp:TextBox ID="TextBox_Wskaznik" runat="server" Height="95px" Width="373px" 
                 TextMode="MultiLine"></asp:TextBox>

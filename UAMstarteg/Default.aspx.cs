@@ -16,7 +16,7 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+	   Page.RegisterStartupScript("myScript", "<script language=JavaScript>__doPostBack('ctl00$HeadLoginView$HeadLoginStatus$ctl00','')</script>");
        // odbieranie nr strategii i nr celu, mozna potem usunac wyswietlanie w labelu
        string id_str = Request.QueryString["id_strategii"];
        string id_cel = Request.QueryString["id_celu"];
