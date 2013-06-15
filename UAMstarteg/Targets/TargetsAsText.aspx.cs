@@ -318,9 +318,9 @@ public partial class TargetsAsText : System.Web.UI.Page
         dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
         if (dt.Rows.Count > 0) // zostało podjęte
         {
-            contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
+            //contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
 
-            contentCell.Controls.Add(new LiteralControl("<b>Działanie zostało podjęte</b>"));
+            contentCell.Controls.Add(new LiteralControl("</br><b>Działanie zostało podjęte</b>"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
             contentCell.Controls.Add(new LiteralControl("Opis : " + row["opis"].ToString()));
@@ -336,27 +336,27 @@ public partial class TargetsAsText : System.Web.UI.Page
             contentCell.Controls.Add(new LiteralControl("Komentarz : " + row["komentarz"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("</div>"));
+            //contentCell.Controls.Add(new LiteralControl("</div>"));
         }
 
         //Sprawdza czy istnieją osoby odpowiedzialne za działanie
-        String peopleQuery = "SELECT * FROM dzialanie_odpowiedzialnosc WHERE id_dzialania" + (int)row["id"];
-        dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
+        String peopleQuery = "SELECT * FROM dzialanie_odpowiedzialnosc INNER JOIN osoby_odpowiedzialne"+
+            " ON id = id_osoby WHERE id_dzialania = " + row["id"];
+        dt = dataFetcher.getSelectResultsAsDataTable(peopleQuery);
         if (dt.Rows.Count > 0) //osoby odpowiedzialne istnieją
         {
-            contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
-
-            contentCell.Controls.Add(new LiteralControl("<b>Osoby odpowiedzialne : </b>"));
+            contentCell.Controls.Add(new LiteralControl("</br><b>Osoby odpowiedzialne : </b>"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
             for (int i = 0; i < dt.Rows.Count; i++) // Dla każdej osoby odpowiedzialnej
             {
-                contentCell.Controls.Add(new LiteralControl(dt.Rows[i]["imie"].ToString() + " " +
-                    dt.Rows[i]["nazwisko"]));
+                if (dt.Rows[i]["nazwisko"] == DBNull.Value)
+                    dt.Rows[i]["nazwisko"] = "";
+                if (dt.Rows[i]["stanowisko"] == DBNull.Value)
+                    dt.Rows[i]["stanowisko"] = "";
+                contentCell.Controls.Add(new LiteralControl(dt.Rows[i]["stanowisko"] +" "+ dt.Rows[i]["nazwisko"]));
                 contentCell.Controls.Add(new LiteralControl("</br>"));
             }
-
-            contentCell.Controls.Add(new LiteralControl("</div>"));
         }
 
         contentCell.Controls.Add(new LiteralControl("<div>"));
