@@ -145,7 +145,6 @@ public partial class TargetsAsText : System.Web.UI.Page
                         //tworzy rekurencyjnie resztę tabeli (wyciąga pozostałe poziomy)
                         createContentTable(subTargets, false, previousLevel);
                     }
-
                 }
             }
         }

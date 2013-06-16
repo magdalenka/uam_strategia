@@ -16,6 +16,8 @@
 </head>
 <body>
     <form id="form1" runat="server">
+    <asp:Panel ID="Panel1" runat="server" ScrollBars="Vertical" Height="500px">
+ 
     <div style="height: 176px">
         <div class="numer">
             <div class="label">
@@ -77,13 +79,44 @@
             <asp:TextBox ID="TextBox_Wskaznik" runat="server" Height="95px" Width="373px" 
                 TextMode="MultiLine"></asp:TextBox>
         </div>
+        <div class="osoby_odpowiedziane">
+            <div>
+                <asp:Label ID="Label10" runat="server" Text="Osoby odpowiedzialne"></asp:Label> 
+                <a class="cloud" href="#"><img src="information.png"><span>Należy zaznaczyć osoby odpowiedzialne za działanie, lub dodać nowe osoby</span></a>
+            </div>
+            <asp:Panel ID="PanelZOsobamiOdp" runat="server" ScrollBars="Vertical" Height="80">     
+                <asp:CheckBoxList ID="OsobyOdpowiedzialneCheckBoxList" runat="server" 
+                    BackColor="White" Width="98%" >
+                </asp:CheckBoxList>        
+            </asp:Panel>
+            <asp:Button ID="PokarzPanelDodawaniaOsobOdp" runat="server" Text="Dodaj osobę" 
+                    onclick="PokarzPanelDodawaniaOsobOdpButton_Click" />
+            <asp:Panel ID="PanelZDodawaniemOOdp" runat="server">     
+                <asp:ListBox ID="OOWyborListBox" runat="server" Width="100%"></asp:ListBox>
+                <div>
+                    <asp:Label ID="Label11" runat="server" Text="Stanowisko__"></asp:Label>
+                    <asp:TextBox ID="OOStanowiskoTextBox" runat="server"></asp:TextBox>
+                </div>
+                <div>
+                    <asp:Label ID="Label12" runat="server" Text="Tytuł naukowy"></asp:Label>
+                    <asp:TextBox ID="OOTytulTextBox" runat="server"></asp:TextBox>
+                </div>
+                <div>
+                    <asp:Label ID="Label13" runat="server" Text="Nazwisko____"></asp:Label>
+                    <asp:TextBox ID="OONazwiskoTextBox" runat="server"></asp:TextBox>
+                </div>
+                <asp:Button ID="DodajOsobyOdpowiedzialneButton" runat="server" 
+                    Text="Dodaj osobę odpowiedzialną" 
+                    onclick="DodajOsobyOdpowiedzialneButton_Click" />
+            </asp:Panel>
+        </div>
 
          <div class="button">
              <asp:Button ID="editButton_14" runat="server" onclick="Button1_Click" Text="Zapisz" />
              <asp:Button ID="Button3" runat="server" Text="Usuń" onclick="Button3_Click" />
              <asp:Button ID="Button2" runat="server" Text="Anuluj" onclick="Button2_Click" />
         </div>
-        
+    </asp:Panel>
     </form>
 </body>
 </html>

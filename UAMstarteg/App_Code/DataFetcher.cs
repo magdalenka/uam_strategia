@@ -51,4 +51,15 @@ public class DataFetcher
 
         return dataAdapter;
     }
+
+    public void delete_update(String query)
+    {
+        SqlConnection mySQLConnection = new SqlConnection();
+        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.Open();
+
+        SqlCommand cmd = new SqlCommand(query, mySQLConnection);
+        cmd.ExecuteNonQuery();
+    }
+
 }

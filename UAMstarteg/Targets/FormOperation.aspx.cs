@@ -14,19 +14,24 @@ public partial class Targets_FormOperation : System.Web.UI.Page
     private int id;
     private int strategyNr;
     private int edit;
+    private DataFetcher df = new DataFetcher();
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        PanelZDodawaniemOOdp.Visible = false;
         id = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("id"));
         strategyNr = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("strategyNr"));
         edit = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("edit"));
         //Załaduj źródła finansowania
-        LoadListBox();
+        LoadZrodloFinansowaniaListBox();
+
         //wczytaj jesli istnieje
-        if (edit != 0)
-        {          
+        if (edit != 0) //eycja
+        {
             LoadOperation(id);
         }
+        else //dodawanie
+            PanelZOsobamiOdp.Visible = false;
     }
 
     protected void Button1_Click(object sender, EventArgs e)
@@ -50,7 +55,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         DeleteOperation(id);
     }
 
-    protected void LoadListBox()
+    protected void LoadZrodloFinansowaniaListBox()
     {
         DataTable dt = select("*", "zrodlo_finansowania", "nazwa != ''", " nazwa ASC");
         ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(" ", "-1"));//pusta opcja
@@ -59,6 +64,77 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(dt.Rows[i]["nazwa"].ToString(), dt.Rows[i]["id"].ToString()));
         }
     }
+
+    protected void LoadOOWyborListBox()
+    {
+        //DataTable dt = select("*", "osoby_odpowiedzialne "," id_startegii = "+strategyNr, " stanowisko ASC");
+        String Query = "SELECT * FROM osoby_odpowiedzialne WHERE id_startegii = "+strategyNr+" ORDER BY stanowisko ASC" ;
+       
+        DataTable dt = df.getSelectResultsAsDataTable(Query);
+        OOWyborListBox.Items.Add(new ListItem(" ", "-1"));//pusta opcja
+        for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            if (dt.Rows[i]["stanowisko"] == DBNull.Value)
+                dt.Rows[i]["stanowisko"] = "";
+            if (dt.Rows[i]["tytul"] == DBNull.Value)
+                dt.Rows[i]["tytul"] = "";
+            if (dt.Rows[i]["nazwisko"] == DBNull.Value)
+                dt.Rows[i]["nazwisko"] = "";
+            OOWyborListBox.Items.Add(new ListItem(dt.Rows[i]["stanowisko"] + " " + 
+                dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
+        }
+       // OOWyborListBox.Items[0].Selected = true;
+    }
+
+    protected void LoadOsobyOdpowiedzialneCheckBoxList()
+    {
+        //Dodaje tylko osoby odpowiedzialne już przypisane do działania
+        DataTable dt = select("*", "osoby_odpowiedzialne INNER JOIN dzialanie_odpowiedzialnosc ON id = id_osoby ",
+           " id_dzialania = " + id, " stanowisko ASC");
+        
+        for (int i=0; i<dt.Rows.Count; i++)
+        {
+            if (dt.Rows[i]["nazwisko"] == DBNull.Value)
+                dt.Rows[i]["nazwisko"] = "";
+            if (dt.Rows[i]["tytul"] == DBNull.Value)
+                dt.Rows[i]["tytul"] = "";
+            //Dodaj nowy element do listy
+            OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(dt.Rows[i]["stanowisko"] + " " +
+                dt.Rows[i]["tytul"] + " "+ dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
+            //Zaznacz go ptaszkiem
+            OsobyOdpowiedzialneCheckBoxList.Items[i].Selected = true;
+        }
+
+        if (dt.Rows.Count == 0 || dt == null || dt.Rows == null)
+            PanelZOsobamiOdp.Visible = false;
+        else
+            PanelZOsobamiOdp.Visible = true;
+    }
+
+    //Usuwa osoby odpowiedzialne z działania jeżeli nie są zaznaczone ptaszkiem
+    //a wcześniej były zaznaczone
+    protected void deleteOsobyOdpowiedzialne()
+    {
+        int counter = 0;
+        String deletePersonQuery = "DELETE FROM dzialanie_odpowiedzialnosc WHERE id_osoby in ( ";
+        for (int i = 0; i < OsobyOdpowiedzialneCheckBoxList.Items.Count; i++)
+        {
+            if (!OsobyOdpowiedzialneCheckBoxList.Items[i].Selected)
+            {
+                if (counter > 0)
+                {
+                    deletePersonQuery += ", ";
+                }
+                deletePersonQuery += OsobyOdpowiedzialneCheckBoxList.Items[i].Value;
+                counter++;
+            }
+        }
+        deletePersonQuery += " ) AND id_dzialania = "+id;
+        //Jeżeli jest coś do usunięcia to usuwa połączenie
+        if (counter > 0)
+            df.delete_update(deletePersonQuery);
+    }
+
 
     public void AddNewOperation(int id_strategii, int id_cel)
     {
@@ -79,6 +155,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         //uzupelnienie tabeli dzialanie_zrodlo
         values = id_operation + " ," + zrodlo_finansowania_id;
         int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
+        id = id_operation;
+        AddOsobyOdpowiedzialne();
 
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
@@ -118,6 +196,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             else
                 ZrodlaFinansowaniaDropDownList.SelectedValue = "-1";
 
+            LoadOsobyOdpowiedzialneCheckBoxList();
+
             TextBox_Numer.Text = number;
             TextBox_Tresc.Text = content;
             TextBox_Wskaznik.Text = wskaznik_rezultat;
@@ -156,6 +236,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             String values = id + " ," + zrodlo_finansowania_id;
             int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
         }
+        //Usuń osoby kóre były przypisane, ale zostały odznaczone na liście
+        deleteOsobyOdpowiedzialne();
 
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
@@ -239,4 +321,63 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         return id_operation;
 
     }
+    protected void PokarzPanelDodawaniaOsobOdpButton_Click(object sender, EventArgs e)
+    {
+        PanelZDodawaniemOOdp.Visible = true;
+        //Załaduj wszytskie osoby z kórych można wybierać
+        LoadOOWyborListBox();
+    }
+
+    protected void DodajOsobyOdpowiedzialneButton_Click(object sender, EventArgs e)
+    {
+        String nazwisko = OONazwiskoTextBox.Text;
+        String tytul = OOTytulTextBox.Text;
+        String stanowisko = OOStanowiskoTextBox.Text;  
+        int id_osoby = 0;
+        String values = "";
+        if (OOWyborListBox.SelectedValue.Equals("-1") || OOWyborListBox.Items[0].Selected)//nic nie wybrano z listboxa
+        {
+           //Dodaj do tabeli osoby_odpowiedzialne
+             values = "1, '" + stanowisko + "', '" + tytul + "', '" + nazwisko + "', " + strategyNr;
+             id_osoby = insert(" osoby_odpowiedzialne ", values);
+        }
+        else // Wybrano już istniejącą osobę z listy
+        {
+            id_osoby = Convert.ToInt32(OOWyborListBox.SelectedValue);
+            DataTable dt = select("*", "osoby_odpowiedzialne", "id = "+id_osoby, null);
+            tytul = dt.Rows[0]["tytul"].ToString();
+            nazwisko = dt.Rows[0]["nazwisko"].ToString();
+            stanowisko = dt.Rows[0]["stanowisko"].ToString();
+            OOWyborListBox.SelectedValue = "-1";
+        }
+        if (edit != 0)// istniejące działanie jest edytowane
+        {
+            //Dodaj do tabeli dzialanie_odpowiedzialnosc
+            values = " " + id_osoby + ", " + id + " ";
+            insert(" dzialanie_odpowiedzialnosc", values);
+        }
+
+        //Dodaj do listy i oznacz ptaszkiem
+        OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(stanowisko + " " +
+                   tytul + " " + nazwisko, id_osoby.ToString()));
+        OsobyOdpowiedzialneCheckBoxList.Items[OsobyOdpowiedzialneCheckBoxList.Items.Count - 1].Selected = true;
+
+        PanelZDodawaniemOOdp.Visible = false;
+        PanelZOsobamiOdp.Visible = true;
+    }
+
+    //Dodaj osoby odp do celu gdy cel jeszcze nie istnieje 
+    //(narazie istnieją tylko jako elementy w liścioe nie w bazie danych)
+    protected void AddOsobyOdpowiedzialne()
+    {
+        foreach (ListItem item in OsobyOdpowiedzialneCheckBoxList.Items)
+        {
+            if (item.Selected)// dodaj do bazytylko elementy oznaczone ptaszkiem
+            {   
+                String values = " " + item.Value + ", " + id + " ";
+                insert(" dzialanie_odpowiedzialnosc", values);
+            }
+        }
+    }
+
 }
