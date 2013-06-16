@@ -83,7 +83,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             OOWyborListBox.Items.Add(new ListItem(dt.Rows[i]["stanowisko"] + " " + 
                 dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
         }
-       // OOWyborListBox.Items[0].Selected = true;
+        OOWyborListBox.Items[0].Selected = true;
     }
 
     protected void LoadOsobyOdpowiedzialneCheckBoxList()
@@ -337,9 +337,13 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         String values = "";
         if (OOWyborListBox.SelectedValue.Equals("-1") || OOWyborListBox.Items[0].Selected)//nic nie wybrano z listboxa
         {
-           //Dodaj do tabeli osoby_odpowiedzialne
-             values = "1, '" + stanowisko + "', '" + tytul + "', '" + nazwisko + "', " + strategyNr;
-             id_osoby = insert(" osoby_odpowiedzialne ", values);
+           //Dodaj do tabeli osoby_odpowiedzialne, jeżeli chociaż jedno pole nie jest puste
+            if (!nazwisko.Equals("") || !tytul.Equals("") || !stanowisko.Equals(""))
+            {
+                values = "1, '" + stanowisko + "', '" + tytul + "', '" + nazwisko + "', " + strategyNr;
+               // values = "1, '" + stanowisko + "', '" + tytul + "', '" + nazwisko + "', " + 1;
+                id_osoby = insert(" osoby_odpowiedzialne ", values);
+            }
         }
         else // Wybrano już istniejącą osobę z listy
         {
@@ -350,17 +354,23 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             stanowisko = dt.Rows[0]["stanowisko"].ToString();
             OOWyborListBox.SelectedValue = "-1";
         }
-        if (edit != 0)// istniejące działanie jest edytowane
+        if (!nazwisko.Equals("") || !tytul.Equals("") || !stanowisko.Equals(""))
         {
-            //Dodaj do tabeli dzialanie_odpowiedzialnosc
-            values = " " + id_osoby + ", " + id + " ";
-            insert(" dzialanie_odpowiedzialnosc", values);
-        }
+            if (edit != 0)// istniejące działanie jest edytowane
+            {
+                //Dodaj do tabeli dzialanie_odpowiedzialnosc
 
-        //Dodaj do listy i oznacz ptaszkiem
-        OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(stanowisko + " " +
-                   tytul + " " + nazwisko, id_osoby.ToString()));
-        OsobyOdpowiedzialneCheckBoxList.Items[OsobyOdpowiedzialneCheckBoxList.Items.Count - 1].Selected = true;
+                values = " " + id_osoby + ", " + id + " ";
+                insert(" dzialanie_odpowiedzialnosc", values);
+
+            }
+
+            //Dodaj do listy i oznacz ptaszkiem
+
+            OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(stanowisko + " " +
+                       tytul + " " + nazwisko, id_osoby.ToString()));
+            OsobyOdpowiedzialneCheckBoxList.Items[OsobyOdpowiedzialneCheckBoxList.Items.Count - 1].Selected = true;
+        }
 
         PanelZDodawaniemOOdp.Visible = false;
         PanelZOsobamiOdp.Visible = true;
