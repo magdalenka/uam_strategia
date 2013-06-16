@@ -48,7 +48,7 @@
         }
     </script>
 
-      <asp:TreeView ID="DrzewoStrategii" Runat="server" OnSelectedNodeChanged="DrzewoStrategii_SelectedNodeChanged" ShowLines=true PopulateNodesFromClient="true" ExpandDepth="0">
+ <asp:TreeView ID="DrzewoStrategii" Runat="server" OnSelectedNodeChanged="DrzewoStrategii_SelectedNodeChanged" ExpandDepth="0" BackColor="#F2F4F4" BorderColor="#DDDDDD" CollapseImageToolTip="" CollapseImageUrl="~/images/up-arrow-circle-blue-Shapes4FREE.png" ExpandImageToolTip="" ExpandImageUrl="~/images/down-arrow-circle-blue-Shapes4FREE.png" Font-Names="Cambria" Font-Overline="False" Font-Size="Small" Font-Strikeout="False" ForeColor="#333399" NodeIndent="40" NoExpandImageUrl="~/images/rt-arrow-circle-blue-Shapes4FREE.png" NodeStyle-NodeSpacing="5px" BorderStyle="Solid" BorderWidth="2px" Width="566px" style="margin-left: 0px"  >
       <Nodes>
       </Nodes>
       </asp:TreeView>
