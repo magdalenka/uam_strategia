@@ -58,8 +58,9 @@ public partial class About : System.Web.UI.Page
 
     protected DataTable select(string co, string skad, string ograniczenie)
     {
+        string connStr = ConfigurationManager.ConnectionStrings["myConnectionStringMSSQL"].ConnectionString;
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStr;
         mySQLConnection.Open();
 
         String query;
