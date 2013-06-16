@@ -1,5 +1,5 @@
 ﻿
-<%@ Page Title="System zarządzania strategiami UAM" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
+<%@ Page Title="System zarządzania strategiami UAM" Language="C#" MasterPageFile="~/ReportSite.master" AutoEventWireup="true"
     CodeFile="TargetsAsText.aspx.cs" Inherits="TargetsAsText" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">

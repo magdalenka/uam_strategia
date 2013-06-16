@@ -9,6 +9,7 @@ public partial class PoWylogowaniu : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.location='Default.aspx'</script>");
+        Session["OrganizationKeyP"] = null;
+        Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.location='Targets/TargetsAsText.aspx'</script>");
     }
 }

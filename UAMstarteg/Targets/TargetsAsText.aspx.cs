@@ -150,7 +150,10 @@ public partial class TargetsAsText : System.Web.UI.Page
         }
         else
         {
-            Label.Text = "<br>Wybierz strategię z panelu po prawej stronie.";
+            if ((string)Session["OrganizationKeyP"] == null)
+                Label.Text = "<h2>Witamy w Systemie zarządzania strategiami UAM.</h2><p>Zaloguj się aby kontynuować.</p>";
+            else
+                Label.Text = "<br>Wybierz strategię z panelu po prawej stronie.";
         }
     }
 
