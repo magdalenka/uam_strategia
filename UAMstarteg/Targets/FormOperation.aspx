@@ -39,9 +39,10 @@
         <div class="terminy">
             <div>
                 <asp:Label ID="Label3" runat="server" Text="Termin"></asp:Label> 
-                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty obowiązywania działania.</br>
-                Daty w formacie rok-miesiąc-dzień</span></a>
-            </div>
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty obowiązywania działania.<br>
+                Daty w formacie rok-miesiąc-dzień
+                </span></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <asp:Label ID="Label5" runat="server" Text=" od "></asp:Label>
             <asp:TextBox ID="TextBox_TerminOd" runat="server"></asp:TextBox>
             <asp:Label ID="Label4" runat="server" Text=" do "></asp:Label> 
@@ -66,10 +67,11 @@
         <div class="status">
             <div>
                 <asp:Label ID="Label7" runat="server" Text="Status"></asp:Label> 
-                <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać status działania.</br>
-                1 jeżeli zostało zatwierdzone, 0 jeżeli nie.</span></a>
-            </div>
-            <asp:TextBox ID="TextBox_Status" runat="server"></asp:TextBox>
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać status działania.<br>
+                </span></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <asp:DropDownList ID="StatusDropDownList" runat="server">
+            </asp:DropDownList>
         </div>
         <div class="wskaznik">
             <div>
@@ -91,18 +93,19 @@
             </asp:Panel>
             <asp:Button ID="PokarzPanelDodawaniaOsobOdp" runat="server" Text="Dodaj osobę" 
                     onclick="PokarzPanelDodawaniaOsobOdpButton_Click" />
-            <asp:Panel ID="PanelZDodawaniemOOdp" runat="server">     
+            <asp:Panel ID="PanelZDodawaniemOOdp" runat="server"> 
+             <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać istniejącą osobę z listy lub wprowadzić dane nowej osoby w polach tekstowych</span></a>    
                 <asp:ListBox ID="OOWyborListBox" runat="server" Width="100%"></asp:ListBox>
                 <div>
-                    <asp:Label ID="Label11" runat="server" Text="Stanowisko__"></asp:Label>
+                    <asp:Label ID="Label11" runat="server" Text="Stanowisko&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"></asp:Label>
                     <asp:TextBox ID="OOStanowiskoTextBox" runat="server"></asp:TextBox>
                 </div>
                 <div>
-                    <asp:Label ID="Label12" runat="server" Text="Tytuł naukowy"></asp:Label>
+                    <asp:Label ID="Label12" runat="server" Text="Tytuł naukowy&nbsp&nbsp"></asp:Label>
                     <asp:TextBox ID="OOTytulTextBox" runat="server"></asp:TextBox>
                 </div>
                 <div>
-                    <asp:Label ID="Label13" runat="server" Text="Nazwisko____"></asp:Label>
+                    <asp:Label ID="Label13" runat="server" Text="Nazwisko&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"></asp:Label>
                     <asp:TextBox ID="OONazwiskoTextBox" runat="server"></asp:TextBox>
                 </div>
                 <asp:Button ID="DodajOsobyOdpowiedzialneButton" runat="server" 

@@ -24,7 +24,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         edit = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("edit"));
         //Załaduj źródła finansowania
         LoadZrodloFinansowaniaListBox();
-
+        LoadStatusDropDownList();
+    
         //wczytaj jesli istnieje
         if (edit != 0) //eycja
         {
@@ -57,58 +58,93 @@ public partial class Targets_FormOperation : System.Web.UI.Page
 
     protected void LoadZrodloFinansowaniaListBox()
     {
-        DataTable dt = select("*", "zrodlo_finansowania", "nazwa != ''", " nazwa ASC");
-        ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(" ", "-1"));//pusta opcja
-        for (int i = 0; i < dt.Rows.Count; i++)
+        if (ZrodlaFinansowaniaDropDownList.Items.Count == 0)
         {
-            ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(dt.Rows[i]["nazwa"].ToString(), dt.Rows[i]["id"].ToString()));
+            DataTable dt = select("*", "zrodlo_finansowania", "nazwa != ''", " nazwa ASC");
+            ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(" ", "-1"));//pusta opcja
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                ZrodlaFinansowaniaDropDownList.Items.Add(new ListItem(dt.Rows[i]["nazwa"].ToString(), dt.Rows[i]["id"].ToString()));
+            }
         }
     }
 
     protected void LoadOOWyborListBox()
     {
-        //DataTable dt = select("*", "osoby_odpowiedzialne "," id_startegii = "+strategyNr, " stanowisko ASC");
-        String Query = "SELECT * FROM osoby_odpowiedzialne WHERE id_startegii = "+strategyNr+" ORDER BY stanowisko ASC" ;
-       
-        DataTable dt = df.getSelectResultsAsDataTable(Query);
-        OOWyborListBox.Items.Add(new ListItem(" ", "-1"));//pusta opcja
-        for (int i = 0; i < dt.Rows.Count; i++)
+        if (OOWyborListBox.Items.Count == 0)
         {
-            if (dt.Rows[i]["stanowisko"] == DBNull.Value)
-                dt.Rows[i]["stanowisko"] = "";
-            if (dt.Rows[i]["tytul"] == DBNull.Value)
-                dt.Rows[i]["tytul"] = "";
-            if (dt.Rows[i]["nazwisko"] == DBNull.Value)
-                dt.Rows[i]["nazwisko"] = "";
-            OOWyborListBox.Items.Add(new ListItem(dt.Rows[i]["stanowisko"] + " " + 
-                dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
+            //DataTable dt = select("*", "osoby_odpowiedzialne "," id_startegii = "+strategyNr, " stanowisko ASC");
+            String Query = "SELECT * FROM osoby_odpowiedzialne WHERE id_startegii = " + strategyNr + " ORDER BY stanowisko ASC";
+            DataTable dt = df.getSelectResultsAsDataTable(Query);
+            OOWyborListBox.Items.Add(new ListItem(" ", "-1"));//pusta opcja
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i]["stanowisko"] == DBNull.Value)
+                    dt.Rows[i]["stanowisko"] = "";
+                if (dt.Rows[i]["tytul"] == DBNull.Value)
+                    dt.Rows[i]["tytul"] = "";
+                if (dt.Rows[i]["nazwisko"] == DBNull.Value)
+                    dt.Rows[i]["nazwisko"] = "";
+                OOWyborListBox.Items.Add(new ListItem(dt.Rows[i]["stanowisko"] + " " +
+                    dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
+            }
+            OOWyborListBox.Items[0].Selected = true;
         }
-        OOWyborListBox.Items[0].Selected = true;
+    }
+
+    //Załaduj wszytskie możliwe opcje zatwierdzenia
+    protected void LoadStatusDropDownList()
+    {
+        if (StatusDropDownList.Items.Count == 0)
+        {
+            StatusDropDownList.Items.Add(new ListItem(" ", "-1"));
+            StatusDropDownList.Items.Add(new ListItem("Zatwierdzono", "1"));
+            StatusDropDownList.Items.Add(new ListItem("Niezatwierdzono", "0"));
+
+            //   StatusDropDownList.SelectedValue = "-1";
+            if (edit == 0)// nowe działanie
+            {
+                if (StatusDropDownList.SelectedValue.Equals("") || StatusDropDownList.SelectedValue.Equals(null))
+                    StatusDropDownList.SelectedValue = "-1";
+            }
+            else
+            {
+                String statusQuery = "SELECT zatwierdzenie FROM dzialanie WHERE id = " + id;
+                DataTable dt = df.getSelectResultsAsDataTable(statusQuery);
+                if (dt.Rows[0]["zatwierdzenie"] == DBNull.Value)//nie było przypisane
+                    StatusDropDownList.SelectedValue = "-1";
+                else
+                    StatusDropDownList.SelectedValue = dt.Rows[0]["zatwierdzenie"].ToString();
+            }
+        }
     }
 
     protected void LoadOsobyOdpowiedzialneCheckBoxList()
     {
-        //Dodaje tylko osoby odpowiedzialne już przypisane do działania
-        DataTable dt = select("*", "osoby_odpowiedzialne INNER JOIN dzialanie_odpowiedzialnosc ON id = id_osoby ",
-           " id_dzialania = " + id, " stanowisko ASC");
-        
-        for (int i=0; i<dt.Rows.Count; i++)
+        if (OsobyOdpowiedzialneCheckBoxList.Items.Count == 0)
         {
-            if (dt.Rows[i]["nazwisko"] == DBNull.Value)
-                dt.Rows[i]["nazwisko"] = "";
-            if (dt.Rows[i]["tytul"] == DBNull.Value)
-                dt.Rows[i]["tytul"] = "";
-            //Dodaj nowy element do listy
-            OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(dt.Rows[i]["stanowisko"] + " " +
-                dt.Rows[i]["tytul"] + " "+ dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
-            //Zaznacz go ptaszkiem
-            OsobyOdpowiedzialneCheckBoxList.Items[i].Selected = true;
-        }
+            //Dodaje tylko osoby odpowiedzialne już przypisane do działania
+            DataTable dt = select("*", "osoby_odpowiedzialne INNER JOIN dzialanie_odpowiedzialnosc ON id = id_osoby ",
+               " id_dzialania = " + id, " stanowisko ASC");
 
-        if (dt.Rows.Count == 0 || dt == null || dt.Rows == null)
-            PanelZOsobamiOdp.Visible = false;
-        else
-            PanelZOsobamiOdp.Visible = true;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i]["nazwisko"] == DBNull.Value)
+                    dt.Rows[i]["nazwisko"] = "";
+                if (dt.Rows[i]["tytul"] == DBNull.Value)
+                    dt.Rows[i]["tytul"] = "";
+                //Dodaj nowy element do listy
+                OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(dt.Rows[i]["stanowisko"] + " " +
+                    dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
+                //Zaznacz go ptaszkiem
+                OsobyOdpowiedzialneCheckBoxList.Items[i].Selected = true;
+            }
+
+            if (dt.Rows.Count == 0 || dt == null || dt.Rows == null)
+                PanelZOsobamiOdp.Visible = false;
+            else
+                PanelZOsobamiOdp.Visible = true;
+        }
     }
 
     //Usuwa osoby odpowiedzialne z działania jeżeli nie są zaznaczone ptaszkiem
@@ -144,7 +180,9 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         string okres_od = TextBox_TerminOd.Text;
         string okres_do = TextBox_TerminDo.Text;
         string waga = TextBox_Waga.Text;
-        string zatwierdzenie = TextBox_Status.Text;
+        String zatwierdzenie = StatusDropDownList.SelectedValue;
+        if (zatwierdzenie.Equals("-1") || zatwierdzenie.Equals("null"))
+            zatwierdzenie = "0";
         String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
         string values = "'" + content + "'," + number + ",'" + wskaznik_rezultat + "','" + okres_od + "','" + okres_do + "'," + waga + ", "
@@ -178,7 +216,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
     public void LoadOperation(int id)
     {
         if (TextBox_Numer.Text == "" && TextBox_Tresc.Text == "" && TextBox_Wskaznik.Text == "" && TextBox_TerminOd.Text == ""
-            && TextBox_TerminDo.Text == "" && TextBox_Waga.Text == "" && TextBox_Status.Text == "")
+            && TextBox_TerminDo.Text == "" && TextBox_Waga.Text == "")
         {
             DataTable dt = select("*", "dzialanie", "id = " + id, null);
 
@@ -204,7 +242,11 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             TextBox_TerminOd.Text = okres_od;
             TextBox_TerminDo.Text = okres_do;
             TextBox_Waga.Text = waga;
-            TextBox_Status.Text = zatwierdzenie;
+            //TextBox_Status.Text = zatwierdzenie;
+            if (!zatwierdzenie.Equals(""))
+                StatusDropDownList.SelectedValue = zatwierdzenie;
+            else
+                StatusDropDownList.SelectedValue = "-1";
         }
 
     }
@@ -217,7 +259,9 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         string okres_od = TextBox_TerminOd.Text;
         string okres_do = TextBox_TerminDo.Text;
         string waga = TextBox_Waga.Text;
-        string zatwierdzenie = TextBox_Status.Text;
+        string zatwierdzenie = StatusDropDownList.SelectedValue;
+        if (zatwierdzenie.Equals("-1") || zatwierdzenie.Equals("null"))
+            zatwierdzenie = "0";
         String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
         string zmieniane_kolumny = "nazwa='" + content1 + "', lp=" + number + ", wskaznik_rezultat='" + wskaznik_rezultat + "', okres_od='" + okres_od +
@@ -324,6 +368,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
     protected void PokarzPanelDodawaniaOsobOdpButton_Click(object sender, EventArgs e)
     {
         PanelZDodawaniemOOdp.Visible = true;
+        PanelZOsobamiOdp.Visible = true;
         //Załaduj wszytskie osoby z kórych można wybierać
         LoadOOWyborListBox();
     }
