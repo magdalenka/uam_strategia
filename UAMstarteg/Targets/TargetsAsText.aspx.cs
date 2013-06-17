@@ -20,6 +20,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 {
     private DataFetcher dataFetcher = new DataFetcher();
     String organizationKeyString;
+    int idStrategy;
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -52,7 +53,9 @@ public partial class TargetsAsText : System.Web.UI.Page
             //int strategyNr = 1, targetNr=0;
             String strategiesQuery = "SELECT id, id_parent, lp, nazwa_strategii, organization_key AS tresc, nazwa_jednostki, widocznosc, organization_key FROM strategia WHERE widocznosc = 1 ORDER BY lp ASC";
             String targetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel WHERE id_strategii = " + strategyNr + " and id_parent is null AND widocznosc = 1 ORDER BY lp ASC";
-
+            
+            idStrategy = strategyNr;
+            
             String organizationKeyQuery = "SELECT organization_key FROM strategiA WHERE id = " + strategyNr;
             DataTable organizationKey = dataFetcher.getSelectResultsAsDataTable(organizationKeyQuery);
             organizationKeyString = organizationKey.Rows[0]["organization_key"].ToString();
@@ -78,7 +81,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                 {
                     previousLevel.Clear();
                     previousLevel.Add(targets.Rows[i]["lp"]);
-                    PutNewRowIntoTable(targets.Rows[i], previousLevel, "target", organizationKeyString);
+                    PutNewRowIntoTable(targets.Rows[i], previousLevel, "target", organizationKeyString, idStrategy);
 
                     targetNr = (int)targets.Rows[i]["id"];
 
@@ -100,7 +103,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                         for (int j = 0; j < operations.Rows.Count; j++)
                         {
                             previousLevel.Add(operations.Rows[j]["lp"]);
-                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation", organizationKeyString);
+                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation", organizationKeyString, idStrategy);
                             previousLevel.RemoveAt(previousLevel.Count - 1);
                         }
                     }
@@ -121,7 +124,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                     // Dodaje liczbę porządkową do listy z numerami porządkowymi
                     previousLevel.Add(dt.Rows[0]["lp"]);
                     // Dodaje do tabeli wiersz z działaniem
-                    PutNewRowIntoTable(dt.Rows[0], previousLevel, "operation", organizationKeyString);
+                    PutNewRowIntoTable(dt.Rows[0], previousLevel, "operation", organizationKeyString, idStrategy);
                 }
                 else // elementem wybranym w drzewie jest cel
                 {
@@ -132,7 +135,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                     // dodaje liczbę porządkową wybranefo celu do listy z numerami porządkowymi
                     previousLevel.Add(dt.Rows[0]["lp"]);
                     // wstawia do tabeli wiersz z wybranym celem
-                    PutNewRowIntoTable(dt.Rows[0], previousLevel, "target", organizationKeyString);
+                    PutNewRowIntoTable(dt.Rows[0], previousLevel, "target", organizationKeyString, idStrategy);
 
                     //wyciąga wszystkie podcele wybranego w drzewie celu
                     String subTargetsQuery = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
@@ -168,7 +171,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             for (int i = 0; i < data.Rows.Count; i++)
             {
                 previousLevel.Add(data.Rows[i]["lp"]);
-                PutNewRowIntoTable(data.Rows[i], previousLevel, "target", organizationKeyString);
+                PutNewRowIntoTable(data.Rows[i], previousLevel, "target", organizationKeyString, idStrategy);
                 subTargetNr = (int)data.Rows[i]["id"];
                 subTargetsQueryCC = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
                     + "WHERE id_parent = " + subTargetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
@@ -187,7 +190,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                         for (int j = 0; j < operations.Rows.Count; j++)
                         {
                             previousLevel.Add(operations.Rows[j]["lp"]);
-                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation", organizationKeyString);
+                            PutNewRowIntoTable(operations.Rows[j], previousLevel, "operation", organizationKeyString, idStrategy);
                             previousLevel.RemoveAt(previousLevel.Count - 1);
                         }
                     }
@@ -245,7 +248,7 @@ public partial class TargetsAsText : System.Web.UI.Page
     }
 
     //Wstawia do tabeli nowy wiersz z celem/podcelem
-    private void PutNewRowIntoTable(DataRow row, ArrayList previousLevel, String type, String strategy)
+    private void PutNewRowIntoTable(DataRow row, ArrayList previousLevel, String type, String strategy, int idStrategy)
     {
         TableRow tableRow = new TableRow();
 
@@ -258,7 +261,7 @@ public partial class TargetsAsText : System.Web.UI.Page
         else if (type.Equals("operation"))
         {
             tableRow.Cells.Add(PutOperationContentCellIntoRow(row));
-            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], 0, strategy, false));
+            tableRow.Cells.Add(PutOperationButtonsIntoTableRow((int)row["id"], idStrategy, strategy, false));
         }
 
         TargetTable.Rows.Add(tableRow);

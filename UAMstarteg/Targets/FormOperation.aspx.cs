@@ -481,7 +481,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         String realizacja = Hidden1.Value;
         String uwagi = UwagiTextBox.Text;
 
-        String values = "okres_od = '"+ okresOd + "', okres_do = '" + okresDo + "', realizacja = " + realizacja + ", komentarz = '" + uwagi +"'";
+        String values = "okres_od = '"+ okresOd + "', okres_do = '" + okresDo + "', realizacja ='' " + realizacja + ", komentarz = '" + uwagi +"'";
         update("podjete_dzialanie",values, "id = "+ podjete_id);
 
     }
