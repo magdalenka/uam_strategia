@@ -27,7 +27,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         LoadZrodloFinansowaniaListBox();
         LoadStatusDropDownList();
         LoadPodjeteDzialanieDropDownList();
-    
+
         //wczytaj jesli istnieje
         if (edit != 0) //eycja
         {
@@ -159,7 +159,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
                 counter++;
             }
         }
-        deletePersonQuery += " ) AND id_dzialania = "+id;
+        deletePersonQuery += " ) AND id_dzialania = " + id;
         //Jeżeli jest coś do usunięcia to usuwa połączenie
         if (counter > 0)
             df.delete_update(deletePersonQuery);
@@ -183,7 +183,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             + zatwierdzenie + ",1";
         //id nowo dodanej operacji
         int id_operation = insert("dzialanie", values);
-        insert("dzialanie_cel", "'"+id_cel+"'" + ", " + id_operation);
+        insert("dzialanie_cel", "'" + id_cel + "'" + ", " + id_operation);
         //uzupelnienie tabeli dzialanie_zrodlo
         values = id_operation + " ," + zrodlo_finansowania_id;
         int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
@@ -223,7 +223,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             string okres_do = dt.Rows[0]["okres_do"].ToString();
             string waga = dt.Rows[0]["waga"].ToString();
             string zatwierdzenie = dt.Rows[0]["zatwierdzenie"].ToString();
-           
+
             dt = select("*", "dzialanie_zrodlo", "id_dzialania = " + id, null);
             if (dt.Rows.Count > 0)
                 ZrodlaFinansowaniaDropDownList.SelectedValue = dt.Rows[0]["id_zrodlo_finansowania"].ToString();
@@ -268,7 +268,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
 
         update("dzialanie", zmieniane_kolumny, "id=" + id);
 
-        DataTable dt = select("*", "dzialanie_zrodlo", "id_dzialania = "+id, null);
+        DataTable dt = select("*", "dzialanie_zrodlo", "id_dzialania = " + id, null);
         if (dt.Rows.Count > 0)
         {
             zmieniane_kolumny = "id_dzialania='" + id + "' , id_zrodlo_finansowania='" + zrodlo_finansowania_id + "'";
@@ -370,23 +370,23 @@ public partial class Targets_FormOperation : System.Web.UI.Page
     {
         String nazwisko = OONazwiskoTextBox.Text;
         String tytul = OOTytulTextBox.Text;
-        String stanowisko = OOStanowiskoTextBox.Text;  
+        String stanowisko = OOStanowiskoTextBox.Text;
         int id_osoby = 0;
         String values = "";
         if (OOWyborListBox.SelectedValue.Equals("-1") || OOWyborListBox.Items[0].Selected)//nic nie wybrano z listboxa
         {
-           //Dodaj do tabeli osoby_odpowiedzialne, jeżeli chociaż jedno pole nie jest puste
+            //Dodaj do tabeli osoby_odpowiedzialne, jeżeli chociaż jedno pole nie jest puste
             if (!nazwisko.Equals("") || !tytul.Equals("") || !stanowisko.Equals(""))
             {
                 values = "1, '" + stanowisko + "', '" + tytul + "', '" + nazwisko + "', " + strategyNr;
-               // values = "1, '" + stanowisko + "', '" + tytul + "', '" + nazwisko + "', " + 1;
+                // values = "1, '" + stanowisko + "', '" + tytul + "', '" + nazwisko + "', " + 1;
                 id_osoby = insert(" osoby_odpowiedzialne ", values);
             }
         }
         else // Wybrano już istniejącą osobę z listy
         {
             id_osoby = Convert.ToInt32(OOWyborListBox.SelectedValue);
-            DataTable dt = select("*", "osoby_odpowiedzialne", "id = "+id_osoby, null);
+            DataTable dt = select("*", "osoby_odpowiedzialne", "id = " + id_osoby, null);
             tytul = dt.Rows[0]["tytul"].ToString();
             nazwisko = dt.Rows[0]["nazwisko"].ToString();
             stanowisko = dt.Rows[0]["stanowisko"].ToString();
@@ -402,7 +402,6 @@ public partial class Targets_FormOperation : System.Web.UI.Page
                 insert(" dzialanie_odpowiedzialnosc", values);
 
             }
-<<<<<<< HEAD
 
             //Dodaj do listy i oznacz ptaszkiem
 
@@ -422,7 +421,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         foreach (ListItem item in OsobyOdpowiedzialneCheckBoxList.Items)
         {
             if (item.Selected)// dodaj do bazytylko elementy oznaczone ptaszkiem
-            {   
+            {
                 String values = " " + item.Value + ", " + id + " ";
                 insert(" dzialanie_odpowiedzialnosc", values);
             }
@@ -435,7 +434,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         {
             PodjeteDzialanieDropDownList.Items.Add(new ListItem("Niepodjęte", "0"));
             PodjeteDzialanieDropDownList.Items.Add(new ListItem("Podjęte", "1"));
-            
+
             String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = " + id;
             DataTable dt = df.getSelectResultsAsDataTable(podjeteQuery);
             if (dt.Rows.Count == 0 || dt.Rows == null || dt == null)
@@ -455,60 +454,6 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             PodjeteDzialaniePanel.Visible = true;
     }
 
-=======
-
-            //Dodaj do listy i oznacz ptaszkiem
-
-            OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(stanowisko + " " +
-                       tytul + " " + nazwisko, id_osoby.ToString()));
-            OsobyOdpowiedzialneCheckBoxList.Items[OsobyOdpowiedzialneCheckBoxList.Items.Count - 1].Selected = true;
-        }
-
-        PanelZDodawaniemOOdp.Visible = false;
-        PanelZOsobamiOdp.Visible = true;
-    }
-
-    //Dodaj osoby odp do celu gdy cel jeszcze nie istnieje 
-    //(narazie istnieją tylko jako elementy w liścioe nie w bazie danych)
-    protected void AddOsobyOdpowiedzialne()
-    {
-        foreach (ListItem item in OsobyOdpowiedzialneCheckBoxList.Items)
-        {
-            if (item.Selected)// dodaj do bazytylko elementy oznaczone ptaszkiem
-            {   
-                String values = " " + item.Value + ", " + id + " ";
-                insert(" dzialanie_odpowiedzialnosc", values);
-            }
-        }
-    }
-
-    protected void LoadPodjeteDzialanieDropDownList()
-    {
-        if (PodjeteDzialanieDropDownList.Items.Count == 0)
-        {
-            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Niepodjęte", "0"));
-            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Podjęte", "1"));
-            
-            String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = " + id;
-            DataTable dt = df.getSelectResultsAsDataTable(podjeteQuery);
-            if (dt.Rows.Count == 0 || dt.Rows == null || dt == null)
-            {
-                PodjeteDzialanieDropDownList.SelectedIndex = 0;
-            }
-            else
-            {
-                PodjeteDzialanieDropDownList.SelectedValue = "1";
-            }
-        }
-    }
-
-    protected void PodjeteDzialanieButton_Click(object sender, EventArgs e)
-    {
-        if (PodjeteDzialanieDropDownList.SelectedValue.Equals("1"))
-            PodjeteDzialaniePanel.Visible = true;
-    }
-
->>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
     protected void PodjeteDzialanieObsluga()
     {
         int podjete_id = 0;
@@ -519,7 +464,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             podjete_id = Convert.ToInt32(dt.Rows[0]["id"]);
             if (PodjeteDzialanieDropDownList.SelectedValue.Equals("0"))//Przestało być podjęte
             {
-                df.delete_update("DELETE FROM podjete_dzialanie WHERE dzialanie = "+id);
+                df.delete_update("DELETE FROM podjete_dzialanie WHERE dzialanie = " + id);
             }
         }
         else// jeszcze nie podjęte
@@ -532,16 +477,12 @@ public partial class Targets_FormOperation : System.Web.UI.Page
 
         String okresOd = OkresOdTextBox.Text;
         String okresDo = OkresDoTextBox.Text;
-<<<<<<< HEAD
 
         String realizacja = Hidden1.Value;
-=======
-        String realizacja = "0"; // z listy
->>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
         String uwagi = UwagiTextBox.Text;
 
-        String values = "okres_od = '"+ okresOd + "', okres_do = '" + okresDo + "', realizacja = " + realizacja + ", komentarz = '" + uwagi +"'";
-        update("podjete_dzialanie",values, "id = "+ podjete_id);
+        String values = "okres_od = '" + okresOd + "', okres_do = '" + okresDo + "', realizacja = " + realizacja + ", komentarz = '" + uwagi + "'";
+        update("podjete_dzialanie", values, "id = " + podjete_id);
 
     }
 }

@@ -62,7 +62,7 @@ public partial class TargetsAsText : System.Web.UI.Page
 
             ArrayList previousLevel = new ArrayList();
 
-           // strategyNr = 1;
+            // strategyNr = 1;
 
             targets = dataFetcher.getSelectResultsAsDataTable(targetsQuery);
             targetsNo = targets.Rows.Count;
@@ -104,7 +104,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                             previousLevel.RemoveAt(previousLevel.Count - 1);
                         }
                     }
-       
+
                 }
             }
             else // Wyświetla wszystko pod wybranym elementem
@@ -112,7 +112,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                 StrategyInformation.Visible = false;
                 String type = "target";
                 DataTable dt = new DataTable();
-                
+
                 if (type.Equals("operation")) // elementem wybranym w drzewie jest działanie
                 {
                     //pobiera z bazy wybrane działanie
@@ -172,11 +172,11 @@ public partial class TargetsAsText : System.Web.UI.Page
                 subTargetNr = (int)data.Rows[i]["id"];
                 subTargetsQueryCC = "SELECT id, lp, id_strategii, id_parent, tresc, widocznosc FROM cel "
                     + "WHERE id_parent = " + subTargetNr + " AND widocznosc = 1 ORDER BY lp ASC;";
-                
+
                 DataTable newDT = dataFetcher.getSelectResultsAsDataTable(subTargetsQueryCC);
                 if (newDT != null && newDT.Rows != null && newDT.Rows.Count > 0)
                 {
-                    createContentTable(newDT, false, previousLevel);   
+                    createContentTable(newDT, false, previousLevel);
                 }
                 else
                 {
@@ -212,7 +212,7 @@ public partial class TargetsAsText : System.Web.UI.Page
         StrategyInformation.Controls.Add(new LiteralControl("</br>"));
 
         //Pobiera dane o wszystkich autorach strategii
-        String strategyAuthorQuery = "SELECT * FROM strategia_autor INNER JOIN autor ON strategia_autor.id_osoby = autor.id where id_strategii = "+ strategyNr;
+        String strategyAuthorQuery = "SELECT * FROM strategia_autor INNER JOIN autor ON strategia_autor.id_osoby = autor.id where id_strategii = " + strategyNr;
         dt = dataFetcher.getSelectResultsAsDataTable(strategyAuthorQuery);
 
         StrategyInformation.Controls.Add(new LiteralControl("<b>Autorzy strategii :</b>"));
@@ -222,7 +222,7 @@ public partial class TargetsAsText : System.Web.UI.Page
             StrategyInformation.Controls.Add(new LiteralControl("Strategia nie ma jeszcze przypisanych żadnych autorów."));
             StrategyInformation.Controls.Add(new LiteralControl("</br>"));
         }
-        
+
         for (int i = 0; i < dt.Rows.Count; i++)
         {
             StrategyInformation.Controls.Add(new LiteralControl("- " + dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"]));
@@ -315,11 +315,11 @@ public partial class TargetsAsText : System.Web.UI.Page
 
         //Wyswietla źródło finansowania działania
         String finQuery = "SELECT * FROM zrodlo_finansowania INNER JOIN dzialanie_zrodlo ON zrodlo_finansowania.id = dzialanie_zrodlo.id_zrodlo_finansowania"
-        +" WHERE dzialanie_zrodlo.id_dzialania = "+ (int)row["id"];
+        + " WHERE dzialanie_zrodlo.id_dzialania = " + (int)row["id"];
         DataTable dt = dataFetcher.getSelectResultsAsDataTable(finQuery);
         if (dt.Rows.Count > 0)
             contentCell.Controls.Add(new LiteralControl("</br><b>Źródło finansowania : </b>" + dt.Rows[0]["nazwa"]));
-        
+
         //Sprawdza czy działanie zostało już podjęte
         String ifTakenQuery = "SELECT * FROM podjete_dzialanie WHERE dzialanie = " + (int)row["id"];
         dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
@@ -337,11 +337,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                 "   -   " + dt.Rows[0]["okres_do"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-<<<<<<< HEAD
-            contentCell.Controls.Add(new LiteralControl("Realizacja : " + dt.Rows[0]["realizacja"].ToString()+"%"));
-=======
-            contentCell.Controls.Add(new LiteralControl("Realizacja : " + dt.Rows[0]["realizacja"].ToString()));
->>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
+            contentCell.Controls.Add(new LiteralControl("Realizacja : " + dt.Rows[0]["realizacja"].ToString() + "%"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
             contentCell.Controls.Add(new LiteralControl("Komentarz : " + dt.Rows[0]["komentarz"].ToString()));
@@ -351,7 +347,7 @@ public partial class TargetsAsText : System.Web.UI.Page
         }
 
         //Sprawdza czy istnieją osoby odpowiedzialne za działanie
-        String peopleQuery = "SELECT * FROM dzialanie_odpowiedzialnosc INNER JOIN osoby_odpowiedzialne"+
+        String peopleQuery = "SELECT * FROM dzialanie_odpowiedzialnosc INNER JOIN osoby_odpowiedzialne" +
             " ON id = id_osoby WHERE id_dzialania = " + row["id"];
         dt = dataFetcher.getSelectResultsAsDataTable(peopleQuery);
         if (dt.Rows.Count > 0) //osoby odpowiedzialne istnieją
@@ -365,7 +361,7 @@ public partial class TargetsAsText : System.Web.UI.Page
                     dt.Rows[i]["nazwisko"] = "";
                 if (dt.Rows[i]["stanowisko"] == DBNull.Value)
                     dt.Rows[i]["stanowisko"] = "";
-                contentCell.Controls.Add(new LiteralControl(dt.Rows[i]["stanowisko"] +" "+ dt.Rows[i]["nazwisko"]));
+                contentCell.Controls.Add(new LiteralControl(dt.Rows[i]["stanowisko"] + " " + dt.Rows[i]["nazwisko"]));
                 contentCell.Controls.Add(new LiteralControl("</br>"));
             }
         }
@@ -381,7 +377,8 @@ public partial class TargetsAsText : System.Web.UI.Page
         TableCell lpCell = new TableCell();
         lpCell.CssClass = "lpCells";
         String lev = "";
-        foreach (int level in previousLevel) {
+        foreach (int level in previousLevel)
+        {
             lev += level + ".";
         }
         lpCell.Controls.Add(new LiteralControl(lev));
@@ -391,79 +388,79 @@ public partial class TargetsAsText : System.Web.UI.Page
     public string OrganizationKey;
     public int OrganizationKeyINT;
 
-    
+
 
     //Zwraca komórkę zawierającą przyciski - isTarget - czy jest celem czy dzialaniem, jak dzilaniem to zwr tylko tlo
     private TableCell PutOperationButtonsIntoTableRow(int id, int strategyNr, String organizationkey, Boolean isTarget)
     {
         // stad
-         OrganizationKey = (string)Session["OrganizationKeyP"];
-         OrganizationKeyINT = Convert.ToInt32(OrganizationKey);
-         TableCell buttonCell = new TableCell();
+        OrganizationKey = (string)Session["OrganizationKeyP"];
+        OrganizationKeyINT = Convert.ToInt32(OrganizationKey);
+        TableCell buttonCell = new TableCell();
 
-         if (organizationkey == OrganizationKey)
-         {
-           
-                 // do tad
+        if (organizationkey == OrganizationKey)
+        {
 
-                 buttonCell.CssClass = "buttonCells";
-                 buttonCell.Width = 66;
+            // do tad
 
-             if (isTarget == true)
-                 {
+            buttonCell.CssClass = "buttonCells";
+            buttonCell.Width = 66;
 
-                 //dodaj
-                 ImageButton addButton = new ImageButton();
-                 // addButton.ID = "addButton_" + id;
-                 addButton.ImageUrl = "add.png";
-                 addButton.Enabled = true;
-                 addButton.Visible = true;
-                 addButton.Height = 22;
-                 addButton.Width = 22;
-                 addButton.OnClientClick = "javascript:OpenWindowOption(" + id + "," + strategyNr + "," + 0 + ");";
-                 buttonCell.Controls.Add(addButton);
-             }
+            if (isTarget == true)
+            {
 
-                 //edytuj
-                 ImageButton editButton = new ImageButton();
-                 // editButton.ID = "editButton_" + id;
-                 editButton.ImageUrl = "edit.png";
-                 editButton.Enabled = true;
-                 editButton.Visible = true;
-                 editButton.Height = 22;
-                 editButton.Width = 22;
-                 if (isTarget == true)
-                 {
-                     editButton.OnClientClick = "javascript:OpenWindowTarget(" + id + "," + strategyNr + "," + 1 + ");";
-                 }
-                 else
-                 {
-                     editButton.OnClientClick = "javascript:OpenWindowOperation(" + id + "," + strategyNr + "," + 1 + ");";
-                 }
-                 buttonCell.Controls.Add(editButton);
+                //dodaj
+                ImageButton addButton = new ImageButton();
+                // addButton.ID = "addButton_" + id;
+                addButton.ImageUrl = "add.png";
+                addButton.Enabled = true;
+                addButton.Visible = true;
+                addButton.Height = 22;
+                addButton.Width = 22;
+                addButton.OnClientClick = "javascript:OpenWindowOption(" + id + "," + strategyNr + "," + 0 + ");";
+                buttonCell.Controls.Add(addButton);
+            }
 
-                 //usun
-                 //niebezpiczne usuwanie
-                 ImageButton deleteButton = new ImageButton();
-                 //  deleteButton.ID = "deleteButton_" + id;
-                 deleteButton.ImageUrl = "delete.png";
-                 deleteButton.Enabled = true;
-                 deleteButton.Visible = true;
-                 deleteButton.Height = 22;
-                 deleteButton.Width = 22;
-                  if (isTarget == true)
-                 {
-                     deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + ","+ 1 +" );";
-                 }
-                 else
-                 {
-                     deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + ", "+ 0 +" );";
-                 }
+            //edytuj
+            ImageButton editButton = new ImageButton();
+            // editButton.ID = "editButton_" + id;
+            editButton.ImageUrl = "edit.png";
+            editButton.Enabled = true;
+            editButton.Visible = true;
+            editButton.Height = 22;
+            editButton.Width = 22;
+            if (isTarget == true)
+            {
+                editButton.OnClientClick = "javascript:OpenWindowTarget(" + id + "," + strategyNr + "," + 1 + ");";
+            }
+            else
+            {
+                editButton.OnClientClick = "javascript:OpenWindowOperation(" + id + "," + strategyNr + "," + 1 + ");";
+            }
+            buttonCell.Controls.Add(editButton);
 
-                 buttonCell.Controls.Add(deleteButton);
-             
-         }
-         return buttonCell;
+            //usun
+            //niebezpiczne usuwanie
+            ImageButton deleteButton = new ImageButton();
+            //  deleteButton.ID = "deleteButton_" + id;
+            deleteButton.ImageUrl = "delete.png";
+            deleteButton.Enabled = true;
+            deleteButton.Visible = true;
+            deleteButton.Height = 22;
+            deleteButton.Width = 22;
+            if (isTarget == true)
+            {
+                deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + "," + 1 + " );";
+            }
+            else
+            {
+                deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + ", " + 0 + " );";
+            }
+
+            buttonCell.Controls.Add(deleteButton);
+
+        }
+        return buttonCell;
     }
 
     public int GetAimId(object sender)
