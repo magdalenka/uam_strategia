@@ -402,6 +402,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
                 insert(" dzialanie_odpowiedzialnosc", values);
 
             }
+<<<<<<< HEAD
 
             //Dodaj do listy i oznacz ptaszkiem
 
@@ -454,6 +455,60 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             PodjeteDzialaniePanel.Visible = true;
     }
 
+=======
+
+            //Dodaj do listy i oznacz ptaszkiem
+
+            OsobyOdpowiedzialneCheckBoxList.Items.Add(new ListItem(stanowisko + " " +
+                       tytul + " " + nazwisko, id_osoby.ToString()));
+            OsobyOdpowiedzialneCheckBoxList.Items[OsobyOdpowiedzialneCheckBoxList.Items.Count - 1].Selected = true;
+        }
+
+        PanelZDodawaniemOOdp.Visible = false;
+        PanelZOsobamiOdp.Visible = true;
+    }
+
+    //Dodaj osoby odp do celu gdy cel jeszcze nie istnieje 
+    //(narazie istnieją tylko jako elementy w liścioe nie w bazie danych)
+    protected void AddOsobyOdpowiedzialne()
+    {
+        foreach (ListItem item in OsobyOdpowiedzialneCheckBoxList.Items)
+        {
+            if (item.Selected)// dodaj do bazytylko elementy oznaczone ptaszkiem
+            {   
+                String values = " " + item.Value + ", " + id + " ";
+                insert(" dzialanie_odpowiedzialnosc", values);
+            }
+        }
+    }
+
+    protected void LoadPodjeteDzialanieDropDownList()
+    {
+        if (PodjeteDzialanieDropDownList.Items.Count == 0)
+        {
+            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Niepodjęte", "0"));
+            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Podjęte", "1"));
+            
+            String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = " + id;
+            DataTable dt = df.getSelectResultsAsDataTable(podjeteQuery);
+            if (dt.Rows.Count == 0 || dt.Rows == null || dt == null)
+            {
+                PodjeteDzialanieDropDownList.SelectedIndex = 0;
+            }
+            else
+            {
+                PodjeteDzialanieDropDownList.SelectedValue = "1";
+            }
+        }
+    }
+
+    protected void PodjeteDzialanieButton_Click(object sender, EventArgs e)
+    {
+        if (PodjeteDzialanieDropDownList.SelectedValue.Equals("1"))
+            PodjeteDzialaniePanel.Visible = true;
+    }
+
+>>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
     protected void PodjeteDzialanieObsluga()
     {
         int podjete_id = 0;
@@ -477,8 +532,12 @@ public partial class Targets_FormOperation : System.Web.UI.Page
 
         String okresOd = OkresOdTextBox.Text;
         String okresDo = OkresDoTextBox.Text;
+<<<<<<< HEAD
 
         String realizacja = Hidden1.Value;
+=======
+        String realizacja = "0"; // z listy
+>>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
         String uwagi = UwagiTextBox.Text;
 
         String values = "okres_od = '"+ okresOd + "', okres_do = '" + okresDo + "', realizacja = " + realizacja + ", komentarz = '" + uwagi +"'";

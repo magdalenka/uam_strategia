@@ -337,7 +337,11 @@ public partial class TargetsAsText : System.Web.UI.Page
                 "   -   " + dt.Rows[0]["okres_do"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
+<<<<<<< HEAD
             contentCell.Controls.Add(new LiteralControl("Realizacja : " + dt.Rows[0]["realizacja"].ToString()+"%"));
+=======
+            contentCell.Controls.Add(new LiteralControl("Realizacja : " + dt.Rows[0]["realizacja"].ToString()));
+>>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
             contentCell.Controls.Add(new LiteralControl("Komentarz : " + dt.Rows[0]["komentarz"].ToString()));
