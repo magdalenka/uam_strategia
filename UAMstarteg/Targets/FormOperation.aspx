@@ -129,8 +129,7 @@
             </div>
             <div>
                 <asp:DropDownList ID="PodjeteDzialanieDropDownList" runat="server" 
-                    Width="60%" 
-                    onselectedindexchanged="PodjeteDzialanieDropDownList_SelectedIndexChanged">
+                    Width="60%" >
                 </asp:DropDownList>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:Button ID="PodjeteDzialanieButton" runat="server" Text="szczegóły"
