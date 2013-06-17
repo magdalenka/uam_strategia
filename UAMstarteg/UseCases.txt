@@ -1,5 +1,0 @@
-1. Przegl¹danie strategii (drzewa)
-2. Przegl¹danie strategii (treœæ w formie tekstu)
-3. Generowanie raportów (Reporting Services)
-4. Edytowanie (usuwanie, dodawanie, zmienianie)
-5. Obliczanie ryzyka.
