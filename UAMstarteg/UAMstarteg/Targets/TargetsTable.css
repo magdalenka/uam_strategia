@@ -1,0 +1,90 @@
+﻿        .lpCells
+        {
+            width: 100px;
+            margin-right: 10px;
+            text-align: center;
+            text-decoration: bold;
+            color: #FFFFFF;
+            background-color: #555555; 
+            -moz-box-shadow: 3px 4px 5px #999966;
+            -webkit-box-shadow: 3px 4px 5px #999966;       
+        }
+        
+        .target
+        {
+            background-color: #0B4064; 
+             margin-right: 10px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: white;        
+            padding-top:20px;
+            padding-bottom:20px;
+            padding-right:40px;
+            padding-left:40px;
+            -moz-box-shadow: 0px 0px 5px #999933;
+            -webkit-box-shadow: 0px 0px 5px #999933; 
+        }
+        
+         .operation
+        {
+            background-color: #8AA4B7; 
+             margin-right: 10px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: black;        
+            padding-top:20px;
+            padding-bottom:20px;
+            padding-right:40px;
+            padding-left:40px;
+            -moz-box-shadow: 0px 0px 5px #999933;
+            -webkit-box-shadow: 0px 0px 5px #999933; 
+        }
+        
+        .buttonCells
+        {
+            margin-right: 10px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            background-color: #555555; 
+            padding-top:20px;
+            padding-bottom:20px;
+            padding-right:8px;
+            padding-left:8px;
+            -moz-box-shadow: 0px 0px 5px #999933;
+            -webkit-box-shadow: 0px 0px 5px #999933; 
+        }
+        
+        .border {
+            border-width: .2em;
+            border-style: dashed;
+            border-color: #0B4064;
+        } 
+        
+        .strategyInformation 
+        {
+            width: 90%;
+            margin-right: 10px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            padding-top:5px;
+            padding-bottom:5px;
+            padding-right:5px;
+            padding-left:5px;
+            background-color: #6A99B9; 
+            color: #05142D;
+            border-width: .2em;
+            border-style: groove;
+            border-color: #74A6FF;
+        }
+        
+        .addNewTargetButton
+        {
+            width: 100px;
+            height: 30px;
+        }
+       

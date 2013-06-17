@@ -74,11 +74,7 @@
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty obowiązywania działania.<br>
                 Daty w formacie rok-miesiąc-dzień
                 </span></a>
-<<<<<<< HEAD
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-=======
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
->>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
             </div>
             <asp:Label ID="Label5" runat="server" Text=" od "></asp:Label>
             <asp:TextBox ID="TextBox_TerminOd" runat="server"></asp:TextBox>
@@ -106,11 +102,7 @@
                 <asp:Label ID="Label7" runat="server" Text="Status"></asp:Label> 
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać status działania.<br>
                 </span></a>
-<<<<<<< HEAD
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-=======
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
->>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
             <asp:DropDownList ID="StatusDropDownList" runat="server">
             </asp:DropDownList>
         </div>
@@ -186,15 +178,10 @@
                     <asp:Label ID="StopienRealizacjiLabel" runat="server" Text="Stopień realizacji działania"></asp:Label>
                     <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać procent w jakim zrealizowano już zadanie</span></a>
                 </div>
-<<<<<<< HEAD
                 <asp:Label ID="LabelStopienRealizacjiProcent" runat="server" Text="Wybrano: "></asp:Label>
                 <asp:Label ID="StopienRealizacjiProcent" runat="server" Text="0%"></asp:Label>
                 <asp:HiddenField ID="Hidden1" runat="server" />
                 <div id="slider"></div>
-=======
-                <asp:DropDownList ID="StopienRealizacjiDropDownList" runat="server" Width="95%">
-                </asp:DropDownList>
->>>>>>> 26e7509791119e669e307a7ecf51c08815864e0c
 
                 <div>
                     <asp:Label ID="UwagiLabel" runat="server" Text="Uwagi dotyczące realizacji działania"></asp:Label>

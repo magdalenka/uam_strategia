@@ -1,0 +1,6 @@
+Tymi loginami mo¿na sprawdzaæ role. Odpowiednie przyciski na stronie g³ównej staj¹ siê aktywne.
+
+lisowski - Filologia
+alak - chemia
+karolin - biologia
+mgrygiel - Wszystko :) 
