@@ -51,11 +51,6 @@ public partial class FormCel : System.Web.UI.Page
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
 
-    protected void Button3_Click(object sender, EventArgs e)
-    {
-        DeleteAim(id);
-    }
-
     public void AddNewAim(int id_strategii, int id_parent)
     {
         string number = TextBox2.Text;
@@ -122,14 +117,6 @@ public partial class FormCel : System.Web.UI.Page
         cmd.ExecuteNonQuery();
 
         mySQLConnection.Close();
-        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
-        ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
-    }
-
-
-    public void DeleteAim(int id)
-    {
-        update("cel", "widocznosc=0", "id=" + id);
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }

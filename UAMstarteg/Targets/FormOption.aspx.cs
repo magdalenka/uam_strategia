@@ -16,6 +16,7 @@ public partial class Targets_FormOption : System.Web.UI.Page
         strategyNr = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("strategyNr"));
 
         Button nextButton = new Button();
+        nextButton.BackColor = System.Drawing.Color.White;
         nextButton.Enabled = true;
         nextButton.Visible = true;
         nextButton.Text = "Dalej";

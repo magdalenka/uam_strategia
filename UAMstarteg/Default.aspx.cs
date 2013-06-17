@@ -16,23 +16,12 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-	   Page.RegisterStartupScript("myScript", "<script language=JavaScript>__doPostBack('ctl00$HeadLoginView$HeadLoginStatus$ctl00','')</script>");
-       // odbieranie nr strategii i nr celu, mozna potem usunac wyswietlanie w labelu
-       string id_str = Request.QueryString["id_strategii"];
-       string id_cel = Request.QueryString["id_celu"];
-
-       if (id_str != "" && id_str != null)
-       {
-           id_str = "Wybrałeś strategię numer " + id_str + ".<br>";
-
-           if (id_cel != "" && id_cel != null)
-           {
-               id_cel = "Wybrałeś cel numer " + id_cel + ".";
-           }
-           else
-           {
-               id_cel = "Podano niepoprawny numer celu.";
-           }
-       }
-    }      
+        if ((string)Session["OrganizationKeyP"] != null)
+        {
+            Session["OrganizationKeyP"] = null;
+            Page.RegisterStartupScript("myScript", "<script language=JavaScript>__doPostBack('ctl00$HeadLoginView$HeadLoginStatus$ctl00','')</script>");
+        }
+        else
+            Page.RegisterStartupScript("myScript", "<script language=JavaScript>parent.location='Targets/TargetsAsText.aspx'</script>");
+    }
 }

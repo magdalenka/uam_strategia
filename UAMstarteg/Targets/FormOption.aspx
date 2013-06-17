@@ -14,8 +14,8 @@
     
         <asp:Label ID="Label1" runat="server" Text="Czy chcesz dodać nowy:"></asp:Label>
         <asp:RadioButtonList ID="RadioButtonList1" runat="server">
-            <asp:ListItem Text ="podcel," Value="podcel" />
-            <asp:ListItem Text ="działanie?" Value="dzialanie" />
+            <asp:ListItem Text ="podcel" Value="podcel" />
+            <asp:ListItem Text ="działanie" Value="dzialanie" />
         </asp:RadioButtonList>
     
     </div>

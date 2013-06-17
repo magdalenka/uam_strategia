@@ -1,5 +1,5 @@
 ﻿
-<%@ Page Title="System zarządzania strategiami UAM" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
+<%@ Page Title="System zarządzania strategiami UAM" Language="C#" MasterPageFile="~/ReportSite.master" AutoEventWireup="true"
     CodeFile="TargetsAsText.aspx.cs" Inherits="TargetsAsText" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
@@ -9,11 +9,15 @@
            return false;
        }
        function OpenWindowOperation(id, strategyNr, edit) {
-           window.open("FormOperation.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=500,top=243,left=25');
+           window.open("FormOperation.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=510,top=243,left=25');
            return false;
        }
        function OpenWindowOption(id, strategyNr, edit) {
            window.open("FormOption.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=200,top=243,left=25');
+           return false;
+       }
+	    function OpenWindowDelete(id, strategyNr, type) {
+           window.open("FormDelete.aspx?id=" + id + "&strategyNr=" + strategyNr + "&type=" + type, '', 'width=500,height=200,top=243,left=25');
            return false;
        }
     </script>

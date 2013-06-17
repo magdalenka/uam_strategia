@@ -145,13 +145,15 @@ public partial class TargetsAsText : System.Web.UI.Page
                         //tworzy rekurencyjnie resztę tabeli (wyciąga pozostałe poziomy)
                         createContentTable(subTargets, false, previousLevel);
                     }
-
                 }
             }
         }
         else
         {
-            Label.Text = "<br>Wybierz strategię z panelu po prawej stronie.";
+            if ((string)Session["OrganizationKeyP"] == null)
+                Label.Text = "<h2>Witamy w Systemie zarządzania strategiami UAM.</h2><p>Zaloguj się aby kontynuować.</p>";
+            else
+                Label.Text = "<br>Wybierz strategię z panelu po prawej stronie.";
         }
     }
 
@@ -296,6 +298,10 @@ public partial class TargetsAsText : System.Web.UI.Page
         contentCell.Controls.Add(new LiteralControl("<b>Waga działania : </b>" + row["waga"].ToString()));
         contentCell.Controls.Add(new LiteralControl("</br>"));
 
+        //Sprawdza i wyswietla wskażnik stopnia wykonania
+        contentCell.Controls.Add(new LiteralControl("<b>Wskaźnik wykonania : </b>" + row["wskaznik_rezultat"]));
+        contentCell.Controls.Add(new LiteralControl("</br>"));
+
         String approval = "";
         if (row["zatwierdzenie"].ToString().Equals("1"))
         {
@@ -306,57 +312,58 @@ public partial class TargetsAsText : System.Web.UI.Page
             approval = "Działanie nie zostało jeszcze zatwierdzone.";
         }
         contentCell.Controls.Add(new LiteralControl("<b>Status : </b>" + approval));
+
         //Wyswietla źródło finansowania działania
         String finQuery = "SELECT * FROM zrodlo_finansowania INNER JOIN dzialanie_zrodlo ON zrodlo_finansowania.id = dzialanie_zrodlo.id_zrodlo_finansowania"
         +" WHERE dzialanie_zrodlo.id_dzialania = "+ (int)row["id"];
         DataTable dt = dataFetcher.getSelectResultsAsDataTable(finQuery);
         if (dt.Rows.Count > 0)
             contentCell.Controls.Add(new LiteralControl("</br><b>Źródło finansowania : </b>" + dt.Rows[0]["nazwa"]));
-
+        
         //Sprawdza czy działanie zostało już podjęte
         String ifTakenQuery = "SELECT * FROM podjete_dzialanie WHERE dzialanie = " + (int)row["id"];
         dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
         if (dt.Rows.Count > 0) // zostało podjęte
         {
-            contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
+            //contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
 
-            contentCell.Controls.Add(new LiteralControl("<b>Działanie zostało podjęte</b>"));
+            contentCell.Controls.Add(new LiteralControl("</br><b>Działanie zostało podjęte</b>"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Opis : " + row["opis"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Opis : " + dt.Rows[0]["opis"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Okres : " + row["okres_od"].ToString() +
-                "   -   " + row["okres_do"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Okres : " + dt.Rows[0]["okres_od"].ToString() +
+                "   -   " + dt.Rows[0]["okres_do"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Realizacja : " + row["realizacja"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Realizacja : " + dt.Rows[0]["realizacja"].ToString()+"%"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Komentarz : " + row["komentarz"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Komentarz : " + dt.Rows[0]["komentarz"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("</div>"));
+            //contentCell.Controls.Add(new LiteralControl("</div>"));
         }
 
         //Sprawdza czy istnieją osoby odpowiedzialne za działanie
-        String peopleQuery = "SELECT * FROM dzialanie_odpowiedzialnosc WHERE id_dzialania" + (int)row["id"];
-        dt = dataFetcher.getSelectResultsAsDataTable(ifTakenQuery);
+        String peopleQuery = "SELECT * FROM dzialanie_odpowiedzialnosc INNER JOIN osoby_odpowiedzialne"+
+            " ON id = id_osoby WHERE id_dzialania = " + row["id"];
+        dt = dataFetcher.getSelectResultsAsDataTable(peopleQuery);
         if (dt.Rows.Count > 0) //osoby odpowiedzialne istnieją
         {
-            contentCell.Controls.Add(new LiteralControl("<div align=left class=border>"));
-
-            contentCell.Controls.Add(new LiteralControl("<b>Osoby odpowiedzialne : </b>"));
+            contentCell.Controls.Add(new LiteralControl("</br><b>Osoby odpowiedzialne : </b>"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
             for (int i = 0; i < dt.Rows.Count; i++) // Dla każdej osoby odpowiedzialnej
             {
-                contentCell.Controls.Add(new LiteralControl(dt.Rows[i]["imie"].ToString() + " " +
-                    dt.Rows[i]["nazwisko"]));
+                if (dt.Rows[i]["nazwisko"] == DBNull.Value)
+                    dt.Rows[i]["nazwisko"] = "";
+                if (dt.Rows[i]["stanowisko"] == DBNull.Value)
+                    dt.Rows[i]["stanowisko"] = "";
+                contentCell.Controls.Add(new LiteralControl(dt.Rows[i]["stanowisko"] +" "+ dt.Rows[i]["nazwisko"]));
                 contentCell.Controls.Add(new LiteralControl("</br>"));
             }
-
-            contentCell.Controls.Add(new LiteralControl("</div>"));
         }
 
         contentCell.Controls.Add(new LiteralControl("<div>"));
@@ -440,13 +447,13 @@ public partial class TargetsAsText : System.Web.UI.Page
                  deleteButton.Visible = true;
                  deleteButton.Height = 22;
                  deleteButton.Width = 22;
-                 if (isTarget == true)
+                  if (isTarget == true)
                  {
-                     deleteButton.OnClientClick = "javascript:OpenWindowTarget(" + id + "," + strategyNr + "," + 1 + ");";
+                     deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + ","+ 1 +" );";
                  }
                  else
                  {
-                     deleteButton.OnClientClick = "javascript:OpenWindowOperation(" + id + "," + strategyNr + "," + 1 + ");";
+                     deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + ", "+ 0 +" );";
                  }
 
                  buttonCell.Controls.Add(deleteButton);

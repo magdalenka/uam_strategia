@@ -37,9 +37,8 @@
         </div>
          <div class="button">
             <asp:Button ID="editButton_14" runat="server"
-            onclick="Button1_Click" Text="Zapisz" />
-             <asp:Button ID="Button3" runat="server" Text="Usuń" onclick="Button3_Click" />
-             <asp:Button ID="Button2" runat="server" Text="Anuluj" onclick="Button2_Click" />
+            onclick="Button1_Click" Text="Zapisz" BackColor="White" />
+             <asp:Button ID="Button2" runat="server" Text="Anuluj"  onclick="Button2_Click" BackColor="White" />
         </div>
         </div>
     </form>
