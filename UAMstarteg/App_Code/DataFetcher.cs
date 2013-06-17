@@ -14,14 +14,17 @@ using System.Data.SqlClient;
 /// </summary>
 public class DataFetcher
 {
+    private String connStrMSSQL;
 	public DataFetcher()
 	{
+        connStrMSSQL = ConfigurationManager.ConnectionStrings["myConnectionStringMSSQL"].ConnectionString;
 	}
 
     public DataTable getSelectResultsAsDataTable(String query)
     {
+         
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStrMSSQL;
         mySQLConnection.Open();
 
         SqlCommand cmd = new SqlCommand(query, mySQLConnection);
@@ -39,7 +42,7 @@ public class DataFetcher
     public SqlDataAdapter getSelectResultsAsSQLDataAdapter(String query)
     {
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStrMSSQL;
         mySQLConnection.Open();
 
         SqlCommand cmd = new SqlCommand(query, mySQLConnection);
@@ -55,7 +58,7 @@ public class DataFetcher
     public void delete_update(String query)
     {
         SqlConnection mySQLConnection = new SqlConnection();
-        mySQLConnection.ConnectionString = @"Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=uamstrateg;User ID=uamstrateg;Password=21hMpA8a";
+        mySQLConnection.ConnectionString = connStrMSSQL;
         mySQLConnection.Open();
 
         SqlCommand cmd = new SqlCommand(query, mySQLConnection);

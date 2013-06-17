@@ -447,13 +447,13 @@ public partial class TargetsAsText : System.Web.UI.Page
                  deleteButton.Visible = true;
                  deleteButton.Height = 22;
                  deleteButton.Width = 22;
-                 if (isTarget == true)
+                  if (isTarget == true)
                  {
-                     deleteButton.OnClientClick = "javascript:OpenWindowTarget(" + id + "," + strategyNr + "," + 1 + ");";
+                     deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + ","+ 1 +" );";
                  }
                  else
                  {
-                     deleteButton.OnClientClick = "javascript:OpenWindowOperation(" + id + "," + strategyNr + "," + 1 + ");";
+                     deleteButton.OnClientClick = "javascript:OpenWindowDelete(" + id + "," + strategyNr + ", "+ 0 +" );";
                  }
 
                  buttonCell.Controls.Add(deleteButton);

@@ -51,11 +51,6 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
 
-    protected void Button3_Click(object sender, EventArgs e)
-    {
-        DeleteOperation(id);
-    }
-
     protected void LoadZrodloFinansowaniaListBox()
     {
         if (ZrodlaFinansowaniaDropDownList.Items.Count == 0)
@@ -283,14 +278,6 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         //Usuń osoby kóre były przypisane, ale zostały odznaczone na liście
         deleteOsobyOdpowiedzialne();
 
-        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
-        ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
-    }
-
-
-    public void DeleteOperation(int id)
-    {
-        update("dzialanie", "widocznosc=0", "id=" + id);
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }

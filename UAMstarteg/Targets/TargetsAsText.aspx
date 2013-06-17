@@ -16,6 +16,10 @@
            window.open("FormOption.aspx?id=" + id + "&strategyNr=" + strategyNr + "&edit=" + edit, '', 'width=500,height=200,top=243,left=25');
            return false;
        }
+	    function OpenWindowDelete(id, strategyNr, type) {
+           window.open("FormDelete.aspx?id=" + id + "&strategyNr=" + strategyNr + "&type=" + type, '', 'width=500,height=200,top=243,left=25');
+           return false;
+       }
     </script>
     <link rel="stylesheet" type="text/css" href="TargetsTable.css" />
 </asp:Content>

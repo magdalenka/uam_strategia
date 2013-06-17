@@ -92,7 +92,7 @@
                 </asp:CheckBoxList>        
             </asp:Panel>
             <asp:Button ID="PokarzPanelDodawaniaOsobOdp" runat="server" Text="Dodaj osobę" 
-                    onclick="PokarzPanelDodawaniaOsobOdpButton_Click" />
+                    onclick="PokarzPanelDodawaniaOsobOdpButton_Click" BackColor="White" />
             <asp:Panel ID="PanelZDodawaniemOOdp" runat="server"> 
              <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać istniejącą osobę z listy lub wprowadzić dane nowej osoby w polach tekstowych</span></a>    
                 <asp:ListBox ID="OOWyborListBox" runat="server" Width="100%"></asp:ListBox>
@@ -110,14 +110,13 @@
                 </div>
                 <asp:Button ID="DodajOsobyOdpowiedzialneButton" runat="server" 
                     Text="Dodaj osobę odpowiedzialną" 
-                    onclick="DodajOsobyOdpowiedzialneButton_Click" />
+                    onclick="DodajOsobyOdpowiedzialneButton_Click" BackColor="White" />
             </asp:Panel>
         </div>
 
          <div class="button">
-             <asp:Button ID="editButton_14" runat="server" onclick="Button1_Click" Text="Zapisz" />
-             <asp:Button ID="Button3" runat="server" Text="Usuń" onclick="Button3_Click" />
-             <asp:Button ID="Button2" runat="server" Text="Anuluj" onclick="Button2_Click" />
+             <asp:Button ID="editButton_14" runat="server" onclick="Button1_Click" Text="Zapisz" BackColor="White" />
+             <asp:Button ID="Button2" runat="server" Text="Anuluj" onclick="Button2_Click" BackColor="White" />
         </div>
     </asp:Panel>
     </form>
