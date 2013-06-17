@@ -132,7 +132,7 @@
                     Width="60%" >
                 </asp:DropDownList>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="PodjeteDzialanieButton" runat="server" Text="szczegóły"
+                <asp:Button ID="PodjeteDzialanieButton" runat="server" Text="szczegóły" OnClick="PodjeteDzialanieButton_Click"
                      BackColor="White" />
                 <a class="cloud" href="#"><img src="information.png"><span>Po naciśnięciu pojawi się 
                 panel ze szczegółami dotyczącymi realizacji działania</span></a>
