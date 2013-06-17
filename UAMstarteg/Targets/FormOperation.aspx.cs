@@ -26,6 +26,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         //Załaduj źródła finansowania
         LoadZrodloFinansowaniaListBox();
         LoadStatusDropDownList();
+        LoadPodjeteDzialanieDropDownList();
     
         //wczytaj jesli istnieje
         if (edit != 0) //eycja
@@ -93,22 +94,19 @@ public partial class Targets_FormOperation : System.Web.UI.Page
     {
         if (StatusDropDownList.Items.Count == 0)
         {
-            StatusDropDownList.Items.Add(new ListItem(" ", "-1"));
             StatusDropDownList.Items.Add(new ListItem("Zatwierdzono", "1"));
             StatusDropDownList.Items.Add(new ListItem("Niezatwierdzono", "0"));
 
-            //   StatusDropDownList.SelectedValue = "-1";
             if (edit == 0)// nowe działanie
             {
-                if (StatusDropDownList.SelectedValue.Equals("") || StatusDropDownList.SelectedValue.Equals(null))
-                    StatusDropDownList.SelectedValue = "-1";
+                StatusDropDownList.SelectedValue = "0";
             }
             else
             {
                 String statusQuery = "SELECT zatwierdzenie FROM dzialanie WHERE id = " + id;
                 DataTable dt = df.getSelectResultsAsDataTable(statusQuery);
                 if (dt.Rows[0]["zatwierdzenie"] == DBNull.Value)//nie było przypisane
-                    StatusDropDownList.SelectedValue = "-1";
+                    StatusDropDownList.SelectedValue = "0";
                 else
                     StatusDropDownList.SelectedValue = dt.Rows[0]["zatwierdzenie"].ToString();
             }
@@ -233,7 +231,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
                 ZrodlaFinansowaniaDropDownList.SelectedValue = "-1";
 
             LoadOsobyOdpowiedzialneCheckBoxList();
-            LoadPodjeteDzialanieDropDownList();
+            //LoadPodjeteDzialanieDropDownList();
 
             TextBox_Numer.Text = number;
             TextBox_Tresc.Text = content;
@@ -241,11 +239,13 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             TextBox_TerminOd.Text = okres_od;
             TextBox_TerminDo.Text = okres_do;
             TextBox_Waga.Text = waga;
-            //TextBox_Status.Text = zatwierdzenie;
+
             if (!zatwierdzenie.Equals(""))
                 StatusDropDownList.SelectedValue = zatwierdzenie;
             else
-                StatusDropDownList.SelectedValue = "-1";
+                StatusDropDownList.SelectedValue = "0";
+
+
         }
 
     }
@@ -432,31 +432,31 @@ public partial class Targets_FormOperation : System.Web.UI.Page
     {
         if (PodjeteDzialanieDropDownList.Items.Count == 0)
         {
-            PodjeteDzialanieDropDownList.Items.Add(new ListItem(" ", "0"));
-            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Podjęte", "0"));
             PodjeteDzialanieDropDownList.Items.Add(new ListItem("Niepodjęte", "0"));
-
-            String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = "+id;
+            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Podjęte", "1"));
+            
+            String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = " + id;
             DataTable dt = df.getSelectResultsAsDataTable(podjeteQuery);
-            if (dt.Rows.Count == 0)
+            if (dt.Rows.Count == 0 || dt.Rows == null || dt == null)
             {
                 PodjeteDzialanieDropDownList.SelectedIndex = 0;
             }
             else
             {
-                PodjeteDzialanieDropDownList.SelectedValue = dt.Rows[0]["id"].ToString();
+                PodjeteDzialanieDropDownList.SelectedValue = "1";
             }
         }
     }
 
     protected void PodjeteDzialanieButton_Click(object sender, EventArgs e)
     {
-        PodjeteDzialaniePanel.Visible = true;
+        if (PodjeteDzialanieDropDownList.SelectedValue.Equals("1"))
+            PodjeteDzialaniePanel.Visible = true;
     }
 
     protected void PodjeteDzialanieObsluga()
     {
-      /*  int podjete_id = 0;
+        int podjete_id = 0;
         String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = " + id;
         DataTable dt = df.getSelectResultsAsDataTable(podjeteQuery);
         if (dt.Rows.Count > 0) // już istnieje jako podjęte
@@ -470,13 +470,18 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         else// jeszcze nie podjęte
         {
             if (PodjeteDzialanieDropDownList.SelectedValue.Equals("1"))// podjęto
-            {*/
-               // podjete_id = 
-                 //   insert("podjete_dzialanie (dzialanie)", id.ToString());
-        df.delete_update("INSERT INTO podjete_dzialanie (dzialanie) VALUES ("+id+")");
-          //  }
-      //  }
+            {
+                podjete_id = insert("podjete_dzialanie (dzialanie) ", id.ToString());
+            }
+        }
 
+        String okresOd = OkresOdTextBox.Text;
+        String okresDo = OkresDoTextBox.Text;
+        String realizacja = "0"; // z listy
+        String uwagi = UwagiTextBox.Text;
+
+        String values = "okres_od = '"+ okresOd + "', okres_do = '" + okresDo + "', realizacja = " + realizacja + ", komentarz = '" + uwagi +"'";
+        update("podjete_dzialanie",values, "id = "+ podjete_id);
 
     }
 }

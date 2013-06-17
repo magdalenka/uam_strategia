@@ -11,6 +11,12 @@
             height: 89px;
             width: 344px;
         }
+        .border {
+            border-width: .2em;
+            border-style: solid;
+            border-color: #0B4064;
+            background-color: #6A99B9; 
+        } 
     </style>
     <link rel="stylesheet" type="text/css" href="Forms.css" />
 </head>
@@ -32,7 +38,7 @@
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać treść działania</span></a>
             </div>
         <div class="tresc">
-        <asp:TextBox ID="TextBox_Tresc" runat="server" Height="95px" Width="100%" 
+        <asp:TextBox ID="TextBox_Tresc" runat="server" Height="95px" Width="95%" 
                 TextMode="MultiLine"></asp:TextBox>
         </div>
         </div>
@@ -42,7 +48,7 @@
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty obowiązywania działania.<br>
                 Daty w formacie rok-miesiąc-dzień
                 </span></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
             <asp:Label ID="Label5" runat="server" Text=" od "></asp:Label>
             <asp:TextBox ID="TextBox_TerminOd" runat="server"></asp:TextBox>
@@ -70,7 +76,7 @@
                 <asp:Label ID="Label7" runat="server" Text="Status"></asp:Label> 
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać status działania.<br>
                 </span></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <asp:DropDownList ID="StatusDropDownList" runat="server">
             </asp:DropDownList>
         </div>
@@ -79,7 +85,7 @@
                 <asp:Label ID="Label8" runat="server" Text="Wskaźnik/Rezultat"></asp:Label> 
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać jednostkę w jakiej jest mierzony stopień zrealizowania działania</span></a>
             </div>
-            <asp:TextBox ID="TextBox_Wskaznik" runat="server" Height="95px" Width="373px" 
+            <asp:TextBox ID="TextBox_Wskaznik" runat="server" Height="95px" Width="95%" 
                 TextMode="MultiLine"></asp:TextBox>
         </div>
         <div class="osoby_odpowiedziane">
@@ -92,27 +98,29 @@
                     BackColor="White" Width="98%" >
                 </asp:CheckBoxList>        
             </asp:Panel>
+             &nbsp;
             <asp:Button ID="PokarzPanelDodawaniaOsobOdp" runat="server" Text="Dodaj osobę" 
                     onclick="PokarzPanelDodawaniaOsobOdpButton_Click" BackColor="White" />
-            <asp:Panel ID="PanelZDodawaniemOOdp" runat="server"> 
+            <asp:Panel ID="PanelZDodawaniemOOdp" runat="server" CssClass="border"> 
              <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać istniejącą osobę z listy lub wprowadzić dane nowej osoby w polach tekstowych</span></a>    
-                <asp:ListBox ID="OOWyborListBox" runat="server" Width="100%"></asp:ListBox>
+                <asp:ListBox ID="OOWyborListBox" runat="server" Width="95%"></asp:ListBox>
                 <div>
                     <asp:Label ID="Label11" runat="server" Text="Stanowisko&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"></asp:Label>
-                    <asp:TextBox ID="OOStanowiskoTextBox" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="OOStanowiskoTextBox" runat="server" Width="70%"></asp:TextBox>
                 </div>
                 <div>
                     <asp:Label ID="Label12" runat="server" Text="Tytuł naukowy&nbsp&nbsp"></asp:Label>
-                    <asp:TextBox ID="OOTytulTextBox" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="OOTytulTextBox" Width="70%" runat="server"></asp:TextBox>
                 </div>
                 <div>
                     <asp:Label ID="Label13" runat="server" Text="Nazwisko&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"></asp:Label>
-                    <asp:TextBox ID="OONazwiskoTextBox" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="OONazwiskoTextBox" Width="70%" runat="server"></asp:TextBox>
                 </div>
                 <asp:Button ID="DodajOsobyOdpowiedzialneButton" runat="server" 
                     Text="Dodaj osobę odpowiedzialną" 
                     onclick="DodajOsobyOdpowiedzialneButton_Click" BackColor="White" />
             </asp:Panel>
+             &nbsp;
         </div>
         <div class="podjete_dzialanie">
             <div>
@@ -121,39 +129,41 @@
             </div>
             <div>
                 <asp:DropDownList ID="PodjeteDzialanieDropDownList" runat="server" 
-                    >
+                    Width="60%" 
+                    onselectedindexchanged="PodjeteDzialanieDropDownList_SelectedIndexChanged">
                 </asp:DropDownList>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Button ID="PodjeteDzialanieButton" runat="server" Text="szczegóły" 
-                    onclick="PodjeteDzialanieButton_Click" />
+                <asp:Button ID="PodjeteDzialanieButton" runat="server" Text="szczegóły"
+                     BackColor="White" />
                 <a class="cloud" href="#"><img src="information.png"><span>Po naciśnięciu pojawi się 
                 panel ze szczegółami dotyczącymi realizacji działania</span></a>
             </div>
-            <asp:Panel ID="PodjeteDzialaniePanel" runat="server" Width="100%">
+            <asp:Panel ID="PodjeteDzialaniePanel" runat="server" Width="95%" CssClass="border">
                 <div>
                     <asp:Label ID="DatyRealizacjiLabel" runat="server" Text="Termin realizacji"></asp:Label>
                     <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty rozpoczęcia 
-                    i zakończenia realizacji</span></a>
+                    i zakończenia realizacji. Data w formacjie rok-miesiąc-dzień</span></a>
                 </div>
-                <asp:Label ID="reOkresOdLabel" runat="server" Text="od "></asp:Label>
-                <asp:TextBox ID="OkresOdTextBox" runat="server"></asp:TextBox>
-                <asp:Label ID="reOkresDoLabel" runat="server" Text="do  "></asp:Label>
-                <asp:TextBox ID="OkresDoTextBox" runat="server"></asp:TextBox>
+                <asp:Label ID="reOkresOdLabel" runat="server" Text="od&nbsp;&nbsp;&nbsp;"></asp:Label>
+                <asp:TextBox ID="OkresOdTextBox" runat="server" Width="40%"></asp:TextBox>
+                <asp:Label ID="reOkresDoLabel" runat="server" Text="&nbsp;&nbsp;&nbsp;do&nbsp;&nbsp;&nbsp;"></asp:Label>
+                <asp:TextBox ID="OkresDoTextBox" runat="server" Width = "40%"></asp:TextBox>
 
                 <div>
                     <asp:Label ID="StopienRealizacjiLabel" runat="server" Text="Stopień realizacji działania"></asp:Label>
                     <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać procent w jakim zrealizowano już zadanie</span></a>
                 </div>
-                <asp:DropDownList ID="StopienRealizacjiDropDownList" runat="server" Width="100%">
+                <asp:DropDownList ID="StopienRealizacjiDropDownList" runat="server" Width="95%">
                 </asp:DropDownList>
 
                 <div>
                     <asp:Label ID="UwagiLabel" runat="server" Text="Uwagi dotyczące realizacji działania"></asp:Label>
                     <a class="cloud" href="#"><img src="information.png"><span>Należy Wprowadzić komentarz lub uwagi dotyczące realizacji działania</span></a>
                 </div>
-                <asp:TextBox ID="UwagiTextBox" runat="server" Height="95px" Width="100%" 
+                <asp:TextBox ID="UwagiTextBox" runat="server" Height="95px" Width="95%" 
                 TextMode="MultiLine"></asp:TextBox>
-            </asp:Panel>      
+            </asp:Panel>  
+             &nbsp;    
         </div>
 
          <div class="button">
