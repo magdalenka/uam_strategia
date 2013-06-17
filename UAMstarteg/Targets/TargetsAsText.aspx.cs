@@ -330,17 +330,17 @@ public partial class TargetsAsText : System.Web.UI.Page
             contentCell.Controls.Add(new LiteralControl("</br><b>Działanie zostało podjęte</b>"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Opis : " + row["opis"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Opis : " + dt.Rows[0]["opis"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Okres : " + row["okres_od"].ToString() +
-                "   -   " + row["okres_do"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Okres : " + dt.Rows[0]["okres_od"].ToString() +
+                "   -   " + dt.Rows[0]["okres_do"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Realizacja : " + row["realizacja"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Realizacja : " + dt.Rows[0]["realizacja"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Komentarz : " + row["komentarz"].ToString()));
+            contentCell.Controls.Add(new LiteralControl("Komentarz : " + dt.Rows[0]["komentarz"].ToString()));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
             //contentCell.Controls.Add(new LiteralControl("</div>"));

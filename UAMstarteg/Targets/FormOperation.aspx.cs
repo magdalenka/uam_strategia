@@ -19,6 +19,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         PanelZDodawaniemOOdp.Visible = false;
+        PodjeteDzialaniePanel.Visible = false;
         id = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("id"));
         strategyNr = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("strategyNr"));
         edit = Convert.ToInt32(HttpUtility.ParseQueryString(Request.Url.Query).Get("edit"));
@@ -191,6 +192,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         id = id_operation;
         AddOsobyOdpowiedzialne();
 
+        PodjeteDzialanieObsluga();
+
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
     }
@@ -230,6 +233,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
                 ZrodlaFinansowaniaDropDownList.SelectedValue = "-1";
 
             LoadOsobyOdpowiedzialneCheckBoxList();
+            LoadPodjeteDzialanieDropDownList();
 
             TextBox_Numer.Text = number;
             TextBox_Tresc.Text = content;
@@ -277,6 +281,8 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         }
         //Usuń osoby kóre były przypisane, ale zostały odznaczone na liście
         deleteOsobyOdpowiedzialne();
+
+        PodjeteDzialanieObsluga();
 
         Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
         ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
@@ -422,4 +428,55 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         }
     }
 
+    protected void LoadPodjeteDzialanieDropDownList()
+    {
+        if (PodjeteDzialanieDropDownList.Items.Count == 0)
+        {
+            PodjeteDzialanieDropDownList.Items.Add(new ListItem(" ", "0"));
+            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Podjęte", "0"));
+            PodjeteDzialanieDropDownList.Items.Add(new ListItem("Niepodjęte", "0"));
+
+            String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = "+id;
+            DataTable dt = df.getSelectResultsAsDataTable(podjeteQuery);
+            if (dt.Rows.Count == 0)
+            {
+                PodjeteDzialanieDropDownList.SelectedIndex = 0;
+            }
+            else
+            {
+                PodjeteDzialanieDropDownList.SelectedValue = dt.Rows[0]["id"].ToString();
+            }
+        }
+    }
+
+    protected void PodjeteDzialanieButton_Click(object sender, EventArgs e)
+    {
+        PodjeteDzialaniePanel.Visible = true;
+    }
+
+    protected void PodjeteDzialanieObsluga()
+    {
+      /*  int podjete_id = 0;
+        String podjeteQuery = "SELECT id FROM podjete_dzialanie WHERE dzialanie = " + id;
+        DataTable dt = df.getSelectResultsAsDataTable(podjeteQuery);
+        if (dt.Rows.Count > 0) // już istnieje jako podjęte
+        {
+            podjete_id = Convert.ToInt32(dt.Rows[0]["id"]);
+            if (PodjeteDzialanieDropDownList.SelectedValue.Equals("0"))//Przestało być podjęte
+            {
+                df.delete_update("DELETE FROM podjete_dzialanie WHERE dzialanie = "+id);
+            }
+        }
+        else// jeszcze nie podjęte
+        {
+            if (PodjeteDzialanieDropDownList.SelectedValue.Equals("1"))// podjęto
+            {*/
+               // podjete_id = 
+                 //   insert("podjete_dzialanie (dzialanie)", id.ToString());
+        df.delete_update("INSERT INTO podjete_dzialanie (dzialanie) VALUES ("+id+")");
+          //  }
+      //  }
+
+
+    }
 }

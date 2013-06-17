@@ -32,7 +32,7 @@
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać treść działania</span></a>
             </div>
         <div class="tresc">
-        <asp:TextBox ID="TextBox_Tresc" runat="server" Height="95px" Width="373px" 
+        <asp:TextBox ID="TextBox_Tresc" runat="server" Height="95px" Width="100%" 
                 TextMode="MultiLine"></asp:TextBox>
         </div>
         </div>
@@ -42,7 +42,8 @@
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty obowiązywania działania.<br>
                 Daty w formacie rok-miesiąc-dzień
                 </span></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
             <asp:Label ID="Label5" runat="server" Text=" od "></asp:Label>
             <asp:TextBox ID="TextBox_TerminOd" runat="server"></asp:TextBox>
             <asp:Label ID="Label4" runat="server" Text=" do "></asp:Label> 
@@ -69,7 +70,7 @@
                 <asp:Label ID="Label7" runat="server" Text="Status"></asp:Label> 
                 <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać status działania.<br>
                 </span></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <asp:DropDownList ID="StatusDropDownList" runat="server">
             </asp:DropDownList>
         </div>
@@ -112,6 +113,47 @@
                     Text="Dodaj osobę odpowiedzialną" 
                     onclick="DodajOsobyOdpowiedzialneButton_Click" BackColor="White" />
             </asp:Panel>
+        </div>
+        <div class="podjete_dzialanie">
+            <div>
+                <asp:Label ID="PodjeteDzialanieLabel" runat="server" Text="Podjęte działanie"></asp:Label>
+                <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać jedną z dostępnych opcji</span></a>
+            </div>
+            <div>
+                <asp:DropDownList ID="PodjeteDzialanieDropDownList" runat="server" 
+                    >
+                </asp:DropDownList>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:Button ID="PodjeteDzialanieButton" runat="server" Text="szczegóły" 
+                    onclick="PodjeteDzialanieButton_Click" />
+                <a class="cloud" href="#"><img src="information.png"><span>Po naciśnięciu pojawi się 
+                panel ze szczegółami dotyczącymi realizacji działania</span></a>
+            </div>
+            <asp:Panel ID="PodjeteDzialaniePanel" runat="server" Width="100%">
+                <div>
+                    <asp:Label ID="DatyRealizacjiLabel" runat="server" Text="Termin realizacji"></asp:Label>
+                    <a class="cloud" href="#"><img src="information.png"><span>Należy wpisać daty rozpoczęcia 
+                    i zakończenia realizacji</span></a>
+                </div>
+                <asp:Label ID="reOkresOdLabel" runat="server" Text="od "></asp:Label>
+                <asp:TextBox ID="OkresOdTextBox" runat="server"></asp:TextBox>
+                <asp:Label ID="reOkresDoLabel" runat="server" Text="do  "></asp:Label>
+                <asp:TextBox ID="OkresDoTextBox" runat="server"></asp:TextBox>
+
+                <div>
+                    <asp:Label ID="StopienRealizacjiLabel" runat="server" Text="Stopień realizacji działania"></asp:Label>
+                    <a class="cloud" href="#"><img src="information.png"><span>Należy wybrać procent w jakim zrealizowano już zadanie</span></a>
+                </div>
+                <asp:DropDownList ID="StopienRealizacjiDropDownList" runat="server" Width="100%">
+                </asp:DropDownList>
+
+                <div>
+                    <asp:Label ID="UwagiLabel" runat="server" Text="Uwagi dotyczące realizacji działania"></asp:Label>
+                    <a class="cloud" href="#"><img src="information.png"><span>Należy Wprowadzić komentarz lub uwagi dotyczące realizacji działania</span></a>
+                </div>
+                <asp:TextBox ID="UwagiTextBox" runat="server" Height="95px" Width="100%" 
+                TextMode="MultiLine"></asp:TextBox>
+            </asp:Panel>      
         </div>
 
          <div class="button">
