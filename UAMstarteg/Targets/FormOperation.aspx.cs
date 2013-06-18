@@ -238,7 +238,7 @@ public partial class Targets_FormOperation : System.Web.UI.Page
             //LoadPodjeteDzialanieDropDownList();
 
             dt = select("*", "podjete_dzialanie", "dzialanie = " + id, null);
-            if (dt.Rows[0]["realizacja"] != DBNull.Value)
+            if (dt != null && dt.Rows.Count>0 && dt.Rows[0]["realizacja"] != DBNull.Value)
             {
                 String procent_realizacja = dt.Rows[0]["realizacja"].ToString();
                 Hidden1.Value = procent_realizacja;
