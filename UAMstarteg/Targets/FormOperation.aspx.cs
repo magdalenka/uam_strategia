@@ -86,6 +86,10 @@ public partial class Targets_FormOperation : System.Web.UI.Page
                     dt.Rows[i]["tytul"] + " " + dt.Rows[i]["nazwisko"], dt.Rows[i]["id"].ToString()));
             }
             OOWyborListBox.Items[0].Selected = true;
+
+            String realizacja = Hidden1.Value;
+            StopienRealizacjiProcent.Text = realizacja+"%";
+
         }
     }
 
@@ -232,6 +236,25 @@ public partial class Targets_FormOperation : System.Web.UI.Page
 
             LoadOsobyOdpowiedzialneCheckBoxList();
             //LoadPodjeteDzialanieDropDownList();
+
+            dt = select("*", "podjete_dzialanie", "dzialanie = " + id, null);
+            if (dt.Rows[0]["realizacja"] != DBNull.Value)
+            {
+                String procent_realizacja = dt.Rows[0]["realizacja"].ToString();
+                Hidden1.Value = procent_realizacja;
+                StopienRealizacjiProcent.Text = procent_realizacja + "%";
+
+                String okres_od_str = dt.Rows[0]["okres_od"].ToString();
+                String okres_do_str = dt.Rows[0]["okres_do"].ToString();
+                String komentarz = dt.Rows[0]["komentarz"].ToString();
+
+                UwagiTextBox.Text = komentarz;
+                OkresOdTextBox.Text = okres_od_str;
+                OkresDoTextBox.Text = okres_do_str;
+                
+                
+            }
+           
 
             TextBox_Numer.Text = number;
             TextBox_Tresc.Text = content;
@@ -481,7 +504,9 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         String realizacja = Hidden1.Value;
         String uwagi = UwagiTextBox.Text;
 
-        String values = "okres_od = '"+ okresOd + "', okres_do = '" + okresDo + "', realizacja ='' " + realizacja + ", komentarz = '" + uwagi +"'";
+        
+
+        String values = "okres_od = '"+ okresOd + "', okres_do = '" + okresDo + "', realizacja = '" + realizacja + "', komentarz = '" + uwagi +"'";
         update("podjete_dzialanie",values, "id = "+ podjete_id);
 
     }

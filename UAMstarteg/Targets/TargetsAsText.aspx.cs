@@ -333,8 +333,8 @@ public partial class TargetsAsText : System.Web.UI.Page
             contentCell.Controls.Add(new LiteralControl("</br><b>Działanie zostało podjęte</b>"));
             contentCell.Controls.Add(new LiteralControl("</br>"));
 
-            contentCell.Controls.Add(new LiteralControl("Opis : " + dt.Rows[0]["opis"].ToString()));
-            contentCell.Controls.Add(new LiteralControl("</br>"));
+            //contentCell.Controls.Add(new LiteralControl("Opis : " + dt.Rows[0]["opis"].ToString()));
+            //contentCell.Controls.Add(new LiteralControl("</br>"));
 
             contentCell.Controls.Add(new LiteralControl("Okres : " + dt.Rows[0]["okres_od"].ToString() +
                 "   -   " + dt.Rows[0]["okres_do"].ToString()));
