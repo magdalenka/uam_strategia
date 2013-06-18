@@ -178,26 +178,29 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         string okres_od = TextBox_TerminOd.Text;
         string okres_do = TextBox_TerminDo.Text;
         string waga = TextBox_Waga.Text;
-        String zatwierdzenie = StatusDropDownList.SelectedValue;
-        if (zatwierdzenie.Equals("-1") || zatwierdzenie.Equals("null"))
-            zatwierdzenie = "0";
-        String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
+        if (!number.Equals("") && !waga.Equals("") && !content.Equals(""))
+        {
+            String zatwierdzenie = StatusDropDownList.SelectedValue;
+            if (zatwierdzenie.Equals("-1") || zatwierdzenie.Equals("null"))
+                zatwierdzenie = "0";
+            String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
-        string values = "'" + content + "'," + number + ",'" + wskaznik_rezultat + "','" + okres_od + "','" + okres_do + "'," + waga + ", "
-            + zatwierdzenie + ",1";
-        //id nowo dodanej operacji
-        int id_operation = insert("dzialanie", values);
-        insert("dzialanie_cel", "'"+id_cel+"'" + ", " + id_operation);
-        //uzupelnienie tabeli dzialanie_zrodlo
-        values = id_operation + " ," + zrodlo_finansowania_id;
-        int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
-        id = id_operation;
-        AddOsobyOdpowiedzialne();
+            string values = "'" + content + "'," + number + ",'" + wskaznik_rezultat + "','" + okres_od + "','" + okres_do + "'," + waga + ", "
+                + zatwierdzenie + ",1";
+            //id nowo dodanej operacji
+            int id_operation = insert("dzialanie", values);
+            insert("dzialanie_cel", "'" + id_cel + "'" + ", " + id_operation);
+            //uzupelnienie tabeli dzialanie_zrodlo
+            values = id_operation + " ," + zrodlo_finansowania_id;
+            int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
+            id = id_operation;
+            AddOsobyOdpowiedzialne();
 
-        PodjeteDzialanieObsluga();
+            PodjeteDzialanieObsluga();
 
-        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
-        ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
+            Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
+            ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
+        }
     }
 
     protected String AddNewFinSourceIfNotSelected()
@@ -281,34 +284,37 @@ public partial class Targets_FormOperation : System.Web.UI.Page
         string okres_od = TextBox_TerminOd.Text;
         string okres_do = TextBox_TerminDo.Text;
         string waga = TextBox_Waga.Text;
-        string zatwierdzenie = StatusDropDownList.SelectedValue;
-        if (zatwierdzenie.Equals("-1") || zatwierdzenie.Equals("null"))
-            zatwierdzenie = "0";
-        String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
-
-        string zmieniane_kolumny = "nazwa='" + content1 + "', lp=" + number + ", wskaznik_rezultat='" + wskaznik_rezultat + "', okres_od='" + okres_od +
-                "', okres_do='" + okres_do + "', waga=" + waga + ", zatwierdzenie=" + zatwierdzenie;
-
-        update("dzialanie", zmieniane_kolumny, "id=" + id);
-
-        DataTable dt = select("*", "dzialanie_zrodlo", "id_dzialania = "+id, null);
-        if (dt.Rows.Count > 0)
+        if (!number.Equals("") && !waga.Equals("") && !content1.Equals(""))
         {
-            zmieniane_kolumny = "id_dzialania='" + id + "' , id_zrodlo_finansowania='" + zrodlo_finansowania_id + "'";
-            update("dzialanie_zrodlo", zmieniane_kolumny, "id_dzialania=" + id);
-        }
-        else
-        {
-            String values = id + " ," + zrodlo_finansowania_id;
-            int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
-        }
-        //Usuń osoby kóre były przypisane, ale zostały odznaczone na liście
-        deleteOsobyOdpowiedzialne();
+            string zatwierdzenie = StatusDropDownList.SelectedValue;
+            if (zatwierdzenie.Equals("-1") || zatwierdzenie.Equals("null"))
+                zatwierdzenie = "0";
+            String zrodlo_finansowania_id = AddNewFinSourceIfNotSelected();
 
-        PodjeteDzialanieObsluga();
+            string zmieniane_kolumny = "nazwa='" + content1 + "', lp=" + number + ", wskaznik_rezultat='" + wskaznik_rezultat + "', okres_od='" + okres_od +
+                    "', okres_do='" + okres_do + "', waga=" + waga + ", zatwierdzenie=" + zatwierdzenie;
 
-        Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
-        ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
+            update("dzialanie", zmieniane_kolumny, "id=" + id);
+
+            DataTable dt = select("*", "dzialanie_zrodlo", "id_dzialania = " + id, null);
+            if (dt.Rows.Count > 0)
+            {
+                zmieniane_kolumny = "id_dzialania='" + id + "' , id_zrodlo_finansowania='" + zrodlo_finansowania_id + "'";
+                update("dzialanie_zrodlo", zmieniane_kolumny, "id_dzialania=" + id);
+            }
+            else
+            {
+                String values = id + " ," + zrodlo_finansowania_id;
+                int id_dzialanie_zrodlo = insert("dzialanie_zrodlo", values);
+            }
+            //Usuń osoby kóre były przypisane, ale zostały odznaczone na liście
+            deleteOsobyOdpowiedzialne();
+
+            PodjeteDzialanieObsluga();
+
+            Page.RegisterStartupScript("myScript", "<script language=JavaScript>window.opener.parent.location.reload()</script>");
+            ClientScript.RegisterStartupScript(typeof(Page), "closePage", "window.close();", true);
+        }
     }
 
     protected DataTable select(string co, string skad, string ograniczenie, String order)
